@@ -4,7 +4,7 @@ function App() {
   const [status, setStatus] = useState('loading...');
 
   useEffect(() => {
-    fetch('https://cv-platform-api.onrender.com/health')
+    fetch('https://cw-platform.onrender.com/health')
       .then(res => res.json())
       .then(data => setStatus(data.status))
       .catch(() => setStatus('error connecting'));
