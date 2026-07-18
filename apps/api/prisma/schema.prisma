@@ -22,6 +22,7 @@ model User {
   createdAt DateTime @default(now())
   attributeValues AttributeValue[]
   cvs CV[]
+  projects Project[]
 }
 
 model Attribute {
@@ -98,4 +99,16 @@ model CV {
   createdAt  DateTime @default(now())
 
   @@unique([userId, positionId])
+}
+
+model Project {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  startDate   DateTime
+  endDate     DateTime?
+  description String
+  tags        String[]
+  createdAt   DateTime @default(now())
 }
