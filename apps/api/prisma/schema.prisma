@@ -20,6 +20,8 @@ model User {
   name      String
   role      String   @default("candidate")
   createdAt DateTime @default(now())
+  attributeValues AttributeValue[]
+  cvs CV[]
 }
 
 model Attribute {
@@ -33,6 +35,7 @@ model Attribute {
   createdAt   DateTime @default(now())
   positionLinks PositionAttribute[]
   accessRuleLinks PositionAccessRule[]
+  valueLinks AttributeValue[]
 }
 
 model AttributeCategory {
@@ -52,6 +55,7 @@ model Position {
   accessRules PositionAccessRule[]
   projectTags   String[]
   maxProjects   Int      @default(3)
+  cvs CV[]
 }
 
 model PositionAttribute {
@@ -70,4 +74,28 @@ model PositionAccessRule {
   attribute   Attribute @relation(fields: [attributeId], references: [id])
   operator    String
   value       String
+}
+
+model AttributeValue {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  attributeId Int
+  attribute   Attribute @relation(fields: [attributeId], references: [id])
+  value       String
+  version     Int       @default(1)
+
+  @@unique([userId, attributeId])
+}
+
+model CV {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  positionId Int
+  position   Position @relation(fields: [positionId], references: [id])
+  status     String   @default("draft")
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, positionId])
 }
