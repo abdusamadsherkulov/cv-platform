@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
@@ -24,6 +24,7 @@ model User {
   cvs CV[]
   projects Project[]
   discussionPosts DiscussionPost[]
+  likesGiven CVLike[]
 }
 
 model Attribute {
@@ -99,6 +100,7 @@ model CV {
   position   Position @relation(fields: [positionId], references: [id])
   status     String   @default("draft")
   createdAt  DateTime @default(now())
+  likes CVLike[]
 
   @@unique([userId, positionId])
 }
@@ -123,4 +125,15 @@ model DiscussionPost {
   author     User     @relation(fields: [authorId], references: [id])
   content    String
   createdAt  DateTime @default(now())
+}
+
+model CVLike {
+  id          Int      @id @default(autoincrement())
+  cvId        Int
+  cv          CV       @relation(fields: [cvId], references: [id])
+  recruiterId Int
+  recruiter   User     @relation(fields: [recruiterId], references: [id])
+  createdAt   DateTime @default(now())
+
+  @@unique([cvId, recruiterId])
 }
