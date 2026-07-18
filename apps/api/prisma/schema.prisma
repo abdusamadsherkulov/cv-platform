@@ -23,6 +23,7 @@ model User {
   attributeValues AttributeValue[]
   cvs CV[]
   projects Project[]
+  discussionPosts DiscussionPost[]
 }
 
 model Attribute {
@@ -57,6 +58,7 @@ model Position {
   projectTags   String[]
   maxProjects   Int      @default(3)
   cvs CV[]
+  discussionPosts DiscussionPost[]
 }
 
 model PositionAttribute {
@@ -111,4 +113,14 @@ model Project {
   description String
   tags        String[]
   createdAt   DateTime @default(now())
+}
+
+model DiscussionPost {
+  id         Int      @id @default(autoincrement())
+  positionId Int
+  position   Position @relation(fields: [positionId], references: [id])
+  authorId   Int
+  author     User     @relation(fields: [authorId], references: [id])
+  content    String
+  createdAt  DateTime @default(now())
 }
