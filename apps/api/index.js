@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import passport from './passport.js';
 import attributesRouter from './routes/attributes.js';
 import positionsRouter from './routes/positions.js';
+import cvsRouter from './routes/cvs.js';
 
 const app = express();
 app.use(cors());
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(passport.initialize());
 app.use('/attributes', attributesRouter);
 app.use('/positions', positionsRouter);
+app.use('/cvs', cvsRouter);
 
 const port = process.env.PORT || 4000;
 
