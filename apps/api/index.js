@@ -5,6 +5,7 @@ import passport from './passport.js';
 import attributesRouter from './routes/attributes.js';
 import positionsRouter from './routes/positions.js';
 import cvsRouter from './routes/cvs.js';
+import projectsRouter from './routes/projects.js';
 
 const app = express();
 app.use(cors());
@@ -13,6 +14,7 @@ app.use(passport.initialize());
 app.use('/attributes', attributesRouter);
 app.use('/positions', positionsRouter);
 app.use('/cvs', cvsRouter);
+app.use('/projects', projectsRouter);
 
 const port = process.env.PORT || 4000;
 
