@@ -15,6 +15,10 @@ function PositionDetail() {
 
   const [attributeToAdd, setAttributeToAdd] = useState('');
 
+  const [ruleAttributeId, setRuleAttributeId] = useState('');
+  const [ruleOperator, setRuleOperator] = useState('gt');
+  const [ruleValue, setRuleValue] = useState('');
+
   const role = getCurrentRole();
   const canManage = role === 'recruiter' || role === 'admin';
 
@@ -91,6 +95,36 @@ function PositionDetail() {
     }
   }
 
+  async function handleAddRule() {
+  if (!ruleAttributeId || !ruleValue) return;
+  setError('');
+  try {
+    await apiFetch(`/positions/${id}/access-rules`, {
+      method: 'POST',
+      body: JSON.stringify({
+        attributeId: Number(ruleAttributeId),
+        operator: ruleOperator,
+        value: ruleValue,
+      }),
+    });
+    setRuleAttributeId('');
+    setRuleValue('');
+    loadPosition();
+  } catch (err) {
+    setError(err.message);
+  }
+}
+
+async function handleRemoveRule(ruleId) {
+  setError('');
+  try {
+    await apiFetch(`/positions/${id}/access-rules/${ruleId}`, { method: 'DELETE' });
+    loadPosition();
+  } catch (err) {
+    setError(err.message);
+  }
+}
+
   if (!position) return <div className="container mt-4">Loading...</div>;
 
   const attachedIds = position.attributes.map((a) => a.attributeId);
@@ -148,6 +182,38 @@ function PositionDetail() {
           </select>
           <button className="btn btn-primary" onClick={handleAddAttribute}>Add</button>
         </div>
+      )}
+    
+      {canManage && (
+        <>
+          <h2 className="mt-4">Access Rules</h2>
+          <ul className="list-group mb-3">
+            {position.accessRules?.map((rule) => (
+              <li key={rule.id} className="list-group-item d-flex justify-content-between align-items-center">
+                {rule.attribute.name} {rule.operator} {rule.value}
+                <button className="btn btn-sm btn-danger" onClick={() => handleRemoveRule(rule.id)}>
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <div className="d-flex gap-2">
+            <select className="form-select" value={ruleAttributeId} onChange={(e) => setRuleAttributeId(e.target.value)}>
+              <option value="">Select attribute...</option>
+              {attributesList.map((attr) => (
+                <option key={attr.id} value={attr.id}>{attr.name}</option>
+              ))}
+            </select>
+            <select className="form-select" value={ruleOperator} onChange={(e) => setRuleOperator(e.target.value)}>
+              <option value="gt">greater than</option>
+              <option value="lt">less than</option>
+              <option value="eq">equals</option>
+            </select>
+            <input className="form-control" placeholder="Value" value={ruleValue} onChange={(e) => setRuleValue(e.target.value)} />
+            <button className="btn btn-primary" onClick={handleAddRule}>Add Rule</button>
+          </div>
+        </>
       )}
     </div>
   );
