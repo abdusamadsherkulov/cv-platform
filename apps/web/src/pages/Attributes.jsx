@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiFetch } from '../api';
+import { apiFetch, getCurrentRole } from '../api';
 
 function Attributes() {
   const [attributes, setAttributes] = useState([]);
@@ -10,6 +10,9 @@ function Attributes() {
   const [description, setDescription] = useState('');
   const [type, setType] = useState('string');
   const [categoryId, setCategoryId] = useState('');
+
+  const role = getCurrentRole();
+  const canManage = role === 'recruiter' || role === 'admin';
 
   async function loadAttributes() {
     try {
@@ -75,34 +78,37 @@ function Attributes() {
           ))}
         </tbody>
       </table>
-
-      <h2>Add New Attribute</h2>
-      <form onSubmit={handleCreate} className="row g-2">
-        <div className="col-md-3">
-          <input className="form-control" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
-        </div>
-        <div className="col-md-3">
-          <input className="form-control" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
-        </div>
-        <div className="col-md-2">
-          <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="string">String</option>
-            <option value="text">Text</option>
-            <option value="numeric">Numeric</option>
-            <option value="date">Date</option>
-            <option value="period">Period</option>
-            <option value="boolean">Boolean</option>
-            <option value="enum">One of many</option>
-            <option value="image">Image</option>
-          </select>
-        </div>
-        <div className="col-md-2">
-          <input className="form-control" placeholder="Category ID" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required />
-        </div>
-        <div className="col-md-2">
-          <button type="submit" className="btn btn-primary w-100">Add</button>
-        </div>
-      </form>
+      {canManage && (
+        <>
+          <h2>Add New Attribute</h2>
+          <form onSubmit={handleCreate} className="row g-2">
+            <div className="col-md-3">
+              <input className="form-control" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required />
+            </div>
+            <div className="col-md-3">
+              <input className="form-control" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+            </div>
+            <div className="col-md-2">
+              <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
+                <option value="string">String</option>
+                <option value="text">Text</option>
+                <option value="numeric">Numeric</option>
+                <option value="date">Date</option>
+                <option value="period">Period</option>
+                <option value="boolean">Boolean</option>
+                <option value="enum">One of many</option>
+                <option value="image">Image</option>
+              </select>
+            </div>
+            <div className="col-md-2">
+              <input className="form-control" placeholder="Category ID" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required />
+            </div>
+            <div className="col-md-2">
+              <button type="submit" className="btn btn-primary w-100">Add</button>
+            </div>
+          </form>
+        </>
+      )}
     </div>
   );
 }

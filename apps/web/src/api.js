@@ -21,3 +21,14 @@ export async function apiFetch(path, options = {}) {
   if (res.status === 204) return null;
   return res.json();
 }
+
+export function getCurrentRole() {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.role;
+  } catch {
+    return null;
+  }
+}

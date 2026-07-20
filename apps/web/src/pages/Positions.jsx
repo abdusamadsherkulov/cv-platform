@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiFetch } from '../api';
+import { apiFetch, getCurrentRole } from '../api';
 import { Link } from 'react-router-dom';
 
 function Positions() {
@@ -10,6 +10,9 @@ function Positions() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedAttributeIds, setSelectedAttributeIds] = useState([]);
+
+  const role = getCurrentRole();
+  const canManage = role === 'recruiter' || role === 'admin';
 
   async function loadPositions() {
     try {
@@ -81,34 +84,38 @@ function Positions() {
           ))}
         </tbody>
       </table>
-
-      <h2>Create New Position</h2>
-      <form onSubmit={handleCreate}>
-        <div className="mb-2">
-          <input className="form-control" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </div>
-        <div className="mb-2">
-          <input className="form-control" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
-        </div>
-        <div className="mb-2">
-          <label className="form-label">Attributes:</label>
-          {attributesList.map((attr) => (
-            <div className="form-check" key={attr.id}>
-              <input
-                type="checkbox"
-                className="form-check-input"
-                checked={selectedAttributeIds.includes(attr.id)}
-                onChange={() => toggleAttribute(attr.id)}
-                id={`attr-${attr.id}`}
-              />
-              <label className="form-check-label" htmlFor={`attr-${attr.id}`}>
-                {attr.name} ({attr.category.name})
-              </label>
+      
+      {canManage && (
+        <>
+          <h2>Create New Position</h2>
+          <form onSubmit={handleCreate}>
+            <div className="mb-2">
+              <input className="form-control" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)} required />
             </div>
-          ))}
-        </div>
-        <button type="submit" className="btn btn-primary">Create Position</button>
-      </form>
+            <div className="mb-2">
+              <input className="form-control" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} required />
+            </div>
+            <div className="mb-2">
+              <label className="form-label">Attributes:</label>
+              {attributesList.map((attr) => (
+                <div className="form-check" key={attr.id}>
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={selectedAttributeIds.includes(attr.id)}
+                    onChange={() => toggleAttribute(attr.id)}
+                    id={`attr-${attr.id}`}
+                  />
+                  <label className="form-check-label" htmlFor={`attr-${attr.id}`}>
+                    {attr.name} ({attr.category.name})
+                  </label>
+                </div>
+              ))}
+            </div>
+            <button type="submit" className="btn btn-primary">Create Position</button>
+          </form>
+        </>
+      )}
     </div>
   );
 }
