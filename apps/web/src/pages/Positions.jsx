@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { apiFetch } from '../api';
+import { Link } from 'react-router-dom';
 
 function Positions() {
   const [positions, setPositions] = useState([]);
@@ -73,7 +74,7 @@ function Positions() {
         <tbody>
           {positions.map((pos) => (
             <tr key={pos.id}>
-              <td>{pos.title}</td>
+              <td><Link to={`/positions/${pos.id}`}>{pos.title}</Link></td>
               <td>{pos.description}</td>
               <td>{pos.attributes.map((a) => a.attribute.name).join(', ')}</td>
             </tr>
