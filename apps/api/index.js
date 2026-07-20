@@ -6,6 +6,7 @@ import attributesRouter from './routes/attributes.js';
 import positionsRouter from './routes/positions.js';
 import cvsRouter from './routes/cvs.js';
 import projectsRouter from './routes/projects.js';
+import statsRouter from './routes/stats.js';
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,7 @@ app.use('/attributes', attributesRouter);
 app.use('/positions', positionsRouter);
 app.use('/cvs', cvsRouter);
 app.use('/projects', projectsRouter);
+app.use('/stats', statsRouter);
 
 const port = process.env.PORT || 4000;
 
