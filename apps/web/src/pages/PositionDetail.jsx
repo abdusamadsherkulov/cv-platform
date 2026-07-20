@@ -19,6 +19,9 @@ function PositionDetail() {
   const [ruleOperator, setRuleOperator] = useState('gt');
   const [ruleValue, setRuleValue] = useState('');
 
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState('');
+
   const role = getCurrentRole();
   const canManage = role === 'recruiter' || role === 'admin';
 
@@ -45,6 +48,7 @@ function PositionDetail() {
   useEffect(() => {
     loadPosition();
     loadAttributesList();
+    loadPosts();
   }, [id]);
 
   async function handleSaveInfo(e) {
@@ -120,6 +124,31 @@ async function handleRemoveRule(ruleId) {
   try {
     await apiFetch(`/positions/${id}/access-rules/${ruleId}`, { method: 'DELETE' });
     loadPosition();
+  } catch (err) {
+    setError(err.message);
+  }
+}
+
+async function loadPosts() {
+  try {
+    const data = await apiFetch(`/discussions/${id}`);
+    setPosts(data);
+  } catch (err) {
+    setError(err.message);
+  }
+}
+
+async function handlePostSubmit(e) {
+  e.preventDefault();
+  if (!newPost.trim()) return;
+  setError('');
+  try {
+    await apiFetch(`/discussions/${id}`, {
+      method: 'POST',
+      body: JSON.stringify({ content: newPost }),
+    });
+    setNewPost('');
+    loadPosts();
   } catch (err) {
     setError(err.message);
   }
@@ -215,6 +244,26 @@ async function handleRemoveRule(ruleId) {
           </div>
         </>
       )}
+      <h2 className="mt-4">Discussion</h2>
+      <ul className="list-group mb-3">
+        {posts.map((post) => (
+          <li key={post.id} className="list-group-item">
+            <strong>{post.author.name}</strong>{' '}
+            <small className="text-muted">{new Date(post.createdAt).toLocaleString()}</small>
+            <p className="mb-0">{post.content}</p>
+          </li>
+        ))}
+      </ul>
+
+      <form onSubmit={handlePostSubmit} className="d-flex gap-2 mb-4">
+        <input
+          className="form-control"
+          placeholder="Write a message..."
+          value={newPost}
+          onChange={(e) => setNewPost(e.target.value)}
+        />
+        <button className="btn btn-primary" type="submit">Post</button>
+      </form>
     </div>
   );
 }
