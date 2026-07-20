@@ -7,6 +7,8 @@ import positionsRouter from './routes/positions.js';
 import cvsRouter from './routes/cvs.js';
 import projectsRouter from './routes/projects.js';
 import statsRouter from './routes/stats.js';
+import discussionsRouter from './routes/discussions.js';
+import likesRouter from './routes/likes.js';
 
 const app = express();
 app.use(cors());
@@ -17,6 +19,8 @@ app.use('/positions', positionsRouter);
 app.use('/cvs', cvsRouter);
 app.use('/projects', projectsRouter);
 app.use('/stats', statsRouter);
+app.use('/discussions', discussionsRouter);
+app.use('/likes', likesRouter);
 
 const port = process.env.PORT || 4000;
 
