@@ -55,4 +55,45 @@ router.delete('/:id', requireAuth, requireRole('recruiter', 'admin'), async (req
   res.status(204).send();
 });
 
+// edit a position, with optimistic locking
+router.put('/:id', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
+  const id = Number(req.params.id);
+  const { title, description, projectTags, maxProjects, version } = req.body;
+
+  const result = await prisma.position.updateMany({
+    where: { id, version },
+    data: { title, description, projectTags, maxProjects, version: { increment: 1 } },
+  });
+
+  if (result.count === 0) {
+    return res.status(409).json({ error: 'This position was changed by someone else. Please reload.' });
+  }
+
+  res.json({ success: true });
+});
+
+// add an attribute to an existing position
+router.post('/:id/attributes', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
+  const positionId = Number(req.params.id);
+  const { attributeId } = req.body;
+
+  const link = await prisma.positionAttribute.create({
+    data: { positionId, attributeId },
+    include: { attribute: true },
+  });
+
+  res.status(201).json(link);
+});
+
+// remove an attribute from a position
+router.delete('/:id/attributes/:attributeId', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
+  await prisma.positionAttribute.deleteMany({
+    where: {
+      positionId: Number(req.params.id),
+      attributeId: Number(req.params.attributeId),
+    },
+  });
+  res.status(204).send();
+});
+
 export default router;
