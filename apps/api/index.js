@@ -9,6 +9,7 @@ import projectsRouter from './routes/projects.js';
 import statsRouter from './routes/stats.js';
 import discussionsRouter from './routes/discussions.js';
 import likesRouter from './routes/likes.js';
+import profileRouter from './routes/profile.js';
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.use('/projects', projectsRouter);
 app.use('/stats', statsRouter);
 app.use('/discussions', discussionsRouter);
 app.use('/likes', likesRouter);
+app.use('/profile', profileRouter);
 
 const port = process.env.PORT || 4000;
 
