@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch } from '../api';
+import { getCurrentRole } from '../api';
 
 function Navbar() {
   const isLoggedIn = !!localStorage.getItem('token');
@@ -14,6 +15,8 @@ function Navbar() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState(null);
   const navigate = useNavigate();
+
+  const role = getCurrentRole();
 
   function changeLanguage(lang) {
     i18n.changeLanguage(lang);
@@ -95,6 +98,9 @@ function Navbar() {
         <Link className="nav-link text-white" to="/cvs">{t('nav.myCvs')}</Link>
         <Link className="nav-link text-white" to="/projects">{t('nav.projects')}</Link>
         <Link className="nav-link text-white" to="/profile">{t('nav.profile')}</Link>
+        {role === 'admin' && (
+          <Link className="nav-link text-white" to="/users">Users</Link>
+        )}
       </div>
 
       <div className="ms-auto d-flex gap-2">
