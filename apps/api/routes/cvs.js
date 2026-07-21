@@ -92,7 +92,12 @@ router.get('/:id', requireAuth, async (req, res) => {
     take: cv.position.maxProjects,
   });
 
-  res.json({ ...cv, fields, projects });
+  const likeCount = await prisma.cVLike.count({ where: { cvId: cv.id } });
+  const userLiked = await prisma.cVLike.findUnique({
+    where: { cvId_recruiterId: { cvId: cv.id, recruiterId: req.user.userId } },
+  }).catch(() => null);
+
+  res.json({ ...cv, fields, projects, likeCount, userLiked: !!userLiked });
 });
 
 // edit a single attribute value in-place, writes through to the shared profile value
