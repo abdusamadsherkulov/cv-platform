@@ -1,6 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '../generated/prisma/index.js';
-import { requireAuth } from '../middleware/auth.js';
+import { requireAuth, requireRole } from '../middleware/auth.js';
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -152,6 +152,22 @@ router.post('/:id/publish', requireAuth, async (req, res) => {
 
   await prisma.cV.update({ where: { id: cv.id }, data: { status: 'published' } });
   res.json({ success: true });
+});
+
+// recruiters/admins browse all published cvs across all candidates
+router.get('/all/published', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
+  const cvs = await prisma.cV.findMany({
+    where: { status: 'published' },
+    include: { position: true, user: true, likes: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const result = cvs.map((cv) => ({
+    ...cv,
+    likeCount: cv.likes.length,
+  }));
+
+  res.json(result);
 });
 
 export default router;
