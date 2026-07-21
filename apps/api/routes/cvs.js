@@ -102,6 +102,10 @@ router.get('/:id', requireAuth, async (req, res) => {
 
 // edit a single attribute value in-place, writes through to the shared profile value
 router.put('/:id/attributes/:attributeId', requireAuth, async (req, res) => {
+  if (req.user.role !== 'candidate' && req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Only the candidate or an admin can edit this' });
+  }
+  
   const attributeId = Number(req.params.attributeId);
   const { value, version } = req.body;
 

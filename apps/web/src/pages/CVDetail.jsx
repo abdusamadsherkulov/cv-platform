@@ -10,6 +10,7 @@ function CVDetail() {
 
   const role = getCurrentRole();
   const canLike = role === 'recruiter' || role === 'admin';
+  const canEdit = role === 'candidate' || role === 'admin';
 
   async function loadCv() {
     try {
@@ -85,7 +86,7 @@ function CVDetail() {
       <table className="table">
         <tbody>
           {cv.fields.map((field) => (
-            <FieldRow key={field.attributeId} field={field} onSave={handleFieldSave} />
+            <FieldRow key={field.attributeId} field={field} onSave={handleFieldSave} canEdit={canEdit} />
           ))}
         </tbody>
       </table>
@@ -108,7 +109,7 @@ function CVDetail() {
   );
 }
 
-function FieldRow({ field, onSave }) {
+function FieldRow({ field, onSave, canEdit }) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(field.value);
 
@@ -138,8 +139,11 @@ function FieldRow({ field, onSave }) {
             </button>
           </form>
         ) : (
-          <span onClick={() => setEditing(true)} style={{ cursor: 'pointer' }}>
-            {isEmpty ? '(empty - click to fill)' : field.value}
+          <span
+            onClick={canEdit ? () => setEditing(true) : undefined}
+            style={{ cursor: canEdit ? 'pointer' : 'default' }}
+          >
+            {isEmpty ? '(empty)' : field.value}
           </span>
         )}
       </td>
