@@ -10,6 +10,7 @@ import statsRouter from './routes/stats.js';
 import discussionsRouter from './routes/discussions.js';
 import likesRouter from './routes/likes.js';
 import profileRouter from './routes/profile.js';
+import searchRouter from './routes/search.js';
 
 const app = express();
 app.use(cors());
@@ -23,6 +24,7 @@ app.use('/stats', statsRouter);
 app.use('/discussions', discussionsRouter);
 app.use('/likes', likesRouter);
 app.use('/profile', profileRouter);
+app.use('/search', searchRouter);
 
 const port = process.env.PORT || 4000;
 
