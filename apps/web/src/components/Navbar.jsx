@@ -95,7 +95,11 @@ function Navbar() {
       <div className="navbar-nav">
         <Link className="nav-link text-white" to="/attributes">{t('nav.attributes')}</Link>
         <Link className="nav-link text-white" to="/positions">{t('nav.positions')}</Link>
-        <Link className="nav-link text-white" to="/cvs">{t('nav.myCvs')}</Link>
+        {role === 'candidate' ? (
+          <Link className="nav-link text-white" to="/cvs">{t('nav.myCvs')}</Link>
+        ) : (
+          <Link className="nav-link text-white" to="/all-cvs">All CVs</Link>
+        )}
         <Link className="nav-link text-white" to="/projects">{t('nav.projects')}</Link>
         <Link className="nav-link text-white" to="/profile">{t('nav.profile')}</Link>
         {role === 'admin' && (
