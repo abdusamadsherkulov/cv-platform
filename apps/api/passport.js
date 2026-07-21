@@ -22,7 +22,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID,
   clientSecret: process.env.GITHUB_CLIENT_SECRET,
-  callbackURL: '/auth/github/callback',
+  callbackURL: `${process.env.API_URL}/auth/github/callback`,
 }, async (accessToken, refreshToken, profile, done) => {
   const email = profile.emails?.[0]?.value ?? `${profile.username}@github.local`;
   const user = await prisma.user.upsert({
