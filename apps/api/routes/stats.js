@@ -16,6 +16,7 @@ router.get('/', async (req, res) => {
     totalCVs,
     recentCVs,
     positionsWithCvCounts,
+    allProjects,
   ] = await Promise.all([
     prisma.position.findMany({ orderBy: { updatedAt: 'desc' }, take: 5 }),
     prisma.position.count(),
@@ -28,18 +29,22 @@ router.get('/', async (req, res) => {
       orderBy: { cvs: { _count: 'desc' } },
       take: 5,
     }),
+    prisma.project.findMany({ select: { tags: true } }),
   ]);
+
+  const tagCounts = {};
+  for (const project of allProjects) {
+    for (const tag of project.tags) {
+      tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+    }
+  }
+  const tagCloud = Object.entries(tagCounts).map(([tag, count]) => ({ tag, count }));
 
   res.json({
     latestPositions,
-    stats: {
-      totalPositions,
-      totalCandidates,
-      totalRecruiters,
-      totalCVs,
-      recentCVs,
-    },
+    stats: { totalPositions, totalCandidates, totalRecruiters, totalCVs, recentCVs },
     popularPositions: positionsWithCvCounts,
+    tagCloud,
   });
 });
 
