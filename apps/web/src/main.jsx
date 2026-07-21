@@ -13,6 +13,7 @@ import PositionDetail from './pages/PositionDetail.jsx';
 import Projects from './pages/Projects.jsx';
 import Profile from './pages/Profile.jsx';
 import './theme.css';
+import './i18n.js';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

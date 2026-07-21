@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const API_URL = 'https://cw-platform.onrender.com';
 
 function App() {
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetch(`${API_URL}/stats`)
@@ -19,7 +21,7 @@ function App() {
 
   return (
     <div className="container mt-4">
-      <h1>CV Management Platform</h1>
+      <h1>{t('home.title')}</h1>
 
       <div className="row mb-4">
         <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalPositions}</h3><p>Positions</p></div></div>
@@ -29,7 +31,7 @@ function App() {
         <div className="col"><div className="card text-center p-3"><h3>{data.stats.recentCVs}</h3><p>CVs (last 24h)</p></div></div>
       </div>
 
-      <h2>Latest Positions</h2>
+      <h2>{t('home.latestPositions')}</h2>
       <table className="table table-striped mb-4">
         <thead><tr><th>Title</th><th>Description</th></tr></thead>
         <tbody>
@@ -42,7 +44,7 @@ function App() {
         </tbody>
       </table>
 
-      <h2>Most Popular Positions</h2>
+      <h2>{t('home.popularPositions')}</h2>
       <table className="table table-striped">
         <thead><tr><th>Title</th><th>CVs Submitted</th></tr></thead>
         <tbody>
@@ -55,7 +57,7 @@ function App() {
         </tbody>
       </table>
 
-      <h2 className="mt-4">Tag Cloud</h2>
+      <h2 className="mt-4">{t('home.tagCloud')}</h2>
       <div className="mb-4">
         {data.tagCloud.map(({ tag, count }) => (
           <Link

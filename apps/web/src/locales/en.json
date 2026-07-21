@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "attributes": "Attributes",
+    "positions": "Positions",
+    "myCvs": "My CVs",
+    "projects": "Projects",
+    "profile": "Profile",
+    "logout": "Log out",
+    "login": "Log in with Google"
+  },
+  "home": {
+    "title": "CV Management Platform",
+    "latestPositions": "Latest Positions",
+    "popularPositions": "Most Popular Positions",
+    "tagCloud": "Tag Cloud"
+  }
+}

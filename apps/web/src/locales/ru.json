@@ -1,0 +1,17 @@
+{
+  "nav": {
+    "attributes": "Атрибуты",
+    "positions": "Позиции",
+    "myCvs": "Мои резюме",
+    "projects": "Проекты",
+    "profile": "Профиль",
+    "logout": "Выйти",
+    "login": "Войти через Google"
+  },
+  "home": {
+    "title": "Платформа управления резюме",
+    "latestPositions": "Последние позиции",
+    "popularPositions": "Самые популярные позиции",
+    "tagCloud": "Облако тегов"
+  }
+}
