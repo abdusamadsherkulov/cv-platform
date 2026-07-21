@@ -12,6 +12,7 @@ import likesRouter from './routes/likes.js';
 import profileRouter from './routes/profile.js';
 import searchRouter from './routes/search.js';
 import usersRouter from './routes/users.js';
+import categoriesRouter from './routes/categories.js';
 
 const app = express();
 app.use(cors());
@@ -27,6 +28,7 @@ app.use('/likes', likesRouter);
 app.use('/profile', profileRouter);
 app.use('/search', searchRouter);
 app.use('/users', usersRouter);
+app.use('/categories', categoriesRouter);
 
 const port = process.env.PORT || 4000;
 
