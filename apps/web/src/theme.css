@@ -100,8 +100,8 @@ body {
 }
 
 [data-theme='dark'] .list-group-item {
-  background-color: #a19999;
-  color: var(--text-color);
+  background-color: #f7f7f7;
+  color: #212529;
   border-color: #444;
 }
 
