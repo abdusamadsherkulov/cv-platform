@@ -16,8 +16,17 @@
   },
   "home": {
     "title": "CV Management Platform",
+    "positions": "Positions",
+    "candidates": "Candidates",
+    "recruiters": "Recruiters",
+    "totalCvs": "Total CVs",
+    "CVsLast24h": "CVs (last 24h)",
     "latestPositions": "Latest Positions",
+    "latestTitle": "Title",
+    "latestDescription": "Description",
     "popularPositions": "Most Popular Positions",
+    "popularTitle": "Title",
+    "CvsSubmitted": "CVs Submitted",
     "tagCloud": "Tag Cloud"
   },
   "attributes": {

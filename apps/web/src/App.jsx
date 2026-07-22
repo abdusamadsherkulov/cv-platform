@@ -17,23 +17,23 @@ function App() {
   }, []);
 
   if (error) return <div className="container mt-4"><div className="alert alert-danger">{error}</div></div>;
-  if (!data) return <div className="container mt-4">Loading...</div>;
+  if (!data) return <div className="container mt-4">{t('nav.loading')}</div>;
 
   return (
     <div className="container mt-4">
       <h1>{t('home.title')}</h1>
 
       <div className="row mb-4">
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalPositions}</h3><p>Positions</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalCandidates}</h3><p>Candidates</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalRecruiters}</h3><p>Recruiters</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalCVs}</h3><p>Total CVs</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.recentCVs}</h3><p>CVs (last 24h)</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalPositions}</h3><p>{t('home.positions')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalCandidates}</h3><p>{t('home.candidates')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalRecruiters}</h3><p>{t('home.recruiters')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalCVs}</h3><p>{t('home.totalCvs')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3>{data.stats.recentCVs}</h3><p>{t('home.CVsLast24h')}</p></div></div>
       </div>
 
       <h2>{t('home.latestPositions')}</h2>
       <table className="table table-striped mb-4">
-        <thead><tr><th>Title</th><th>Description</th></tr></thead>
+        <thead><tr><th>{t('home.latestTitle')}</th><th>{t('home.latestDescription')}</th></tr></thead>
         <tbody>
           {data.latestPositions.map((pos) => (
             <tr key={pos.id}>
@@ -46,7 +46,7 @@ function App() {
 
       <h2>{t('home.popularPositions')}</h2>
       <table className="table table-striped">
-        <thead><tr><th>Title</th><th>CVs Submitted</th></tr></thead>
+        <thead><tr><th>{t('home.popularTitle')}</th><th>{t('home.CvsSubmitted')}</th></tr></thead>
         <tbody>
           {data.popularPositions.map((pos) => (
             <tr key={pos.id}>

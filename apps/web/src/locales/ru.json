@@ -16,8 +16,17 @@
   },
   "home": {
     "title": "Платформа управления резюме",
+    "positions": "Позиции",
+    "candidates": "Кандидаты",
+    "recruiters": "Рекрутеры",
+    "totalCvs": "Всего резюме",
+    "CVsLast24h": "Резюме (последние 24 часа)",
     "latestPositions": "Последние позиции",
+    "latestTitle": "Название",
+    "latestDescription": "Описание",
     "popularPositions": "Самые популярные позиции",
+    "popularTitle": "Название",
+    "CvsSubmitted": "Резюме отправлено",
     "tagCloud": "Облако тегов"
   },
   "attributes": {

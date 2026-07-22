@@ -111,7 +111,7 @@ function Navbar() {
 
       <div className="ms-auto d-flex gap-2">
         <button className="btn btn-outline-light btn-sm" onClick={toggleTheme}>
-          {theme === 'light' ? `🌙 {t("theme.dark")}` : `☀️ {t("theme.light")}`}
+          {theme === 'light' ? `${t("theme.dark")}` : `${t("theme.light")}`}
         </button>
         <button className="btn btn-outline-light btn-sm" onClick={() => changeLanguage(i18n.language === 'en' ? 'ru' : 'en')}>
           {i18n.language === 'en' ? 'RU' : 'EN'}
