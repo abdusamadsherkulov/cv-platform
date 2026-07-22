@@ -15,6 +15,7 @@ function Navbar() {
 
   const [query, setQuery] = useState('');
   const [results, setResults] = useState(null);
+  const [showResults, setShowResults] = useState(false);
   const navigate = useNavigate();
 
   const role = getCurrentRole();
@@ -23,6 +24,7 @@ function Navbar() {
 
   const location = useLocation();
   const searchRef = useRef(null);
+  
 
   function changeLanguage(lang) {
     i18n.changeLanguage(lang);
@@ -37,7 +39,7 @@ function Navbar() {
   useEffect(() => {
   function handleClickOutside(e) {
     if (searchRef.current && !searchRef.current.contains(e.target)) {
-      setResults(null);
+      setShowResults(false);
     }
   }
   document.addEventListener('mousedown', handleClickOutside);
@@ -59,6 +61,7 @@ function Navbar() {
     try {
       const data = await apiFetch(`/search?q=${encodeURIComponent(query)}`);
       setResults(data);
+      setShowResults(true);
     } catch (err) {
       setResults(null);
     }
@@ -83,13 +86,14 @@ function Navbar() {
             placeholder={t('nav.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => {if (results) setShowResults(true); }}
           />
           <button className="btn btn-sm navbar-btn ms-1" type="submit">
             {t('nav.searchButton')}
           </button>
           {/* btn navbar-btn btn-sm */}
 
-          {results && (
+          {showResults && results && (
             <div className="position-absolute bg-white text-dark p-2 shadow" style={{ top: '100%', left: 0, zIndex: 10, minWidth: '300px' }}>
               {results.positions.length === 0 && results.attributes.length === 0 && <p className="mb-0">{t('nav.noResults')}</p>}
 
