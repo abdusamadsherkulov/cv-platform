@@ -88,8 +88,8 @@ function Profile() {
       </div>
 
       <div className="d-flex gap-3">
-        <Link to="/projects" className="btn btn-outline-secondary">{t('profile.myProjects')}</Link>
-        <Link to="/cvs" className="btn btn-outline-secondary">{t('profile.myCvs')}</Link>
+        <Link to="/projects" className="btn profile-btn">{t('profile.myProjects')}</Link>
+        <Link to="/cvs" className="btn profile-btn">{t('profile.myCvs')}</Link>
       </div>
     </div>
   );
