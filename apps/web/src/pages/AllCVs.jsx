@@ -26,7 +26,7 @@ function AllCVs() {
       <h1>{t('allCvs.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <table className="table table-striped">
+      <table className="table table-striped table-borderless">
         <thead>
           <tr>
             <th>{t('allCvs.colCandidate')}</th>

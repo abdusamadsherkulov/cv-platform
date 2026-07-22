@@ -69,7 +69,7 @@ function Positions() {
 
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <table className="table table-striped">
+      <table className="table table-striped table-borderless">
         <thead>
           <tr>
             <th>{t('positions.colTitle')}</th>

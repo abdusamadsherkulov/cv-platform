@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './theme.css';
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
@@ -15,7 +16,6 @@ import Profile from './pages/Profile.jsx';
 import Users from './pages/Users.jsx';
 import AllCVs from './pages/AllCVs.jsx';
 import Login from './pages/Login.jsx';
-import './theme.css';
 import './i18n.js';
 
 createRoot(document.getElementById('root')).render(

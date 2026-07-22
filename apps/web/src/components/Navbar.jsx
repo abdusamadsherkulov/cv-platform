@@ -1,9 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { apiFetch } from '../api';
 import { getCurrentRole } from '../api';
+import { useLocation } from 'react-router-dom';
 
 function Navbar() {
   const isLoggedIn = !!localStorage.getItem('token');
@@ -19,6 +20,8 @@ function Navbar() {
   const role = getCurrentRole();
 
   const [showSignInOptions, setShowSignInOptions] = useState(false);
+
+  const location = useLocation();
 
   function changeLanguage(lang) {
     i18n.changeLanguage(lang);
@@ -56,76 +59,83 @@ function Navbar() {
     navigate(`/positions/${id}`);
   }
 
+  if (location.pathname === '/login') return null;
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3 mb-4">
-      <Link className="navbar-brand" to="/">CV Platform</Link>
-      <form className="d-flex mx-3 position-relative" onSubmit={handleSearch}>
-        <input
-          className="form-control form-control-sm"
-          placeholder={t('nav.searchPlaceholder')}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-        <button className="btn btn-sm btn-outline-light ms-1" type="submit">{t('nav.searchButton')}</button>
-
-        {results && (
-          <div className="position-absolute bg-white text-dark p-2 shadow" style={{ top: '100%', left: 0, zIndex: 10, minWidth: '300px' }}>
-            {results.positions.length === 0 && results.attributes.length === 0 && <p className="mb-0">{t('nav.noResults')}</p>}
-
-            {results.positions.length > 0 && (
-              <>
-                <strong>{t('nav.positions')}</strong>
-                <ul className="list-unstyled mb-2">
-                  {results.positions.map((p) => (
-                    <li key={p.id} onClick={() => goToPosition(p.id)} style={{ cursor: 'pointer' }}>{p.title}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-
-            {results.attributes.length > 0 && (
-              <>
-                <strong>{t('nav.attributes')}</strong>
-                <ul className="list-unstyled mb-0">
-                  {results.attributes.map((a) => <li key={a.id}>{a.name}</li>)}
-                </ul>
-              </>
-            )}
-          </div>
-        )}
-      </form>
-      <div className="navbar-nav">
-        <Link className="nav-link text-white" to="/attributes">{t('nav.attributes')}</Link>
-        <Link className="nav-link text-white" to="/positions">{t('nav.positions')}</Link>
-        {role === 'candidate' ? (
-          <Link className="nav-link text-white" to="/cvs">{t('nav.myCvs')}</Link>
-        ) : (
-          <Link className="nav-link text-white" to="/all-cvs">{t('nav.allCvs')}</Link>
-        )}
-        <Link className="nav-link text-white" to="/projects">{t('nav.projects')}</Link>
-        <Link className="nav-link text-white" to="/profile">{t('nav.profile')}</Link>
-        {role === 'admin' && (
-          <Link className="nav-link text-white" to="/users">{t('nav.users')}</Link>
-        )}
-      </div>
-
-      <div className="ms-auto d-flex gap-2">
-        <button className="btn btn-outline-light btn-sm" onClick={toggleTheme}>
-          {theme === 'light' ? `${t("theme.dark")}` : `${t("theme.light")}`}
-        </button>
-        <button className="btn btn-outline-light btn-sm" onClick={() => changeLanguage(i18n.language === 'en' ? 'ru' : 'en')}>
-          {i18n.language === 'en' ? 'RU' : 'EN'}
-        </button>
-        {isLoggedIn ? (
-          <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
-            {t('nav.logout')}
+    <nav className="navbar navbar-expand-lg mb-4" style={{ paddingLeft: '7rem', paddingRight: '7rem', backgroundColor: 'var(--navbar-bg)', color: 'var(--navbar-text)' }}>
+        <Link className="navbar-brand" to="/" style={{ color: 'var(--navbar-text)' }}>
+          CV Platform
+        </Link>
+        <form className="d-flex mx-3 position-relative" onSubmit={handleSearch}>
+          <input
+            className="form-control form-control-sm"
+            placeholder={t('nav.searchPlaceholder')}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button className="btn btn-sm navbar-btn ms-1" type="submit">
+            {t('nav.searchButton')}
           </button>
-        ) : (
-          <Link className="btn btn-outline-light btn-sm" to="/login">
-            {t('nav.login')}
-          </Link>
-        )}
-      </div>
+          {/* btn navbar-btn btn-sm */}
+
+          {results && (
+            <div className="position-absolute bg-white text-dark p-2 shadow" style={{ top: '100%', left: 0, zIndex: 10, minWidth: '300px' }}>
+              {results.positions.length === 0 && results.attributes.length === 0 && <p className="mb-0">{t('nav.noResults')}</p>}
+
+              {results.positions.length > 0 && (
+                <>
+                  <strong>{t('nav.positions')}</strong>
+                  <ul className="list-unstyled mb-2">
+                    {results.positions.map((p) => (
+                      <li key={p.id} onClick={() => goToPosition(p.id)} style={{ cursor: 'pointer' }}>{p.title}</li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              {results.attributes.length > 0 && (
+                <>
+                  <strong>{t('nav.attributes')}</strong>
+                  <ul className="list-unstyled mb-0">
+                    {results.attributes.map((a) => <li key={a.id}>{a.name}</li>)}
+                  </ul>
+                </>
+              )}
+            </div>
+          )}
+        </form>
+        <div className="navbar-nav">
+          <NavLink className={({isActive}) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/attributes" style={{ color: 'var(--navbar-text)' }}>{t('nav.attributes')}</NavLink>
+          <NavLink className={({isActive}) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/positions" style={{ color: 'var(--navbar-text)' }}>{t('nav.positions')}</NavLink>
+          {role === 'candidate' ? (
+            <NavLink className={({isActive}) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/cvs" style={{ color: 'var(--navbar-text)' }}>{t('nav.myCvs')}</NavLink>
+          ) : (
+            <NavLink className={({isActive}) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/all-cvs" style={{ color: 'var(--navbar-text)' }}>{t('nav.allCvs')}</NavLink>
+          )}
+          <NavLink className={({isActive}) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/projects" style={{ color: 'var(--navbar-text)' }}>{t('nav.projects')}</NavLink>
+          <NavLink className={({isActive}) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/profile" style={{ color: 'var(--navbar-text)' }}>{t('nav.profile')}</NavLink>
+          {role === 'admin' && (
+            <NavLink className={({isActive}) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/users" style={{ color: 'var(--navbar-text)' }}>{t('nav.users')}</NavLink>
+          )}
+        </div>
+
+        <div className="ms-auto d-flex gap-2">
+          <button className="btn navbar-btn btn-sm" onClick={toggleTheme}>
+            {theme === 'light' ? `${t("theme.dark")}` : `${t("theme.light")}`}
+          </button>
+          <button className="btn navbar-btn btn-sm" onClick={() => changeLanguage(i18n.language === 'en' ? 'ru' : 'en')}>
+            {i18n.language === 'en' ? 'RU' : 'EN'}
+          </button>
+          {isLoggedIn ? (
+            <button className="btn navbar-btn btn-sm" onClick={handleLogout}>
+              {t('nav.logout')}
+            </button>
+          ) : (
+            <Link className="btn navbar-btn btn-sm" to="/login">
+              {t('nav.login')}
+            </Link>
+          )}
+        </div>
     </nav>
   );
 }

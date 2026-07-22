@@ -32,12 +32,12 @@ function App() {
       </div>
 
       <h2>{t('home.latestPositions')}</h2>
-      <table className="table table-striped mb-4">
+      <table className="table table-striped table-borderless mb-4">
         <thead><tr><th>{t('home.latestTitle')}</th><th>{t('home.latestDescription')}</th></tr></thead>
         <tbody>
           {data.latestPositions.map((pos) => (
             <tr key={pos.id}>
-              <td><Link to={`/positions/${pos.id}`}>{pos.title}</Link></td>
+              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style = {{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
               <td>{pos.description}</td>
             </tr>
           ))}
@@ -45,12 +45,12 @@ function App() {
       </table>
 
       <h2>{t('home.popularPositions')}</h2>
-      <table className="table table-striped">
+      <table className="table table-striped table-borderless">
         <thead><tr><th>{t('home.popularTitle')}</th><th>{t('home.CvsSubmitted')}</th></tr></thead>
         <tbody>
           {data.popularPositions.map((pos) => (
             <tr key={pos.id}>
-              <td><Link to={`/positions/${pos.id}`}>{pos.title}</Link></td>
+              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style = {{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
               <td>{pos._count.cvs}</td>
             </tr>
           ))}

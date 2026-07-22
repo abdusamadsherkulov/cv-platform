@@ -50,7 +50,7 @@ function CVs() {
       <h1>{t('cvs.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <table className="table table-striped">
+      <table className="table table-striped table-borderless">
         <thead>
           <tr>
             <th>{t('cvs.colPosition')}</th>

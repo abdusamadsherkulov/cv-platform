@@ -73,7 +73,7 @@ function Attributes() {
         onChange={(e) => setSearch(e.target.value)}
       />
 
-      <table className="table table-striped">
+      <table className="table table-striped table-borderless">
         <thead>
           <tr>
             <th>{t('attributes.colName')}</th>

@@ -62,7 +62,7 @@ function Users() {
       <h1>{t('users.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <table className="table table-striped">
+      <table className="table table-striped table-borderless">
         <thead>
           <tr>
             <th>{t('users.colName')}</th>
