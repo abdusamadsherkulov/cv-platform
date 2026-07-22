@@ -57,7 +57,7 @@ function Navbar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3 mb-4 mx-4">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3 mb-4">
       <Link className="navbar-brand" to="/">CV Platform</Link>
       <form className="d-flex mx-3 position-relative" onSubmit={handleSearch}>
         <input
