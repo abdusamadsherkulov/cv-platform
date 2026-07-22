@@ -99,6 +99,7 @@ function ValueRow({ value, onRemove, onSaved }) {
   const [editing, setEditing] = useState(false);
   const [input, setInput] = useState(value.value);
   const [error, setError] = useState('');
+  const { t } = useTranslation();
 
   async function handleSave(e) {
     e.preventDefault();

@@ -95,7 +95,7 @@ body {
 [data-theme='dark'] .form-control,
 [data-theme='dark'] .form-select {
   background-color: #f7f7f7;
-  color: var(--text-color);
+  color: #212529;
   border-color: #444;
 }
 
