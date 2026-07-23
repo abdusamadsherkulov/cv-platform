@@ -5,6 +5,20 @@ import { requireAuth } from '../middleware/auth.js';
 const prisma = new PrismaClient();
 const router = express.Router();
 
+router.get('/me', requireAuth, async (req, res) => {
+  const user = await prisma.user.findUnique({ where: { id: req.user.userId } });
+  res.json({ firstName: user.firstName, lastName: user.lastName, location: user.location });
+});
+
+router.put('/me', requireAuth, async (req, res) => {
+  const { firstName, lastName, location } = req.body;
+  const user = await prisma.user.update({
+    where: { id: req.user.userId },
+    data: { firstName, lastName, location },
+  });
+  res.json({ firstName: user.firstName, lastName: user.lastName, location: user.location });
+});
+
 // get all of the current user's filled-in attribute values
 router.get('/', requireAuth, async (req, res) => {
   const values = await prisma.attributeValue.findMany({
@@ -48,21 +62,6 @@ router.delete('/:attributeId', requireAuth, async (req, res) => {
     where: { userId: req.user.userId, attributeId: Number(req.params.attributeId) },
   });
   res.status(204).send();
-});
-
-// get/update the "Me" built-in fields
-router.get('/me', requireAuth, async (req, res) => {
-  const user = await prisma.user.findUnique({ where: { id: req.user.userId } });
-  res.json({ firstName: user.firstName, lastName: user.lastName, location: user.location });
-});
-
-router.put('/me', requireAuth, async (req, res) => {
-  const { firstName, lastName, location } = req.body;
-  const user = await prisma.user.update({
-    where: { id: req.user.userId },
-    data: { firstName, lastName, location },
-  });
-  res.json({ firstName: user.firstName, lastName: user.lastName, location: user.location });
 });
 
 export default router;
