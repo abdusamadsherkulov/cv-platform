@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { apiFetch, getCurrentRole } from '../api';
+import { apiFetch, getCurrentRole, displayName } from '../api';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 function Projects() {
   const [projects, setProjects] = useState([]);
@@ -79,7 +80,7 @@ function Projects() {
         <tbody>
           {projects.map((proj) => (
             <tr key={proj.id}>
-              {!isCandidate && <td>{proj.user.name}</td>}
+              {!isCandidate && <td><Link to={`/candidates/${proj.user.id}`}>{displayName(proj.user)}</Link></td>}
               <td>{proj.name}</td>
               <td>
                 {new Date(proj.startDate).toLocaleDateString()} -{' '}
