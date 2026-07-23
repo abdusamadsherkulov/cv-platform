@@ -69,13 +69,15 @@ function Profile() {
       {error && <div className="alert alert-danger">{error}</div>}
 
       <h2>{t('profile.info')}</h2>
-      <table className="table">
-        <tbody>
-          {values.map((v) => (
-            <ValueRow key={v.attributeId} value={v} onRemove={handleRemove} onSaved={loadValues} />
-          ))}
-        </tbody>
-      </table>
+      <div className="d-flex justify-content-center">
+        <table className="table" style={{ maxWidth: '600px' }}>
+          <tbody>
+            {values.map((v) => (
+              <ValueRow key={v.attributeId} value={v} onRemove={handleRemove} onSaved={loadValues} />
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="d-flex gap-2 mb-4">
         <select className="form-select" value={attributeToAdd} onChange={(e) => setAttributeToAdd(e.target.value)}>
@@ -128,13 +130,15 @@ function ValueRow({ value, onRemove, onSaved }) {
     <tr>
       <td style={{ width: '200px' }}>{value.attribute.name}</td>
       <td>
-        <input
-          className="form-control"
-          style = {{maxWidth: '300px'}}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        {saveStatus === 'saving' && <small className="text-muted">{t('profile.saving')}</small>}
+        <div className="d-flex justify-content-center">
+          <input
+            className="form-control"
+            style={{ maxWidth: '300px' }}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+        </div>
+        {saveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
         {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
         {error && <div className="text-danger small">{error}</div>}
       </td>
