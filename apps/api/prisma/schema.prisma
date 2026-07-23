@@ -19,6 +19,9 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String
+  firstName String   @default("")
+  lastName  String   @default("")
+  location  String   @default("")
   role      String   @default("candidate")
   isBlocked Boolean  @default(false)
   createdAt DateTime @default(now())
