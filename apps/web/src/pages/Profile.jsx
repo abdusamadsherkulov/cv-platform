@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../api';
 import { useTranslation } from 'react-i18next';
@@ -14,6 +14,7 @@ function Profile() {
 
   const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '' });
   const [meSaveStatus, setMeSaveStatus] = useState('');
+  const meLoadedRef = useRef(false);
 
   async function loadValues() {
     try {
@@ -37,6 +38,7 @@ function Profile() {
     try {
       const data = await apiFetch('/profile/me');
       setMeFields(data);
+      meLoadedRef.current = true;
     } catch (err) {
       setError(err.message);
     }
@@ -49,6 +51,8 @@ function Profile() {
   }, []);
 
   useEffect(() => {
+    if (!meLoadedRef.current) return;
+
     const timer = setTimeout(async () => {
       setMeSaveStatus('saving');
       try {
