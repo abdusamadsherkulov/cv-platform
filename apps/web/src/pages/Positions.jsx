@@ -65,7 +65,7 @@ function Positions() {
 
   return (
     <div className="container mt-4">
-      <h1>{t('positions.title')}</h1>
+      <h1 className="mb-4">{t('positions.title')}</h1>
 
       {error && <div className="alert alert-danger">{error}</div>}
 

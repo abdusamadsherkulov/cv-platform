@@ -97,7 +97,7 @@ function Profile() {
 
   return (
     <div className="container mt-4">
-      <h1>{t('profile.title')}</h1>
+      <h1 className="mb-4">{t('profile.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <h2>Me</h2>

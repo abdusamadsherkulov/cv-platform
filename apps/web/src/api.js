@@ -32,3 +32,10 @@ export function getCurrentRole() {
     return null;
   }
 }
+
+export function displayName(user) {
+  if (user.firstName && user.lastName) {
+    return `${user.firstName} ${user.lastName}`;
+  }
+  return user.name;
+}

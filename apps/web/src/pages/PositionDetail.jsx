@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { apiFetch, getCurrentRole } from '../api';
+import { apiFetch, getCurrentRole, displayName } from '../api';
 import { useTranslation } from 'react-i18next';
 
 function PositionDetail() {
@@ -243,7 +243,7 @@ async function handlePostSubmit(e) {
       <ul className="list-group mb-3">
         {posts.map((post) => (
           <li key={post.id} className="list-group-item">
-            <strong>{post.author.name}</strong>{' '}
+            <strong>{displayName(post.author)}</strong>{' '}
             <small className="text-muted">{new Date(post.createdAt).toLocaleString()}</small>
             <p className="mb-0">{post.content}</p>
           </li>

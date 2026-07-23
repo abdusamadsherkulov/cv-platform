@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiFetch } from '../api';
+import { apiFetch, displayName } from '../api';
 import { useTranslation } from 'react-i18next';
 
 function Users() {
@@ -59,7 +59,7 @@ function Users() {
 
   return (
     <div className="container mt-4">
-      <h1>{t('users.title')}</h1>
+      <h1 className="mb-4">{t('users.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <table className="table table-striped table-borderless">
@@ -75,7 +75,7 @@ function Users() {
         <tbody>
           {users.map((u) => (
             <tr key={u.id}>
-              <td>{u.name}</td>
+              <td>{displayName(u)}</td>
               <td>{u.email}</td>
               <td>
                 <select

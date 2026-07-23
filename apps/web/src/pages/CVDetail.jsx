@@ -72,7 +72,7 @@ function CVDetail() {
 
   return (
     <div className="container mt-4">
-      <h1>{cv.position.title}</h1>
+      <h1 className="mb-4">{cv.position.title}</h1>
       <p>{t('cvDetail.status')}: <strong>{cv.status}</strong></p>
       <p>{t('cvDetail.likes')}: {cv.likeCount}
         {canLike && (
