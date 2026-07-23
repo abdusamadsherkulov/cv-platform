@@ -116,6 +116,7 @@ function FieldRow({ field, onSave, canEdit }) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(field.value);
 
+  const { t } = useTranslation();
   const isEmpty = !field.value?.trim();
 
   function handleSubmit(e) {
@@ -146,7 +147,7 @@ function FieldRow({ field, onSave, canEdit }) {
             onClick={canEdit ? () => setEditing(true) : undefined}
             style={{ cursor: canEdit ? 'pointer' : 'default' }}
           >
-            {isEmpty ? { text: t('cvDetail.empty') } : field.value}
+            {isEmpty ? t('cvDetail.empty') : field.value}
           </span>
         )}
       </td>

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 function Users() {
   const [users, setUsers] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
   const [error, setError] = useState('');
 
   const { t } = useTranslation();
@@ -21,6 +22,18 @@ function Users() {
     loadUsers();
   }, []);
 
+  function toggleSelected(id) {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  }
+
+  function toggleSelectAll() {
+    setSelectedIds((prev) =>
+      prev.length === users.length ? [] : users.map((u) => u.id)
+    );
+  }
+
   async function handleRoleChange(userId, newRole) {
     setError('');
     try {
@@ -34,23 +47,31 @@ function Users() {
     }
   }
 
-  async function handleToggleBlock(userId, currentlyBlocked) {
+  async function handleBlockSelected(shouldBlock) {
     setError('');
     try {
-      await apiFetch(`/users/${userId}/block`, {
-        method: 'PUT',
-        body: JSON.stringify({ isBlocked: !currentlyBlocked }),
-      });
+      await Promise.all(
+        selectedIds.map((id) =>
+          apiFetch(`/users/${id}/block`, {
+            method: 'PUT',
+            body: JSON.stringify({ isBlocked: shouldBlock }),
+          })
+        )
+      );
+      setSelectedIds([]);
       loadUsers();
     } catch (err) {
       setError(err.message);
     }
   }
 
-  async function handleDelete(userId) {
+  async function handleDeleteSelected() {
     setError('');
     try {
-      await apiFetch(`/users/${userId}`, { method: 'DELETE' });
+      await Promise.all(
+        selectedIds.map((id) => apiFetch(`/users/${id}`, { method: 'DELETE' }))
+      );
+      setSelectedIds([]);
       loadUsers();
     } catch (err) {
       setError(err.message);
@@ -59,22 +80,59 @@ function Users() {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">{t('users.title')}</h1>
+      <h1>{t('users.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
+
+      <div className="d-flex gap-2 mb-2">
+        <button
+          className="btn btn-sm btn-outline-warning"
+          disabled={selectedIds.length === 0}
+          onClick={() => handleBlockSelected(true)}
+        >
+          {t('users.block')}
+        </button>
+        <button
+          className="btn btn-sm btn-outline-secondary"
+          disabled={selectedIds.length === 0}
+          onClick={() => handleBlockSelected(false)}
+        >
+          {t('users.unblock')}
+        </button>
+        <button
+          className="btn btn-sm btn-danger"
+          disabled={selectedIds.length === 0}
+          onClick={handleDeleteSelected}
+        >
+          {t('users.delete')}
+        </button>
+      </div>
 
       <table className="table table-striped table-borderless">
         <thead>
           <tr>
+            <th>
+              <input
+                type="checkbox"
+                checked={selectedIds.length === users.length && users.length > 0}
+                onChange={toggleSelectAll}
+              />
+            </th>
             <th>{t('users.colName')}</th>
             <th>{t('users.colEmail')}</th>
             <th>{t('users.colRole')}</th>
             <th>{t('users.colStatus')}</th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
           {users.map((u) => (
             <tr key={u.id}>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={selectedIds.includes(u.id)}
+                  onChange={() => toggleSelected(u.id)}
+                />
+              </td>
               <td>{displayName(u)}</td>
               <td>{u.email}</td>
               <td>
@@ -89,14 +147,6 @@ function Users() {
                 </select>
               </td>
               <td>{u.isBlocked ? t('users.blocked') : t('users.active')}</td>
-              <td className="d-flex gap-2">
-                <button className="btn btn-sm btn-outline-warning" onClick={() => handleToggleBlock(u.id, u.isBlocked)}>
-                  {u.isBlocked ? t('users.unblock') : t('users.block')}
-                </button>
-                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(u.id)}>
-                  {t('users.delete')}
-                </button>
-              </td>
             </tr>
           ))}
         </tbody>
