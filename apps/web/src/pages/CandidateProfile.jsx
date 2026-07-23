@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiFetch, getCurrentRole } from '../api';
+import { useTranslation } from 'react-i18next';
+
 
 function CandidateProfile() {
   const { userId } = useParams();
@@ -11,6 +13,7 @@ function CandidateProfile() {
 
   const role = getCurrentRole();
   const canEdit = role === 'admin';
+  const { t } = useTranslation();
 
   async function loadAll() {
     try {
@@ -60,12 +63,11 @@ function CandidateProfile() {
       <h1>{meFields.firstName && meFields.lastName ? `${meFields.firstName} ${meFields.lastName}` : meFields.name}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <h2>Me</h2>
       <div className="row g-2 mb-4" style={{ maxWidth: '600px' }}>
         <div className="col-md-4">
           <input
             className="form-control"
-            placeholder="First Name"
+            placeholder={t('profile.firstName')}
             value={meFields.firstName}
             disabled={!canEdit}
             onChange={(e) => setMeFields((f) => ({ ...f, firstName: e.target.value }))}
@@ -75,7 +77,7 @@ function CandidateProfile() {
         <div className="col-md-4">
           <input
             className="form-control"
-            placeholder="Last Name"
+            placeholder={t('profile.lastName')}
             value={meFields.lastName}
             disabled={!canEdit}
             onChange={(e) => setMeFields((f) => ({ ...f, lastName: e.target.value }))}
@@ -85,7 +87,7 @@ function CandidateProfile() {
         <div className="col-md-4">
           <input
             className="form-control"
-            placeholder="Location"
+            placeholder={t('profile.location')}
             value={meFields.location}
             disabled={!canEdit}
             onChange={(e) => setMeFields((f) => ({ ...f, location: e.target.value }))}
@@ -94,7 +96,7 @@ function CandidateProfile() {
         </div>
       </div>
 
-      <h2>Info</h2>
+      <h2>{t('profile.info')}</h2>
       <table className="table" style={{ maxWidth: '600px' }}>
         <tbody>
           {values.map((v) => (
@@ -103,7 +105,7 @@ function CandidateProfile() {
         </tbody>
       </table>
 
-      <h2>Projects</h2>
+      <h2>{t('profile.projects')}</h2>
       <ul className="list-group">
         {projects.map((proj) => (
           <li key={proj.id} className="list-group-item">

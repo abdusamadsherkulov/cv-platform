@@ -126,7 +126,8 @@
     "me": "Me",
     "firstName": "First Name",
     "lastName": "Last Name",
-    "location": "Location"
+    "location": "Location",
+    "projects": "Projects"
   },
   "users": {
     "title": "User Management",
