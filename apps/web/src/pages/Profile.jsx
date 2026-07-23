@@ -12,6 +12,9 @@ function Profile() {
 
   const { t } = useTranslation();
 
+  const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '' });
+  const [meSaveStatus, setMeSaveStatus] = useState('');
+
   async function loadValues() {
     try {
       const data = await apiFetch('/profile');
@@ -30,10 +33,39 @@ function Profile() {
     }
   }
 
+  async function loadMe() {
+    try {
+      const data = await apiFetch('/profile/me');
+      setMeFields(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   useEffect(() => {
     loadValues();
     loadAttributesList();
+    loadMe();
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      setMeSaveStatus('saving');
+      try {
+        await apiFetch('/profile/me', {
+          method: 'PUT',
+          body: JSON.stringify(meFields),
+        });
+        setMeSaveStatus('saved');
+        setTimeout(() => setMeSaveStatus(''), 3000);
+      } catch (err) {
+        setError(err.message);
+        setMeSaveStatus('');
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [meFields]);
 
   async function handleAddAttribute() {
     if (!attributeToAdd) return;
@@ -67,6 +99,40 @@ function Profile() {
     <div className="container mt-4">
       <h1>{t('profile.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
+
+      <h2>Me</h2>
+      <div className="d-flex justify-content-center mb-2">
+        <div className="row g-2" style={{ maxWidth: '600px', width: '100%' }}>
+          <div className="col-md-4">
+            <input
+              className="form-control"
+              placeholder="First Name"
+              value={meFields.firstName}
+              onChange={(e) => setMeFields((f) => ({ ...f, firstName: e.target.value }))}
+            />
+          </div>
+          <div className="col-md-4">
+            <input
+              className="form-control"
+              placeholder="Last Name"
+              value={meFields.lastName}
+              onChange={(e) => setMeFields((f) => ({ ...f, lastName: e.target.value }))}
+            />
+          </div>
+          <div className="col-md-4">
+            <input
+              className="form-control"
+              placeholder="Location"
+              value={meFields.location}
+              onChange={(e) => setMeFields((f) => ({ ...f, location: e.target.value }))}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="text-center mb-4">
+        {meSaveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
+        {meSaveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
+      </div>
 
       <h2>{t('profile.info')}</h2>
       <div className="d-flex justify-content-center">
