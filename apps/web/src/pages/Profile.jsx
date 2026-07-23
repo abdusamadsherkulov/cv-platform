@@ -130,6 +130,7 @@ function ValueRow({ value, onRemove, onSaved }) {
       <td style={{ width: '100%' }}>
         <input
           className="form-control"
+          style = {{maxWidth: '300px'}}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
