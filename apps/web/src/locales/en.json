@@ -118,7 +118,9 @@
     "add": "Add",
     "remove": "Remove",
     "myProjects": "My Projects",
-    "myCvs": "My CVs"
+    "myCvs": "My CVs",
+    "saving": "Saving...",
+    "saved": "Saved"
   },
   "users": {
     "title": "User Management",

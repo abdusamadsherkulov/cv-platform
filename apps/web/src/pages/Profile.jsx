@@ -114,11 +114,12 @@ function ValueRow({ value, onRemove, onSaved }) {
         });
         setSaveStatus('saved');
         onSaved();
+        setTimeout(() => setSaveStatus(''), 3000);
       } catch (err) {
         setError(err.message);
         setSaveStatus('');
       }
-    }, 5000); // wait 5 seconds after the user stops typing
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, [input]);
@@ -126,14 +127,14 @@ function ValueRow({ value, onRemove, onSaved }) {
   return (
     <tr>
       <td style={{ width: '200px' }}>{value.attribute.name}</td>
-      <td>
+      <td style={{ width: '100%' }}>
         <input
           className="form-control"
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
-        {saveStatus === 'saving' && <small className="text-muted">Saving...</small>}
-        {saveStatus === 'saved' && <small className="text-success">Saved</small>}
+        {saveStatus === 'saving' && <small className="text-muted">{t('profile.saving')}</small>}
+        {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
         {error && <div className="text-danger small">{error}</div>}
       </td>
       <td>
