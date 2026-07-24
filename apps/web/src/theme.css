@@ -45,54 +45,6 @@ body {
   color: var(--text-color) !important;
 }
 
-/* .table thead {
-  background-color: var(--navbar-bg);
-  color: var(--text-color);
-}
-
-.table thead th {
-  background-color: var(--navbar-bg);
-  color: var(--text-color);
-}
-
-.table-striped > tbody > tr:nth-of-type(odd) > td,
-.table-striped > tbody > tr:nth-of-type(odd) > th {
-  background-color: #ffffff;
-  color: var(--text-color);
-}
-
-.table-striped > tbody > tr:nth-of-type(even) > td,
-.table-striped > tbody > tr:nth-of-type(even) > th {
-  background-color: var(--navbar-bg);
-  color: var(--text-color);
-}
-
-
-
-[data-theme='dark'] .table {
-  color: var(--text-color);
-}
-
-[data-theme='dark'] .table-striped > tbody > tr:nth-of-type(odd) > * {
-  background-color: #213141;
-  color: var(--text-color);
-}
-
-[data-theme='dark'] .table-striped > tbody > tr:nth-of-type(even) > * {
-  background-color: #233950;
-  color: var(--text-color);
-}
-
-[data-theme='dark'] .table thead {
-  background-color: #233950;
-  color: var(--text-color);
-}
-
-[data-theme='dark'] .table thead th {
-  background-color: #233950;
-  color: var(--text-color);
-} */
-
 [data-theme='dark'] .form-control,
 [data-theme='dark'] .form-select {
   background-color: #f7f7f7;
@@ -115,4 +67,74 @@ body {
   --bs-table-striped-bg: var(--navbar-bg);
   --bs-table-striped-color: var(--text-color);
   --bs-table-color: var(--text-color);
+}
+
+/* Theme Swap */
+.theme-swap {
+  display: grid;
+  cursor: pointer;
+  position: relative;
+  margin-top: 0.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.theme-swap input {
+  display: none;
+}
+
+.theme-swap svg {
+  grid-column: 1;
+  grid-row: 1;
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: transform 0.4s ease, opacity 0.3s ease;
+}
+
+.swap-off {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+.swap-on {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0);
+}
+
+.theme-swap input:checked ~ .swap-off {
+  opacity: 0;
+  transform: rotate(90deg) scale(0);
+}
+
+.theme-swap input:checked ~ .swap-on {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Loading */
+.loading-ring {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  position: relative;
+}
+
+.loading-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 3px solid var(--text-color);
+  animation: loading-ring-pulse 0.8s ease-out infinite;
+}
+
+@keyframes loading-ring-pulse {
+  0% {
+    transform: scale(0.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
 }

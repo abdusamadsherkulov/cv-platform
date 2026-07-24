@@ -103,61 +103,65 @@ function PositionDetail() {
   }
 
   async function handleAddRule() {
-  if (!ruleAttributeId || !ruleValue) return;
-  setError('');
-  try {
-    await apiFetch(`/positions/${id}/access-rules`, {
-      method: 'POST',
-      body: JSON.stringify({
-        attributeId: Number(ruleAttributeId),
-        operator: ruleOperator,
-        value: ruleValue,
-      }),
-    });
-    setRuleAttributeId('');
-    setRuleValue('');
-    loadPosition();
-  } catch (err) {
-    setError(err.message);
+    if (!ruleAttributeId || !ruleValue) return;
+    setError('');
+    try {
+      await apiFetch(`/positions/${id}/access-rules`, {
+        method: 'POST',
+        body: JSON.stringify({
+          attributeId: Number(ruleAttributeId),
+          operator: ruleOperator,
+          value: ruleValue,
+        }),
+      });
+      setRuleAttributeId('');
+      setRuleValue('');
+      loadPosition();
+    } catch (err) {
+      setError(err.message);
+    }
   }
-}
 
-async function handleRemoveRule(ruleId) {
-  setError('');
-  try {
-    await apiFetch(`/positions/${id}/access-rules/${ruleId}`, { method: 'DELETE' });
-    loadPosition();
-  } catch (err) {
-    setError(err.message);
+  async function handleRemoveRule(ruleId) {
+    setError('');
+    try {
+      await apiFetch(`/positions/${id}/access-rules/${ruleId}`, { method: 'DELETE' });
+      loadPosition();
+    } catch (err) {
+      setError(err.message);
+    }
   }
-}
 
-async function loadPosts() {
-  try {
-    const data = await apiFetch(`/discussions/${id}`);
-    setPosts(data);
-  } catch (err) {
-    setError(err.message);
+  async function loadPosts() {
+    try {
+      const data = await apiFetch(`/discussions/${id}`);
+      setPosts(data);
+    } catch (err) {
+      setError(err.message);
+    }
   }
-}
 
-async function handlePostSubmit(e) {
-  e.preventDefault();
-  if (!newPost.trim()) return;
-  setError('');
-  try {
-    await apiFetch(`/discussions/${id}`, {
-      method: 'POST',
-      body: JSON.stringify({ content: newPost }),
-    });
-    setNewPost('');
-    loadPosts();
-  } catch (err) {
-    setError(err.message);
+  async function handlePostSubmit(e) {
+    e.preventDefault();
+    if (!newPost.trim()) return;
+    setError('');
+    try {
+      await apiFetch(`/discussions/${id}`, {
+        method: 'POST',
+        body: JSON.stringify({ content: newPost }),
+      });
+      setNewPost('');
+      loadPosts();
+    } catch (err) {
+      setError(err.message);
+    }
   }
-}
 
-  if (!position) return <div className="container mt-4">{t('nav.loading')}</div>;
+  if (!position) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+      <span className="loading-ring"></span>
+    </div>
+  );
 
   const attachedIds = position.attributes.map((a) => a.attributeId);
   const attributesNotYetAdded = attributesList.filter((a) => !attachedIds.includes(a.id));
@@ -197,7 +201,7 @@ async function handlePostSubmit(e) {
           </li>
         ))}
       </ul>
-      
+
       {canManage && (
         <div className="d-flex gap-2">
           <select className="form-select" value={attributeToAdd} onChange={(e) => setAttributeToAdd(e.target.value)}>
@@ -209,7 +213,7 @@ async function handlePostSubmit(e) {
           <button className="btn btn-primary" onClick={handleAddAttribute}>{t('positionDetail.add')}</button>
         </div>
       )}
-    
+
       {canManage && (
         <>
           <h2 className="mt-4">{t('positionDetail.accessRules')}</h2>

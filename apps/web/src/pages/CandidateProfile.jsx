@@ -59,7 +59,7 @@ function CandidateProfile() {
   }
 
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 mb-4">
       <h1>{meFields.firstName && meFields.lastName ? `${meFields.firstName} ${meFields.lastName}` : meFields.name}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 

@@ -17,7 +17,9 @@ function App() {
   }, []);
 
   if (error) return <div className="container mt-4"><div className="alert alert-danger">{error}</div></div>;
-  if (!data) return <div className="container mt-4">{t('nav.loading')}</div>;
+  if (!data) return <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
+    <span className="loading-ring"></span>
+  </div>;
 
   return (
     <div className="container mt-4">
@@ -37,7 +39,7 @@ function App() {
         <tbody>
           {data.latestPositions.map((pos) => (
             <tr key={pos.id}>
-              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style = {{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
+              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style={{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
               <td>{pos.description}</td>
             </tr>
           ))}
@@ -50,7 +52,7 @@ function App() {
         <tbody>
           {data.popularPositions.map((pos) => (
             <tr key={pos.id}>
-              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style = {{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
+              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style={{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
               <td>{pos._count.cvs}</td>
             </tr>
           ))}
