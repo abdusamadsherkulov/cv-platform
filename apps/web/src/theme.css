@@ -1,7 +1,7 @@
 :root {
   --bg-color: #FEFEFE;
   --text-color: #2c4663;
-  --navbar-bg: #ECECEC;
+  --navbar-bg: #dfdfdf;
   --navbar-text: #2c4663;
   --navbar-btn-bg: #2c4663;
   --navbar-btn-border: #1f2c3a;
@@ -143,6 +143,7 @@ body {
 .hamburger-menu {
   border-radius: 0.5rem;
   padding: 0.75rem;
+  margin-top: 1rem;
   min-width: 220px;
   animation: menu-fade-in 0.15s ease-out;
 }
@@ -170,7 +171,7 @@ body {
 }
 
 .hamburger-menu .nav-link:hover {
-  background-color: rgba(128, 128, 128, 0.15);
+  background-color: rgba(117, 117, 117, 0.15);
 }
 
 .hamburger-menu .nav-link.fw-bold {
