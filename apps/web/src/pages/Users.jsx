@@ -80,7 +80,7 @@ function Users() {
 
   return (
     <div className="container mt-4">
-      <h1>{t('users.title')}</h1>
+      <h1 className="mb-4">{t('users.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="d-flex gap-2 mb-2">

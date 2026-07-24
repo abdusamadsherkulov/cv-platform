@@ -105,49 +105,45 @@ function Profile() {
       {error && <div className="alert alert-danger">{error}</div>}
 
       <h2>{t('profile.me')}</h2>
-      <div className="d-flex justify-content-center mb-2">
-        <div className="row g-2" style={{ maxWidth: '600px', width: '100%' }}>
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              placeholder={t('profile.firstName')}
-              value={meFields.firstName}
-              onChange={(e) => setMeFields((f) => ({ ...f, firstName: e.target.value }))}
-            />
-          </div>
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              placeholder={t('profile.lastName')}
-              value={meFields.lastName}
-              onChange={(e) => setMeFields((f) => ({ ...f, lastName: e.target.value }))}
-            />
-          </div>
-          <div className="col-md-4">
-            <input
-              className="form-control"
-              placeholder={t('profile.location')}
-              value={meFields.location}
-              onChange={(e) => setMeFields((f) => ({ ...f, location: e.target.value }))}
-            />
-          </div>
+      <div className="row g-2 mb-2" style={{ maxWidth: '600px' }}>
+        <div className="col-md-4">
+          <input
+            className="form-control"
+            placeholder={t('profile.firstName')}
+            value={meFields.firstName}
+            onChange={(e) => setMeFields((f) => ({ ...f, firstName: e.target.value }))}
+          />
+        </div>
+        <div className="col-md-4">
+          <input
+            className="form-control"
+            placeholder={t('profile.lastName')}
+            value={meFields.lastName}
+            onChange={(e) => setMeFields((f) => ({ ...f, lastName: e.target.value }))}
+          />
+        </div>
+        <div className="col-md-4">
+          <input
+            className="form-control"
+            placeholder={t('profile.location')}
+            value={meFields.location}
+            onChange={(e) => setMeFields((f) => ({ ...f, location: e.target.value }))}
+          />
         </div>
       </div>
-      <div className="text-center mb-4">
+      <div className="mb-4">
         {meSaveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
         {meSaveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
       </div>
 
       <h2>{t('profile.info')}</h2>
-      <div className="d-flex justify-content-center">
-        <table className="table" style={{ maxWidth: '600px' }}>
-          <tbody>
-            {values.map((v) => (
-              <ValueRow key={v.attributeId} value={v} onRemove={handleRemove} onSaved={loadValues} />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <table className="table" style={{ maxWidth: '600px' }}>
+        <tbody>
+          {values.map((v) => (
+            <ValueRow key={v.attributeId} value={v} onRemove={handleRemove} onSaved={loadValues} />
+          ))}
+        </tbody>
+      </table>
 
       <div className="d-flex gap-2 mb-4">
         <select className="form-select" value={attributeToAdd} onChange={(e) => setAttributeToAdd(e.target.value)}>
@@ -200,14 +196,12 @@ function ValueRow({ value, onRemove, onSaved }) {
     <tr>
       <td style={{ width: '200px' }}>{value.attribute.name}</td>
       <td>
-        <div className="d-flex justify-content-center">
-          <input
-            className="form-control"
-            style={{ maxWidth: '300px' }}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-        </div>
+        <input
+          className="form-control"
+          style={{ maxWidth: '300px' }}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        />
         {saveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
         {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
         {error && <div className="text-danger small">{error}</div>}
