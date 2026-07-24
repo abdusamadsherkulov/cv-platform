@@ -11,6 +11,7 @@ function Attributes() {
   const [description, setDescription] = useState('');
   const [type, setType] = useState('string');
   const [categoryId, setCategoryId] = useState('');
+  const [optionsText, setOptionsText] = useState('');
 
   const role = getCurrentRole();
   const canManage = role === 'recruiter' || role === 'admin';
@@ -47,13 +48,18 @@ function Attributes() {
     e.preventDefault();
     setError('');
     try {
+      const options = type === 'enum'
+        ? optionsText.split(',').map((o) => o.trim()).filter(Boolean)
+        : [];
+
       await apiFetch('/attributes', {
         method: 'POST',
-        body: JSON.stringify({ name, description, type, categoryId: Number(categoryId) }),
+        body: JSON.stringify({ name, description, type, categoryId: Number(categoryId), options }),
       });
       setName('');
       setDescription('');
       setCategoryId('');
+      setOptionsText('');
       loadAttributes();
     } catch (err) {
       setError(err.message);
@@ -115,6 +121,19 @@ function Attributes() {
                 <option value="image">Image</option>
               </select>
             </div>
+
+            {type === 'enum' && (
+              <div className="col-md-4">
+                <input
+                  className="form-control"
+                  placeholder="Options, comma-separated (e.g. Basic, Intermediate, Advanced)"
+                  value={optionsText}
+                  onChange={(e) => setOptionsText(e.target.value)}
+                  required
+                />
+              </div>
+            )}
+            
             <div className="col-md-2">
               <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
                 <option value="">{t('attributes.selectCategory')}</option>

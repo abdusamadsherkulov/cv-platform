@@ -125,10 +125,10 @@ function CVDetail() {
 }
 
 function FieldRow({ field, onSave, canEdit }) {
+  const { t } = useTranslation(); // was missing before — needed here too
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(field.value);
 
-  const { t } = useTranslation();
   const isEmpty = !field.value?.trim();
 
   function handleSubmit(e) {
@@ -143,12 +143,38 @@ function FieldRow({ field, onSave, canEdit }) {
       <td>
         {editing ? (
           <form onSubmit={handleSubmit} className="d-flex gap-2">
-            <input
-              className="form-control"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-              autoFocus
-            />
+            {field.type === 'enum' ? (
+              <select
+                className="form-select form-select-sm"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                autoFocus
+              >
+                <option value="">{t('cvDetail.selectValue')}</option>
+                {field.options.map((opt) => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+            ) : field.type === 'boolean' ? (
+              <select
+                className="form-select form-select-sm"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                autoFocus
+              >
+                <option value="">{t('cvDetail.selectValue')}</option>
+                <option value="true">{t('cvDetail.yes')}</option>
+                <option value="false">{t('cvDetail.no')}</option>
+              </select>
+            ) : (
+              <input
+                className="form-control"
+                type={field.type === 'numeric' ? 'number' : field.type === 'date' ? 'date' : 'text'}
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                autoFocus
+              />
+            )}
             <button className="btn btn-sm btn-primary" type="submit">{t('cvDetail.save')}</button>
             <button className="btn btn-sm btn-secondary" type="button" onClick={() => setEditing(false)}>
               {t('cvDetail.cancel')}

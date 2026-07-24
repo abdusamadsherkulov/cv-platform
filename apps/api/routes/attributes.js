@@ -26,7 +26,7 @@ router.post('/', requireAuth, requireRole('recruiter', 'admin'), async (req, res
   const { name, description, type, categoryId } = req.body;
 
   const attribute = await prisma.attribute.create({
-    data: { name, description, type, categoryId },
+    data: { name, description, type, categoryId, options: options || [] },
   });
 
   res.status(201).json(attribute);
@@ -34,12 +34,12 @@ router.post('/', requireAuth, requireRole('recruiter', 'admin'), async (req, res
 
 // edit, with optimistic locking
 router.put('/:id', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
-  const { name, description, type, categoryId, version } = req.body;
+  const { name, description, type, categoryId, options, version } = req.body;
   const id = Number(req.params.id);
 
   const result = await prisma.attribute.updateMany({
     where: { id, version },
-    data: { name, description, type, categoryId, version: { increment: 1 } },
+    data: { name, description, type, categoryId, options: options || [], version: { increment: 1 } },
   });
 
   if (result.count === 0) {

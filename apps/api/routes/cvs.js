@@ -65,24 +65,34 @@ router.get('/:id', requireAuth, async (req, res) => {
   });
   if (!cv) return res.status(404).json({ error: 'CV not found' });
 
-  // pull this candidate's saved values for exactly the attributes this position needs
+  // access control: candidates can only see their own CV; recruiters only published ones; admins see everything
+  const isOwner = cv.userId === req.user.userId;
+  const isAdmin = req.user.role === 'admin';
+  const isRecruiter = req.user.role === 'recruiter';
+
+  if (!isOwner && !isAdmin) {
+    if (!isRecruiter || cv.status !== 'published') {
+      return res.status(403).json({ error: 'You do not have access to this CV' });
+    }
+  }
+
+  // pull the CV owner's saved values for exactly the attributes this position needs
   const attributeIds = cv.position.attributes.map((a) => a.attributeId);
   const values = await prisma.attributeValue.findMany({
     where: { userId: cv.userId, attributeId: { in: attributeIds } },
   });
 
-  // build a lookup so we can pair each position attribute with its value (or blank)
   const valueMap = Object.fromEntries(values.map((v) => [v.attributeId, v]));
 
   const fields = cv.position.attributes.map((posAttr) => ({
     attributeId: posAttr.attributeId,
     name: posAttr.attribute.name,
     type: posAttr.attribute.type,
+    options: posAttr.attribute.options,
     value: valueMap[posAttr.attributeId]?.value ?? '',
     version: valueMap[posAttr.attributeId]?.version ?? null,
   }));
 
-  // pull matching projects by tag, capped at maxProjects
   const projects = await prisma.project.findMany({
     where: {
       userId: cv.userId,
@@ -102,27 +112,33 @@ router.get('/:id', requireAuth, async (req, res) => {
 
 // edit a single attribute value in-place, writes through to the shared profile value
 router.put('/:id/attributes/:attributeId', requireAuth, async (req, res) => {
-  if (req.user.role !== 'candidate' && req.user.role !== 'admin') {
+  const cv = await prisma.cV.findUnique({ where: { id: Number(req.params.id) } });
+  if (!cv) return res.status(404).json({ error: 'CV not found' });
+
+  const isOwner = cv.userId === req.user.userId;
+  const isAdmin = req.user.role === 'admin';
+
+  if (!isOwner && !isAdmin) {
     return res.status(403).json({ error: 'Only the candidate or an admin can edit this' });
   }
-  
+
+  const targetUserId = cv.userId; // always the CV owner's profile, never the requester's
   const attributeId = Number(req.params.attributeId);
   const { value, version } = req.body;
 
   const existing = await prisma.attributeValue.findUnique({
-    where: { userId_attributeId: { userId: req.user.userId, attributeId } },
+    where: { userId_attributeId: { userId: targetUserId, attributeId } },
   });
 
   if (!existing) {
-    // first time this attribute's ever been filled in for this user
     const created = await prisma.attributeValue.create({
-      data: { userId: req.user.userId, attributeId, value },
+      data: { userId: targetUserId, attributeId, value },
     });
     return res.json(created);
   }
 
   const result = await prisma.attributeValue.updateMany({
-    where: { userId: req.user.userId, attributeId, version },
+    where: { userId: targetUserId, attributeId, version },
     data: { value, version: { increment: 1 } },
   });
 

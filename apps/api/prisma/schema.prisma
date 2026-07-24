@@ -39,6 +39,7 @@ model Attribute {
   type        String
   categoryId  Int
   category    AttributeCategory @relation(fields: [categoryId], references: [id])
+  options     String[] @default([])
   version     Int      @default(1)
   createdAt   DateTime @default(now())
   positionLinks PositionAttribute[]

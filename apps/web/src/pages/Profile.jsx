@@ -196,12 +196,40 @@ function ValueRow({ value, onRemove, onSaved }) {
     <tr>
       <td style={{ width: '200px' }}>{value.attribute.name}</td>
       <td>
-        <input
-          className="form-control"
-          style={{ maxWidth: '300px' }}
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
+        <div className="d-flex justify-content-center">
+          {value.attribute.type === 'enum' ? (
+            <select
+              className="form-select"
+              style={{ maxWidth: '300px' }}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            >
+              <option value="">{t('profile.selectValue')}</option>
+              {value.attribute.options.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          ) : value.attribute.type === 'boolean' ? (
+            <select
+              className="form-select"
+              style={{ maxWidth: '300px' }}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            >
+              <option value="">{t('profile.selectValue')}</option>
+              <option value="true">{t('profile.yes')}</option>
+              <option value="false">{t('profile.no')}</option>
+            </select>
+          ) : (
+            <input
+              className="form-control"
+              type={value.attribute.type === 'numeric' ? 'number' : value.attribute.type === 'date' ? 'date' : 'text'}
+              style={{ maxWidth: '300px' }}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          )}
+        </div>
         {saveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
         {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
         {error && <div className="text-danger small">{error}</div>}
