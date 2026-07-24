@@ -138,3 +138,41 @@ body {
     opacity: 0;
   }
 }
+
+/* Hamburger menu */
+.hamburger-menu {
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  min-width: 220px;
+  animation: menu-fade-in 0.15s ease-out;
+}
+
+@keyframes menu-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hamburger-menu .nav-link {
+  padding: 0.6rem 0.75rem;
+  border-radius: 0.4rem;
+  font-size: 1.1rem;
+  transition: background-color 0.15s ease;
+}
+
+.hamburger-menu span {
+  font-size: 1.1rem;
+}
+
+.hamburger-menu .nav-link:hover {
+  background-color: rgba(128, 128, 128, 0.15);
+}
+
+.hamburger-menu .nav-link.fw-bold {
+  background-color: rgba(128, 128, 128, 0.2);
+}

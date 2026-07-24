@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import CountUp from '../src/components/CountUp';
 
 const API_URL = 'https://cw-platform.onrender.com';
 
@@ -23,14 +24,14 @@ function App() {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">{t('home.title')}</h1>
+      <h2 className="mb-4">{t('home.title')}</h2>
 
       <div className="row mb-4">
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalPositions}</h3><p>{t('home.positions')}</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalCandidates}</h3><p>{t('home.candidates')}</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalRecruiters}</h3><p>{t('home.recruiters')}</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.totalCVs}</h3><p>{t('home.totalCvs')}</p></div></div>
-        <div className="col"><div className="card text-center p-3"><h3>{data.stats.recentCVs}</h3><p>{t('home.CVsLast24h')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3><CountUp end={data.stats.totalPositions} /></h3><p>{t('home.positions')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3><CountUp end={data.stats.totalCandidates} /></h3><p>{t('home.candidates')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3><CountUp end={data.stats.totalRecruiters} /></h3><p>{t('home.recruiters')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3><CountUp end={data.stats.totalCVs} /></h3><p>{t('home.totalCvs')}</p></div></div>
+        <div className="col"><div className="card text-center p-3"><h3><CountUp end={data.stats.recentCVs} /></h3><p>{t('home.CVsLast24h')}</p></div></div>
       </div>
 
       <h2>{t('home.latestPositions')}</h2>

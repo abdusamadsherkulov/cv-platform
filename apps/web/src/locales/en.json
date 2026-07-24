@@ -12,7 +12,8 @@
     "users": "Users",
     "logout": "Log out",
     "login": "Sign In",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "theme": "Theme"
   },
   "home": {
     "title": "CV Management Platform",
