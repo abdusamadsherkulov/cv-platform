@@ -23,7 +23,7 @@ router.get('/', requireAuth, async (req, res) => {
 
 // only recruiters/admins can create attributes
 router.post('/', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
-  const { name, description, type, categoryId } = req.body;
+  const { name, description, type, categoryId, options } = req.body;
 
   const attribute = await prisma.attribute.create({
     data: { name, description, type, categoryId, options: options || [] },
