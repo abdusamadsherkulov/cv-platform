@@ -226,16 +226,16 @@ function Profile() {
           <table className="table">
             <thead>
               <tr>
-                <th>{t('cvs.colPosition')}</th>
-                <th>{t('cvs.colStatus')}</th>
+                <th style={{ minWidth: '200px' }}>{t('cvs.colPosition')}</th>
+                <th style={{ width: '100%' }}>{t('cvs.colStatus')}</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
               {cvs.map((cv) => (
                 <tr key={cv.id}>
-                  <td><Link className='pos-user-link' to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
-                  <td><span className={`badge rounded-pill text-bg-${cv.status === 'published' ? 'success' : 'secondary'}`}>
+                  <td style={{minWidth: '200px' }}><Link className='pos-user-link' to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
+                  <td style={{width: '100%' }}><span className={`badge rounded-pill text-bg-${cv.status === 'published' ? 'success' : 'secondary'}`}>
                     {t(`cvDetail.${cv.status}`)}
                   </span></td>
                   <td>
