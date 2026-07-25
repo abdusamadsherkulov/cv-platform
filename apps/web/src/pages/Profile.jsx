@@ -169,7 +169,7 @@ function Profile() {
       <h1 className="mb-4">{t('profile.title')}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <h2>{t('profile.me')}</h2>
+      <h2 className='mt-5'>{t('profile.me')}</h2>
       <div className="row g-2 mb-2" style={{ maxWidth: '600px' }}>
         <div className="col-md-4">
           <input
@@ -201,7 +201,7 @@ function Profile() {
         {meSaveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
       </div>
 
-      <h2>{t('profile.info')}</h2>
+      <h2 className='mt-5'>{t('profile.info')}</h2>
       <table className="table">
         <tbody>
           {values.map((v) => (
@@ -222,7 +222,7 @@ function Profile() {
 
       {role === 'candidate' && (
         <>
-          <h2>{t('profile.myCvs')}</h2>
+          <h2 className='mt-5'>{t('profile.myCvs')}</h2>
           <table className="table">
             <thead>
               <tr>
@@ -248,7 +248,7 @@ function Profile() {
             </tbody>
           </table>
 
-          <h2 className="mt-4">{t('profile.myProjects')}</h2>
+          <h2 className="mt-5">{t('profile.myProjects')}</h2>
           <table className="table">
             <thead>
               <tr>
@@ -256,7 +256,7 @@ function Profile() {
                 <th style={{ minWidth: '180px' }} className='text-center'>{t('projects.colPeriod')}</th>
                 <th style={{ minWidth: '150px' }} className='text-center'>{t('projects.colTags')}</th>
                 <th style={{ width: '100%' }} className='text-center'>{t('projects.colDescription')}</th>
-                <th style={{ minWidth: '300px'}} ></th>
+                <th style={{ minWidth: '250px'}} ></th>
               </tr>
             </thead>
             <tbody>
@@ -266,7 +266,7 @@ function Profile() {
             </tbody>
           </table>
 
-          <h3 className='mt-4'>{t('projects.addNew')}</h3>
+          <h3 className='mt-5'>{t('projects.addNew')}</h3>
           <form onSubmit={handleCreateProject} className="row g-2 mb-4">
             <div className="col-md-3">
               <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
