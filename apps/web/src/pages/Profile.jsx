@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { apiFetch } from '../api';
 import { useTranslation } from 'react-i18next';
+import { getCurrentRole } from '../api';
 
 function Profile() {
   const [values, setValues] = useState([]);
@@ -15,6 +16,7 @@ function Profile() {
   const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '' });
   const [meSaveStatus, setMeSaveStatus] = useState('');
   const meLoadedRef = useRef(false);
+  const role = getCurrentRole();
 
   async function loadValues() {
     try {
@@ -154,11 +156,12 @@ function Profile() {
         </select>
         <button className="btn btn-primary" onClick={handleAddAttribute}>{t('profile.add')}</button>
       </div>
-
-      <div className="d-flex gap-3">
-        <Link to="/my-projects" className="btn navbar-btn btn-sm">{t('profile.myProjects')}</Link>
-        <Link to="/cvs" className="btn navbar-btn btn-sm">{t('profile.myCvs')}</Link>
-      </div>
+      {role === 'candidate' && (
+        <div className="d-flex gap-3">
+          <Link to="/my-projects" className="btn navbar-btn btn-sm">{t('profile.myProjects')}</Link>
+          <Link to="/cvs" className="btn navbar-btn btn-sm">{t('profile.myCvs')}</Link>
+        </div>
+      )}
     </div>
   );
 }
