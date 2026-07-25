@@ -12,6 +12,7 @@ import CVs from './pages/CVs.jsx';
 import CVDetail from './pages/CVDetail.jsx';
 import PositionDetail from './pages/PositionDetail.jsx';
 import Projects from './pages/Projects.jsx';
+import MyProjects from './pages/MyProjects.jsx';
 import Profile from './pages/Profile.jsx';
 import Users from './pages/Users.jsx';
 import AllCVs from './pages/AllCVs.jsx';
@@ -32,6 +33,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/cvs/:id" element={<CVDetail />} />
         <Route path="/positions/:id" element={<PositionDetail />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/my-projects" element={<MyProjects />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/users" element={<Users />} />
         <Route path="/all-cvs" element={<AllCVs />} />

@@ -103,6 +103,7 @@
   },
   "projects": {
     "title": "Мои проекты",
+    "myTitle": "Мои проекты",
     "titleAdminRecruiter": "Все проекты",
     "colCandidate": "Кандидат",
     "colName": "Название",
