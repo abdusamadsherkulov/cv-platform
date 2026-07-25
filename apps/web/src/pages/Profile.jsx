@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { apiFetch } from '../api';
+import { apiFetch, getCurrentRole } from '../api';
 import { useTranslation } from 'react-i18next';
-import { getCurrentRole } from '../api';
 
 function Profile() {
   const [values, setValues] = useState([]);

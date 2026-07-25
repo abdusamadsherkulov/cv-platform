@@ -116,9 +116,7 @@ function Navbar() {
             </form>
             <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/attributes" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.attributes')}</NavLink>
             <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/positions" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.positions')}</NavLink>
-            {role === 'candidate' ? (
-              <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/cvs" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.myCvs')}</NavLink>
-            ) : (
+            {role !== 'candidate' && (
               <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/all-cvs" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.allCvs')}</NavLink>
             )}
             {role === 'candidate' ? (
