@@ -185,7 +185,7 @@ function Navbar() {
 
           {langMenuOpen && (
             <div
-              className="position-absolute d-flex flex-column shadow hamburger-menu"
+              className="position-absolute d-flex flex-column shadow lang-menu"
               style={{ top: '100%', right: 0, backgroundColor: 'var(--navbar-bg)', zIndex: 20 }}
             >
               <button
