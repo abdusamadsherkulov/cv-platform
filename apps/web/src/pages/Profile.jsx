@@ -234,8 +234,8 @@ function Profile() {
             <tbody>
               {cvs.map((cv) => (
                 <tr key={cv.id}>
-                  <td style={{minWidth: '200px' }}><Link className='pos-user-link' to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
-                  <td style={{width: '100%' }} className='text-center'><span className={`badge rounded-pill text-bg-${cv.status === 'published' ? 'success' : 'secondary'}`}>
+                  <td style={{ minWidth: '200px' }}><Link className='pos-user-link' to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
+                  <td style={{ width: '100%' }} className='text-center'><span className={`badge rounded-pill text-bg-${cv.status === 'published' ? 'success' : 'secondary'}`}>
                     {t(`cvDetail.${cv.status}`)}
                   </span></td>
                   <td>
@@ -252,10 +252,10 @@ function Profile() {
           <table className="table">
             <thead>
               <tr>
-                <th>{t('projects.colName')}</th>
-                <th>{t('projects.colPeriod')}</th>
-                <th>{t('projects.colTags')}</th>
-                <th>{t('projects.colDescription')}</th>
+                <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
+                <th style={{ minWidth: '180px' }}>{t('projects.colPeriod')}</th>
+                <th style={{ minWidth: '150px' }}>{t('projects.colTags')}</th>
+                <th style={{ width: '100%' }}>{t('projects.colDescription')}</th>
                 <th></th>
               </tr>
             </thead>
@@ -437,13 +437,13 @@ function ProfileProjectRow({ project, onDelete, onSaved }) {
         </>
       ) : (
         <>
-          <td>{project.name}</td>
-          <td>
+          <td style={{ minWidth: '150px' }}>{project.name}</td>
+          <td style={{ minWidth: '180px' }}>
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
-          <td>{project.tags.join(', ')}</td>
-          <td>{project.description}</td>
+          <td style={{ minWidth: '150px' }}>{project.tags.join(', ')}</td>
+          <td style={{ width: '100%' }}>{project.description}</td>
         </>
       )}
       <td className="d-flex gap-2">
