@@ -106,6 +106,14 @@ function Navbar() {
             className="position-absolute d-flex flex-column shadow hamburger-menu"
             style={{ top: '100%', left: 0, backgroundColor: 'var(--navbar-bg)', zIndex: 20 }}
           >
+            <form className="d-md-none mb-2 mt-2 px-2" onSubmit={handleSearch}>
+              <input
+                className="form-control form-control-sm"
+                placeholder={t('nav.searchPlaceholder')}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
+            </form>
             <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/attributes" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.attributes')}</NavLink>
             <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/positions" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.positions')}</NavLink>
             {role === 'candidate' ? (
@@ -141,15 +149,15 @@ function Navbar() {
         )}
       </div>
 
-      <Link className="navbar-brand" to="/" style={{ color: 'var(--navbar-text)', fontSize: '1.4rem'}}>
+      <Link className="navbar-brand" to="/" style={{ color: 'var(--navbar-text)', fontSize: '1.4rem' }}>
         CV Platform
       </Link>
 
       <div className="ms-auto d-flex align-items-center gap-2 flex-wrap justify-content-end">
-        <form className="d-flex position-relative" onSubmit={handleSearch} ref={searchRef}>
+        <form className="d-none d-md-flex position-relative" onSubmit={handleSearch} ref={searchRef}>
           <input
             className="form-control form-control-sm"
-            style={{ width: '140px'}}
+            style={{ width: '140px' }}
             placeholder={t('nav.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}

@@ -74,20 +74,7 @@ function MyProjects() {
         </thead>
         <tbody>
           {projects.map((proj) => (
-            <tr key={proj.id}>
-              <td>{proj.name}</td>
-              <td>
-                {new Date(proj.startDate).toLocaleDateString()} -{' '}
-                {proj.endDate ? new Date(proj.endDate).toLocaleDateString() : t('projects.ongoing')}
-              </td>
-              <td>{proj.tags.join(', ')}</td>
-              <td>{proj.description}</td>
-              <td>
-                <button className="btn btn-sm btn-danger" onClick={() => handleDelete(proj.id)}>
-                  {t('projects.delete')}
-                </button>
-              </td>
-            </tr>
+            <MyProjectRow key={proj.id} project={proj} onDelete={handleDelete} onSaved={loadProjects} />
           ))}
         </tbody>
       </table>
@@ -114,6 +101,75 @@ function MyProjects() {
         </div>
       </form>
     </div>
+  );
+}
+
+function MyProjectRow({ project, onDelete, onSaved }) {
+  const { t } = useTranslation();
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(project.name);
+  const [startDate, setStartDate] = useState(project.startDate.slice(0, 10));
+  const [endDate, setEndDate] = useState(project.endDate ? project.endDate.slice(0, 10) : '');
+  const [tagsInput, setTagsInput] = useState(project.tags.join(', '));
+  const [description, setDescription] = useState(project.description);
+  const [error, setError] = useState('');
+
+  async function handleSave(e) {
+    e.preventDefault();
+    setError('');
+    try {
+      const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
+      await apiFetch(`/projects/${project.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ name, startDate, endDate: endDate || null, description, tags }),
+      });
+      setEditing(false);
+      onSaved();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  return (
+    <tr>
+      {editing ? (
+        <>
+          <td><input className="form-control form-control-sm" value={name} onChange={(e) => setName(e.target.value)} /></td>
+          <td className="d-flex gap-1">
+            <input className="form-control form-control-sm" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            <input className="form-control form-control-sm" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </td>
+          <td><input className="form-control form-control-sm" value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} /></td>
+          <td>
+            <input className="form-control form-control-sm" value={description} onChange={(e) => setDescription(e.target.value)} />
+            {error && <div className="text-danger small">{error}</div>}
+          </td>
+        </>
+      ) : (
+        <>
+          <td>{project.name}</td>
+          <td>
+            {new Date(project.startDate).toLocaleDateString()} -{' '}
+            {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
+          </td>
+          <td>{project.tags.join(', ')}</td>
+          <td>{project.description}</td>
+        </>
+      )}
+      <td className="d-flex gap-2">
+        {editing ? (
+          <>
+            <button className="btn btn-sm btn-primary" onClick={handleSave}>{t('cvDetail.save')}</button>
+            <button className="btn btn-sm btn-secondary" onClick={() => setEditing(false)}>{t('cvDetail.cancel')}</button>
+          </>
+        ) : (
+          <>
+            <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('positionDetail.editButton')}</button>
+            <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
+          </>
+        )}
+      </td>
+    </tr>
   );
 }
 
