@@ -17,6 +17,7 @@ function Profile() {
   const [meSaveStatus, setMeSaveStatus] = useState('');
   const meLoadedRef = useRef(false);
   const role = getCurrentRole();
+  const [cvs, setCvs] = useState([]);
 
   async function loadValues() {
     try {
@@ -46,10 +47,30 @@ function Profile() {
     }
   }
 
+  async function loadCvs() {
+    try {
+      const data = await apiFetch('/cvs');
+      setCvs(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function handleDeleteCv(cvId) {
+    setError('');
+    try {
+      await apiFetch(`/cvs/${cvId}`, { method: 'DELETE' });
+      loadCvs();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   useEffect(() => {
     loadValues();
     loadAttributesList();
     loadMe();
+    loadCvs();
   }, []);
 
   useEffect(() => {
@@ -156,11 +177,35 @@ function Profile() {
         </select>
         <button className="btn btn-primary" onClick={handleAddAttribute}>{t('profile.add')}</button>
       </div>
+
       {role === 'candidate' && (
-        <div className="d-flex gap-3">
+        <>
+          <h2>{t('profile.myCvs')}</h2>
+          <table className="table" style={{ maxWidth: '600px' }}>
+            <thead>
+              <tr>
+                <th>{t('cvs.colPosition')}</th>
+                <th>{t('cvs.colStatus')}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {cvs.map((cv) => (
+                <tr key={cv.id}>
+                  <td><Link to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
+                  <td>{t(`cvDetail.${cv.status}`)}</td>
+                  <td>
+                    <button className="btn btn-sm btn-danger" onClick={() => handleDeleteCv(cv.id)}>
+                      {t('projects.delete')}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
           <Link to="/my-projects" className="btn navbar-btn btn-sm">{t('profile.myProjects')}</Link>
-          <Link to="/cvs" className="btn navbar-btn btn-sm">{t('profile.myCvs')}</Link>
-        </div>
+        </>
       )}
     </div>
   );
