@@ -15,7 +15,7 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 // admin/recruiter view all projects across all candidates
-router.get('/all', requireAuth, async (req, res) => {
+router.get('/all', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
   const projects = await prisma.project.findMany({
     include: { user: true },
     orderBy: { startDate: 'desc' },

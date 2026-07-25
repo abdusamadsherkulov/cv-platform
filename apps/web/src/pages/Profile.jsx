@@ -266,7 +266,7 @@ function Profile() {
             </tbody>
           </table>
 
-          <h3>{t('projects.addNew')}</h3>
+          <h3 className='mt-4'>{t('projects.addNew')}</h3>
           <form onSubmit={handleCreateProject} className="row g-2 mb-4" style={{ maxWidth: '600px' }}>
             <div className="col-md-6">
               <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
