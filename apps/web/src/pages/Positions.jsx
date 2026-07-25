@@ -15,11 +15,23 @@ function Positions() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isCandidate = role === 'candidate';
+  const [myCvs, setMyCvs] = useState([]);
+  const positionIdsWithCv = myCvs.map((cv) => cv.positionId);
 
   async function loadPositions() {
     try {
       const data = await apiFetch('/positions');
       setPositions(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function loadMyCvs() {
+    if (!isCandidate) return;
+    try {
+      const data = await apiFetch('/cvs');
+      setMyCvs(data);
     } catch (err) {
       setError(err.message);
     }
@@ -37,6 +49,7 @@ function Positions() {
   useEffect(() => {
     loadPositions();
     loadAttributesList();
+    loadMyCvs();
   }, []);
 
   function toggleAttribute(id) {
@@ -98,7 +111,11 @@ function Positions() {
               <td>{pos.attributes.map((a) => a.attribute.name).join(', ')}</td>
               {isCandidate && (
                 <td>
-                  <button className="btn btn-sm btn-success" onClick={() => handleCreateCv(pos.id)}>
+                  <button
+                    className="btn btn-sm btn-success"
+                    disabled={positionIdsWithCv.includes(pos.id)}
+                    onClick={() => handleCreateCv(pos.id)}
+                  >
                     {t('positions.createCv')}
                   </button>
                 </td>
