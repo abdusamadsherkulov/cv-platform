@@ -71,7 +71,7 @@ model Position {
 model PositionAttribute {
   id          Int       @id @default(autoincrement())
   positionId  Int
-  position    Position  @relation(fields: [positionId], references: [id])
+  position    Position  @relation(fields: [positionId], references: [id], onDelete: Cascade)
   attributeId Int
   attribute   Attribute @relation(fields: [attributeId], references: [id])
 }
@@ -79,7 +79,7 @@ model PositionAttribute {
 model PositionAccessRule {
   id          Int       @id @default(autoincrement())
   positionId  Int
-  position    Position  @relation(fields: [positionId], references: [id])
+  position    Position  @relation(fields: [positionId], references: [id], onDelete: Cascade)
   attributeId Int
   attribute   Attribute @relation(fields: [attributeId], references: [id])
   operator    String
@@ -103,7 +103,7 @@ model CV {
   userId     Int
   user       User     @relation(fields: [userId], references: [id])
   positionId Int
-  position   Position @relation(fields: [positionId], references: [id])
+  position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
   status     String   @default("draft")
   createdAt  DateTime @default(now())
   likes CVLike[]
@@ -126,7 +126,7 @@ model Project {
 model DiscussionPost {
   id         Int      @id @default(autoincrement())
   positionId Int
-  position   Position @relation(fields: [positionId], references: [id])
+  position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
   authorId   Int
   author     User     @relation(fields: [authorId], references: [id])
   content    String
@@ -136,7 +136,7 @@ model DiscussionPost {
 model CVLike {
   id          Int      @id @default(autoincrement())
   cvId        Int
-  cv          CV       @relation(fields: [cvId], references: [id])
+  cv          CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
   recruiterId Int
   recruiter   User     @relation(fields: [recruiterId], references: [id])
   createdAt   DateTime @default(now())
