@@ -64,6 +64,9 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(project.name);
+  const [startDate, setStartDate] = useState(project.startDate.slice(0, 10));
+  const [endDate, setEndDate] = useState(project.endDate ? project.endDate.slice(0, 10) : '');
+  const [tagsInput, setTagsInput] = useState(project.tags.join(', '));
   const [description, setDescription] = useState(project.description);
   const [error, setError] = useState('');
 
@@ -71,15 +74,10 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
     e.preventDefault();
     setError('');
     try {
+      const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
       await apiFetch(`/projects/${project.id}/admin`, {
         method: 'PUT',
-        body: JSON.stringify({
-          name,
-          description,
-          startDate: project.startDate,
-          endDate: project.endDate,
-          tags: project.tags,
-        }),
+        body: JSON.stringify({ name, startDate, endDate: endDate || null, description, tags }),
       });
       setEditing(false);
       onSaved();
@@ -91,26 +89,30 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
   return (
     <tr>
       <td><Link to={`/candidates/${project.user.id}`}>{displayName(project.user)}</Link></td>
-      <td>
-        {editing ? (
-          <input className="form-control form-control-sm" value={name} onChange={(e) => setName(e.target.value)} />
-        ) : (
-          project.name
-        )}
-      </td>
-      <td>
-        {new Date(project.startDate).toLocaleDateString()} -{' '}
-        {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
-      </td>
-      <td>{project.tags.join(', ')}</td>
-      <td>
-        {editing ? (
-          <input className="form-control form-control-sm" value={description} onChange={(e) => setDescription(e.target.value)} />
-        ) : (
-          project.description
-        )}
-        {error && <div className="text-danger small">{error}</div>}
-      </td>
+      {editing ? (
+        <>
+          <td><input className="form-control form-control-sm" value={name} onChange={(e) => setName(e.target.value)} /></td>
+          <td className="d-flex gap-1">
+            <input className="form-control form-control-sm" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            <input className="form-control form-control-sm" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </td>
+          <td><input className="form-control form-control-sm" value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} /></td>
+          <td>
+            <input className="form-control form-control-sm" value={description} onChange={(e) => setDescription(e.target.value)} />
+            {error && <div className="text-danger small">{error}</div>}
+          </td>
+        </>
+      ) : (
+        <>
+          <td>{project.name}</td>
+          <td>
+            {new Date(project.startDate).toLocaleDateString()} -{' '}
+            {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
+          </td>
+          <td>{project.tags.join(', ')}</td>
+          <td>{project.description}</td>
+        </>
+      )}
       {isAdmin && (
         <td className="d-flex gap-2">
           {editing ? (
