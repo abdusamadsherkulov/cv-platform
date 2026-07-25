@@ -144,7 +144,8 @@
     "location": "Location",
     "projects": "Projects",
     "selectValue": "Select value",
-    "yes": "Yes"
+    "yes": "Yes",
+    "no": "No"
   },
   "users": {
     "title": "User Management",
