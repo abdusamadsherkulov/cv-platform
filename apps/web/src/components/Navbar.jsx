@@ -113,7 +113,11 @@ function Navbar() {
             ) : (
               <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/all-cvs" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.allCvs')}</NavLink>
             )}
-            <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to={role === 'candidate' ? '/my-projects' : '/projects'} style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.projects')}</NavLink>
+            {role === 'candidate' ? (
+              <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/my-projects" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.myProjects')}</NavLink>
+            ) : (
+              <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/projects" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.projects')}</NavLink>
+            )}
             <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/profile" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.profile')}</NavLink>
             {role === 'admin' && (
               <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/users" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.users')}</NavLink>

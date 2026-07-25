@@ -60,7 +60,7 @@ function CVs() {
         <tbody>
           {cvs.map((cv) => (
             <tr key={cv.id}>
-              <td><Link to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
+              <td><Link className='pos-user-link' to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
               <td>  <span className={`badge rounded-pill text-bg-${cv.status === 'published' ? 'success' : 'secondary'}`}>
                 {t(`cvDetail.${cv.status}`)}
               </span></td>

@@ -111,14 +111,14 @@ function Attributes() {
             </div>
             <div className="col-md-2">
               <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="string">String</option>
-                <option value="text">Text</option>
-                <option value="numeric">Numeric</option>
-                <option value="date">Date</option>
-                <option value="period">Period</option>
-                <option value="boolean">Boolean</option>
-                <option value="enum">One of many</option>
-                <option value="image">Image</option>
+                <option value="string">{t('attributes.typeString')}</option>
+                <option value="text">{t('attributes.typeText')}</option>
+                <option value="numeric">{t('attributes.typeNumeric')}</option>
+                <option value="date">{t('attributes.typeDate')}</option>
+                <option value="period">{t('attributes.typePeriod')}</option>
+                <option value="boolean">{t('attributes.typeBoolean')}</option>
+                <option value="enum">{t('attributes.typeEnum')}</option>
+                <option value="image">{t('attributes.typeImage')}</option>
               </select>
             </div>
 
@@ -133,7 +133,7 @@ function Attributes() {
                 />
               </div>
             )}
-            
+
             <div className="col-md-2">
               <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
                 <option value="">{t('attributes.selectCategory')}</option>

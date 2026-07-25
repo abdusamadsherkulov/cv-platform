@@ -7,6 +7,7 @@
     "positions": "Позиции",
     "myCvs": "Мои резюме",
     "allCvs": "Все резюме",
+    "myProjects": "Мои проекты",
     "projects": "Проекты",
     "profile": "Профиль",
     "users": "Пользователи",
@@ -41,7 +42,15 @@
     "namePlaceholder": "Название",
     "descriptionPlaceholder": "Описание",
     "selectCategory": "Выберите категорию...",
-    "addButton": "Добавить"
+    "addButton": "Добавить",
+    "typeString": "Строка",
+    "typeText": "Текст",
+    "typeNumeric": "Число",
+    "typeDate": "Дата",
+    "typePeriod": "Период",
+    "typeBoolean": "Логическое значение",
+    "typeEnum": "Один из списка",
+    "typeImage": "Изображение"
   },
   "positions": {
     "title": "Позиции",
@@ -132,7 +141,9 @@
     "firstName": "Имя",
     "lastName": "Фамилия",
     "location": "Местоположение",
-    "projects": "Проекты"
+    "projects": "Проекты",
+    "selectValue": "Выберите уровень",
+    "yes": "Да"
   },
   "users": {
     "title": "Управление пользователями",

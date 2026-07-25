@@ -223,6 +223,29 @@ function ValueRow({ value, onRemove, onSaved }) {
               <option value="true">{t('profile.yes')}</option>
               <option value="false">{t('profile.no')}</option>
             </select>
+          ) : value.attribute.type === 'text' ? (
+            <textarea
+              className="form-control"
+              style={{ maxWidth: '300px' }}
+              rows={3}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          ) : value.attribute.type === 'period' ? (
+            <div className="d-flex gap-2">
+              <input
+                className="form-control"
+                type="date"
+                value={input.split(',')[0] || ''}
+                onChange={(e) => setInput(`${e.target.value},${input.split(',')[1] || ''}`)}
+              />
+              <input
+                className="form-control"
+                type="date"
+                value={input.split(',')[1] || ''}
+                onChange={(e) => setInput(`${input.split(',')[0] || ''},${e.target.value}`)}
+              />
+            </div>
           ) : (
             <input
               className="form-control"

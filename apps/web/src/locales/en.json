@@ -7,6 +7,7 @@
     "positions": "Positions",
     "myCvs": "My CVs",
     "allCvs": "All CVs",
+    "myProjects": "My Projects",
     "projects": "Projects",
     "profile": "Profile",
     "users": "Users",
@@ -41,7 +42,15 @@
     "namePlaceholder": "Name",
     "descriptionPlaceholder": "Description",
     "selectCategory": "Select category...",
-    "addButton": "Add"
+    "addButton": "Add",
+    "typeString": "String",
+    "typeText": "Text",
+    "typeNumeric": "Numberic",
+    "typeDate": "Date",
+    "typePeriod": "Period",
+    "typeBoolean": "Boolean",
+    "typeEnum": "One of many",
+    "typeImage": "Image"
   },
   "positions": {
     "title": "Positions",
@@ -132,7 +141,9 @@
     "firstName": "First Name",
     "lastName": "Last Name",
     "location": "Location",
-    "projects": "Projects"
+    "projects": "Projects",
+    "selectValue": "Select value",
+    "yes": "Yes"
   },
   "users": {
     "title": "User Management",
