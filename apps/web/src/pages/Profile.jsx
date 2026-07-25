@@ -202,7 +202,7 @@ function Profile() {
       </div>
 
       <h2 className='mt-5'>{t('profile.info')}</h2>
-      <table className="table">
+      <table className="table table-striped table-borderless">
         <tbody>
           {values.map((v) => (
             <ValueRow key={v.attributeId} value={v} onRemove={handleRemove} onSaved={loadValues} />
@@ -223,7 +223,7 @@ function Profile() {
       {role === 'candidate' && (
         <>
           <h2 className='mt-5'>{t('profile.myCvs')}</h2>
-          <table className="table">
+          <table className="table table-striped table-borderless">
             <thead>
               <tr>
                 <th style={{ minWidth: '200px' }}>{t('cvs.colPosition')}</th>
@@ -252,11 +252,11 @@ function Profile() {
           <table className="table table-striped table-borderless">
             <thead>
               <tr>
-                <th>{t('projects.colName')}</th>
-                <th>{t('projects.colPeriod')}</th>
-                <th>{t('projects.colTags')}</th>
-                <th>{t('projects.colDescription')}</th>
-                <th></th>
+                <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
+                <th style={{ minWidth: '180px' }}>{t('projects.colPeriod')}</th>
+                <th style={{ minWidth: '150px' }}>{t('projects.colTags')}</th>
+                <th style={{width: "100%"}}>{t('projects.colDescription')}</th>
+                <th style={{minWidth: '200px'}}></th>
               </tr>
             </thead>
             <tbody>
@@ -437,13 +437,13 @@ function ProfileProjectRow({ project, onDelete, onSaved }) {
         </>
       ) : (
         <>
-          <td>{project.name}</td>
-          <td>
+          <td style={{minWidth: '150px'}}>{project.name}</td>
+          <td style={{minWidth: '180px'}}>
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
-          <td>{project.tags.join(', ')}</td>
-          <td>{project.description}</td>
+          <td style={{minWidth: '150px'}}>{project.tags.join(', ')}</td>
+          <td style={{width: '100%'}}>{project.description}</td>
         </>
       )}
       <td className="d-flex gap-2">
