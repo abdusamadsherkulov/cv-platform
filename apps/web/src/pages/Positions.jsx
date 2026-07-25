@@ -1,21 +1,20 @@
 import { useState, useEffect } from 'react';
 import { apiFetch, getCurrentRole } from '../api';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 function Positions() {
   const [positions, setPositions] = useState([]);
   const [attributesList, setAttributesList] = useState([]);
   const [error, setError] = useState('');
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [selectedAttributeIds, setSelectedAttributeIds] = useState([]);
-
   const role = getCurrentRole();
   const canManage = role === 'recruiter' || role === 'admin';
-
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const isCandidate = role === 'candidate';
 
   async function loadPositions() {
     try {
@@ -63,6 +62,19 @@ function Positions() {
     }
   }
 
+  async function handleCreateCv(positionId) {
+    setError('');
+    try {
+      const cv = await apiFetch('/cvs', {
+        method: 'POST',
+        body: JSON.stringify({ positionId }),
+      });
+      navigate(`/cvs/${cv.id}`);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   return (
     <div className="container mt-4">
       <h1 className="mb-4">{t('positions.title')}</h1>
@@ -75,6 +87,7 @@ function Positions() {
             <th>{t('positions.colTitle')}</th>
             <th>{t('positions.colDescription')}</th>
             <th>{t('positions.colAttributes')}</th>
+            {isCandidate && <th></th>}
           </tr>
         </thead>
         <tbody>
@@ -83,11 +96,18 @@ function Positions() {
               <td><Link className='pos-user-link' to={`/positions/${pos.id}`}>{pos.title}</Link></td>
               <td>{pos.description}</td>
               <td>{pos.attributes.map((a) => a.attribute.name).join(', ')}</td>
+              {isCandidate && (
+                <td>
+                  <button className="btn btn-sm btn-success" onClick={() => handleCreateCv(pos.id)}>
+                    {t('positions.createCv')}
+                  </button>
+                </td>
+              )}
             </tr>
           ))}
         </tbody>
       </table>
-      
+
       {canManage && (
         <>
           <h2>{t('positions.createNew')}</h2>
