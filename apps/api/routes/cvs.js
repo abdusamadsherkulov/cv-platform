@@ -110,6 +110,22 @@ router.get('/:id', requireAuth, async (req, res) => {
   res.json({ ...cv, fields, projects, likeCount, userLiked: !!userLiked });
 });
 
+// delete own cv (only draft, or admin can delete any)
+router.delete('/:id', requireAuth, async (req, res) => {
+  const cv = await prisma.cV.findUnique({ where: { id: Number(req.params.id) } });
+  if (!cv) return res.status(404).json({ error: 'CV not found' });
+
+  const isOwner = cv.userId === req.user.userId;
+  const isAdmin = req.user.role === 'admin';
+
+  if (!isOwner && !isAdmin) {
+    return res.status(403).json({ error: 'Not authorized' });
+  }
+
+  await prisma.cV.delete({ where: { id: cv.id } });
+  res.status(204).send();
+});
+
 // edit a single attribute value in-place, writes through to the shared profile value
 router.put('/:id/attributes/:attributeId', requireAuth, async (req, res) => {
   const cv = await prisma.cV.findUnique({ where: { id: Number(req.params.id) } });
