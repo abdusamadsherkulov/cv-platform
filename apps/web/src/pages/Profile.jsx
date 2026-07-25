@@ -7,16 +7,19 @@ function Profile() {
   const [values, setValues] = useState([]);
   const [attributesList, setAttributesList] = useState([]);
   const [error, setError] = useState('');
-
   const [attributeToAdd, setAttributeToAdd] = useState('');
-
   const { t } = useTranslation();
-
   const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '' });
   const [meSaveStatus, setMeSaveStatus] = useState('');
   const meLoadedRef = useRef(false);
   const role = getCurrentRole();
   const [cvs, setCvs] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [projectName, setProjectName] = useState('');
+  const [projectStartDate, setProjectStartDate] = useState('');
+  const [projectEndDate, setProjectEndDate] = useState('');
+  const [projectDescription, setProjectDescription] = useState('');
+  const [projectTagsInput, setProjectTagsInput] = useState('');
 
   async function loadValues() {
     try {
@@ -65,11 +68,51 @@ function Profile() {
     }
   }
 
+  async function loadProjects() {
+    try {
+      const data = await apiFetch('/projects');
+      setProjects(data);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function handleCreateProject(e) {
+    e.preventDefault();
+    setError('');
+    try {
+      const tags = projectTagsInput.split(',').map((t) => t.trim()).filter(Boolean);
+      await apiFetch('/projects', {
+        method: 'POST',
+        body: JSON.stringify({ name: projectName, startDate: projectStartDate, endDate: projectEndDate || null, description: projectDescription, tags }),
+      });
+      setProjectName('');
+      setProjectStartDate('');
+      setProjectEndDate('');
+      setProjectDescription('');
+      setProjectTagsInput('');
+      loadProjects();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function handleDeleteProject(id) {
+    setError('');
+    try {
+      await apiFetch(`/projects/${id}`, { method: 'DELETE' });
+      loadProjects();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   useEffect(() => {
     loadValues();
     loadAttributesList();
     loadMe();
     loadCvs();
+    loadProjects();
   }, []);
 
   useEffect(() => {
@@ -205,7 +248,45 @@ function Profile() {
             </tbody>
           </table>
 
-          <Link to="/my-projects" className="btn navbar-btn btn-sm">{t('profile.myProjects')}</Link>
+          <h2 className="mt-4">{t('profile.myProjects')}</h2>
+          <table className="table" style={{ maxWidth: '600px' }}>
+            <thead>
+              <tr>
+                <th>{t('projects.colName')}</th>
+                <th>{t('projects.colPeriod')}</th>
+                <th>{t('projects.colTags')}</th>
+                <th>{t('projects.colDescription')}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {projects.map((proj) => (
+                <ProfileProjectRow key={proj.id} project={proj} onDelete={handleDeleteProject} onSaved={loadProjects} />
+              ))}
+            </tbody>
+          </table>
+
+          <h3>{t('projects.addNew')}</h3>
+          <form onSubmit={handleCreateProject} className="row g-2 mb-4" style={{ maxWidth: '600px' }}>
+            <div className="col-md-6">
+              <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
+            </div>
+            <div className="col-md-3">
+              <input className="form-control" type="date" value={projectStartDate} onChange={(e) => setProjectStartDate(e.target.value)} required />
+            </div>
+            <div className="col-md-3">
+              <input className="form-control" type="date" value={projectEndDate} onChange={(e) => setProjectEndDate(e.target.value)} placeholder="End (optional)" />
+            </div>
+            <div className="col-md-8">
+              <input className="form-control" placeholder={t('projects.tagsPlaceholder')} value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
+            </div>
+            <div className="col-md-4">
+              <button type="submit" className="btn btn-primary w-100">{t('projects.addButton')}</button>
+            </div>
+            <div className="col-12">
+              <textarea className="form-control" placeholder={t('projects.descriptionPlaceholder')} value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)} required />
+            </div>
+          </form>
         </>
       )}
     </div>
@@ -308,6 +389,75 @@ function ValueRow({ value, onRemove, onSaved }) {
       </td>
       <td>
         <button className="btn btn-sm btn-danger" onClick={() => onRemove(value.attributeId)}>{t('profile.remove')}</button>
+      </td>
+    </tr>
+  );
+}
+
+function ProfileProjectRow({ project, onDelete, onSaved }) {
+  const { t } = useTranslation();
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(project.name);
+  const [startDate, setStartDate] = useState(project.startDate.slice(0, 10));
+  const [endDate, setEndDate] = useState(project.endDate ? project.endDate.slice(0, 10) : '');
+  const [tagsInput, setTagsInput] = useState(project.tags.join(', '));
+  const [description, setDescription] = useState(project.description);
+  const [error, setError] = useState('');
+
+  async function handleSave(e) {
+    e.preventDefault();
+    setError('');
+    try {
+      const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
+      await apiFetch(`/projects/${project.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ name, startDate, endDate: endDate || null, description, tags }),
+      });
+      setEditing(false);
+      onSaved();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  return (
+    <tr>
+      {editing ? (
+        <>
+          <td><input className="form-control form-control-sm" value={name} onChange={(e) => setName(e.target.value)} /></td>
+          <td className="d-flex gap-1">
+            <input className="form-control form-control-sm" type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+            <input className="form-control form-control-sm" type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
+          </td>
+          <td><input className="form-control form-control-sm" value={tagsInput} onChange={(e) => setTagsInput(e.target.value)} /></td>
+          <td>
+            <input className="form-control form-control-sm" value={description} onChange={(e) => setDescription(e.target.value)} />
+            {error && <div className="text-danger small">{error}</div>}
+          </td>
+        </>
+      ) : (
+        <>
+          <td>{project.name}</td>
+          <td>
+            {new Date(project.startDate).toLocaleDateString()} -{' '}
+            {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
+          </td>
+          <td>{project.tags.join(', ')}</td>
+          <td>{project.description}</td>
+        </>
+      )}
+      <td className="d-flex gap-2">
+        {editing ? (
+          <>
+            <button className="btn btn-sm btn-primary" onClick={handleSave}>{t('cvDetail.save')}</button>
+            <button className="btn btn-sm btn-secondary" onClick={() => setEditing(false)}>{t('cvDetail.cancel')}</button>
+          </>
+        ) : (
+          <>
+            <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('positionDetail.editButton')}</button>
+            <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
+          </>
+        )}
       </td>
     </tr>
   );
