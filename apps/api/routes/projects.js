@@ -94,7 +94,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
 });
 
 // admin edits any project
-router.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
+router.put('/:id/admin', requireAuth, requireRole('admin'), async (req, res) => {
   const { name, startDate, endDate, description, tags } = req.body;
 
   const project = await prisma.project.update({

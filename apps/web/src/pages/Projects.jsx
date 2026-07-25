@@ -71,7 +71,7 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
     e.preventDefault();
     setError('');
     try {
-      await apiFetch(`/projects/${project.id}`, {
+      await apiFetch(`/projects/${project.id}/admin`, {
         method: 'PUT',
         body: JSON.stringify({
           name,
