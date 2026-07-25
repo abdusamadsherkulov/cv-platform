@@ -28,6 +28,9 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const langRef = useRef(null);
+
   function changeLanguage(lang) {
     i18n.changeLanguage(lang);
     localStorage.setItem('language', lang);
@@ -45,6 +48,9 @@ function Navbar() {
       }
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setMenuOpen(false);
+      }
+      if (langRef.current && !langRef.current.contains(e.target)) {
+        setLangMenuOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -131,7 +137,7 @@ function Navbar() {
         )}
       </div>
 
-      <Link className="navbar-brand" to="/" style={{ color: 'var(--navbar-text)', fontSize: '1.5rem'}}>
+      <Link className="navbar-brand" to="/" style={{ color: 'var(--navbar-text)', fontSize: '1.5rem' }}>
         CV Platform
       </Link>
 
@@ -172,9 +178,39 @@ function Navbar() {
           )}
         </form>
 
-        <button className="btn navbar-btn btn-sm" onClick={() => changeLanguage(i18n.language === 'en' ? 'ru' : 'en')}>
-          {i18n.language === 'en' ? 'RU' : 'EN'}
-        </button>
+        <div ref={langRef} style={{ position: 'relative' }}>
+          <button className="btn navbar-btn btn-sm" onClick={() => setLangMenuOpen((m) => !m)}>
+            {i18n.language.toUpperCase()}
+          </button>
+
+          {langMenuOpen && (
+            <div
+              className="position-absolute d-flex flex-column shadow hamburger-menu"
+              style={{ top: '100%', right: 0, backgroundColor: 'var(--navbar-bg)', zIndex: 20 }}
+            >
+              <button
+                className="btn nav-link text-start"
+                style={{
+                  color: 'var(--navbar-text)',
+                  backgroundColor: i18n.language === 'en' ? 'rgba(128,128,128,0.2)' : 'transparent',
+                }}
+                onClick={() => { changeLanguage('en'); setLangMenuOpen(false); }}
+              >
+                English
+              </button>
+              <button
+                className="btn nav-link text-start"
+                style={{
+                  color: 'var(--navbar-text)',
+                  backgroundColor: i18n.language === 'ru' ? 'rgba(128,128,128,0.2)' : 'transparent',
+                }}
+                onClick={() => { changeLanguage('ru'); setLangMenuOpen(false); }}
+              >
+                Русский
+              </button>
+            </div>
+          )}
+        </div>
 
         {isLoggedIn ? (
           <button className="btn navbar-btn btn-sm" onClick={handleLogout}>
