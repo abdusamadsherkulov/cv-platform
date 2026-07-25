@@ -268,19 +268,19 @@ function Profile() {
 
           <h3 className='mt-4'>{t('projects.addNew')}</h3>
           <form onSubmit={handleCreateProject} className="row g-2 mb-4">
-            <div className="col-md-6">
+            <div className="col-md-3">
               <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
             </div>
-            <div className="col-md-3">
+            <div className="col-md-2">
               <input className="form-control" type="date" value={projectStartDate} onChange={(e) => setProjectStartDate(e.target.value)} required />
             </div>
-            <div className="col-md-3">
+            <div className="col-md-2">
               <input className="form-control" type="date" value={projectEndDate} onChange={(e) => setProjectEndDate(e.target.value)} placeholder="End (optional)" />
             </div>
-            <div className="col-md-8">
+            <div className="col-md-3">
               <input className="form-control" placeholder={t('projects.tagsPlaceholder')} value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
             </div>
-            <div className="col-md-4">
+            <div className="col-md-2">
               <button type="submit" className="btn btn-primary w-100">{t('projects.addButton')}</button>
             </div>
             <div className="col-12">
