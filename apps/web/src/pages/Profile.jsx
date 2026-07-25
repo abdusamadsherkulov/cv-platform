@@ -324,7 +324,7 @@ function ValueRow({ value, onRemove, onSaved }) {
 
   return (
     <tr>
-      <td style={{ width: '300px' }}>{value.attribute.name}</td>
+      <td style={{ width: '200px', minWidth: '200px' }}>{value.attribute.name}</td>
       <td style={{ width: '100%' }}>
         <div className="d-flex justify-content-center">
           {value.attribute.type === 'enum' ? (
