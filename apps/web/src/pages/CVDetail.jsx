@@ -77,7 +77,7 @@ function CVDetail() {
   return (
     <div className="container mt-4">
       <h1 className="mb-4">{cv.position.title}</h1>
-      <p>{t('cvDetail.status')}: <strong>{cv.status}</strong></p>
+      <p>{t('cvDetail.status')}: <strong>{t(`cvDetail.${cv.status}`)}</strong></p>
       <p>{t('cvDetail.likes')}: {cv.likeCount}
         {canLike && (
           <button className="btn btn-sm btn-outline-primary ms-2 d-inline-flex align-items-center gap-1" onClick={handleToggleLike}>

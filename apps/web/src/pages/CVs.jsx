@@ -61,7 +61,7 @@ function CVs() {
           {cvs.map((cv) => (
             <tr key={cv.id}>
               <td><Link to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
-              <td>{cv.status}</td>
+              <td>{t(`cvDetail.${cv.status}`)}</td>
             </tr>
           ))}
         </tbody>

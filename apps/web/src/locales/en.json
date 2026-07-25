@@ -93,8 +93,11 @@
     "unlike": "Unlike",
     "attributes": "Attributes",
     "projects": "Projects",
+    "draft": "draft",
+    "published": "published",
     "publish": "Publish CV",
     "empty": "(empty)",
+    "selectValue": "Select level",
     "save": "Save",
     "cancel": "Cancel"
   },
