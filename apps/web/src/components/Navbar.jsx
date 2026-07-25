@@ -87,7 +87,7 @@ function Navbar() {
   if (location.pathname === '/login') return null;
 
   return (
-    <nav className="navbar navbar-expand-lg mb-4" style={{ paddingLeft: '7rem', paddingRight: '7rem', backgroundColor: 'var(--navbar-bg)', color: 'var(--navbar-text)' }}>
+    <nav className="navbar navbar-expand-lg mb-4 px-3 px-lg-5" style={{ backgroundColor: 'var(--navbar-bg)', color: 'var(--navbar-text)' }}>
       <div ref={menuRef} style={{ position: 'relative' }}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -96,7 +96,7 @@ function Navbar() {
           fill="currentColor"
           viewBox="0 0 16 16"
           onClick={() => setMenuOpen((m) => !m)}
-          style={{ cursor: 'pointer', color: 'var(--navbar-text)', marginRight: '1rem', strokeWidth: menuOpen ? 1 : 0, stroke: 'currentColor' }}
+          style={{ cursor: 'pointer', color: 'var(--navbar-text)', marginRight: '1rem', marginBottom: '1px', strokeWidth: menuOpen ? 1 : 0, stroke: 'currentColor' }}
         >
           <path fillRule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
         </svg>
@@ -141,14 +141,15 @@ function Navbar() {
         )}
       </div>
 
-      <Link className="navbar-brand" to="/" style={{ color: 'var(--navbar-text)', fontSize: '1.5rem' }}>
+      <Link className="navbar-brand" to="/" style={{ color: 'var(--navbar-text)', fontSize: '1.4rem'}}>
         CV Platform
       </Link>
 
-      <div className="ms-auto d-flex align-items-center gap-2">
+      <div className="ms-auto d-flex align-items-center gap-2 flex-wrap justify-content-end">
         <form className="d-flex position-relative" onSubmit={handleSearch} ref={searchRef}>
           <input
             className="form-control form-control-sm"
+            style={{ width: '140px'}}
             placeholder={t('nav.searchPlaceholder')}
             value={query}
             onChange={(e) => setQuery(e.target.value)}

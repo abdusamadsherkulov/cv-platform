@@ -43,14 +43,14 @@
     "descriptionPlaceholder": "Description",
     "selectCategory": "Select category...",
     "addButton": "Add",
-    "typeString": "String",
-    "typeText": "Text",
-    "typeNumeric": "Numberic",
-    "typeDate": "Date",
-    "typePeriod": "Period",
-    "typeBoolean": "Boolean",
-    "typeEnum": "One of many",
-    "typeImage": "Image"
+    "type-string": "String",
+    "type-text": "Text",
+    "type-numeric": "Numberic",
+    "type-date": "Date",
+    "type-period": "Period",
+    "type-boolean": "Boolean",
+    "type-enum": "One of many",
+    "type-image": "Image"
   },
   "positions": {
     "title": "Positions",
@@ -163,6 +163,7 @@
   "login": {
     "title": "Sign In",
     "google": "Continue with Google",
+    "or": "or",
     "github": "Continue with GitHub"
   },
   "theme": {

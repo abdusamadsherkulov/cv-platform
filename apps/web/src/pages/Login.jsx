@@ -11,7 +11,7 @@ function Login() {
 
         <a
           href="https://cw-platform.onrender.com/auth/google"
-          className="btn d-flex align-items-center gap-2 mb-3"
+          className="btn d-flex align-items-center gap-2 mb-2"
           style={{ width: '280px' }}
         >
           <svg width="20" height="20" viewBox="0 0 48 48">
@@ -22,10 +22,10 @@ function Login() {
           </svg>
           {t('login.google')}
         </a>
-
+        <span style={{fontSize: "1.2rem"}}>{t('login.or')}</span>
         <a
           href="https://cw-platform.onrender.com/auth/github"
-          className="btn d-flex align-items-center gap-2"
+          className="btn d-flex align-items-center gap-2 mt-2"
           style={{ width: '280px' }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

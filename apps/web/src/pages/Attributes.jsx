@@ -93,7 +93,7 @@ function Attributes() {
             <tr key={attr.id}>
               <td>{attr.name}</td>
               <td>{attr.category.name}</td>
-              <td>{attr.type}</td>
+              <td>{t(`attributes.type-${attr.type}`)}</td>
               <td>{attr.description}</td>
             </tr>
           ))}
@@ -111,14 +111,14 @@ function Attributes() {
             </div>
             <div className="col-md-2">
               <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
-                <option value="string">{t('attributes.typeString')}</option>
-                <option value="text">{t('attributes.typeText')}</option>
-                <option value="numeric">{t('attributes.typeNumeric')}</option>
-                <option value="date">{t('attributes.typeDate')}</option>
-                <option value="period">{t('attributes.typePeriod')}</option>
-                <option value="boolean">{t('attributes.typeBoolean')}</option>
-                <option value="enum">{t('attributes.typeEnum')}</option>
-                <option value="image">{t('attributes.typeImage')}</option>
+                <option value="string">{t('attributes.type-string')}</option>
+                <option value="text">{t('attributes.type-text')}</option>
+                <option value="numeric">{t('attributes.type-numeric')}</option>
+                <option value="date">{t('attributes.type-date')}</option>
+                <option value="period">{t('attributes.type-period')}</option>
+                <option value="boolean">{t('attributes.type-boolean')}</option>
+                <option value="enum">{t('attributes.type-enum')}</option>
+                <option value="image">{t('attributes.type-image')}</option>
               </select>
             </div>
 

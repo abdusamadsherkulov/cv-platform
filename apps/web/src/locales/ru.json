@@ -43,14 +43,14 @@
     "descriptionPlaceholder": "Описание",
     "selectCategory": "Выберите категорию...",
     "addButton": "Добавить",
-    "typeString": "Строка",
-    "typeText": "Текст",
-    "typeNumeric": "Число",
-    "typeDate": "Дата",
-    "typePeriod": "Период",
-    "typeBoolean": "Логическое значение",
-    "typeEnum": "Один из списка",
-    "typeImage": "Изображение"
+    "type-string": "Строка",
+    "type-text": "Текст",
+    "type-numeric": "Число",
+    "type-date": "Дата",
+    "type-period": "Период",
+    "type-boolean": "Логическое значение",
+    "type-enum": "Один из списка",
+    "type-image": "Изображение"
   },
   "positions": {
     "title": "Позиции",
@@ -163,6 +163,7 @@
   "login": {
     "title": "Вход",
     "google": "Войти через Google",
+    "or": "или",
     "github": "Войти через GitHub"
   },
   "theme": {
