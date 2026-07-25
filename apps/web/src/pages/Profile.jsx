@@ -256,7 +256,7 @@ function Profile() {
                 <th style={{ minWidth: '180px' }} className='text-center'>{t('projects.colPeriod')}</th>
                 <th style={{ minWidth: '150px' }} className='text-center'>{t('projects.colTags')}</th>
                 <th style={{ width: '100%' }} className='text-center'>{t('projects.colDescription')}</th>
-                <th style={{ minWidth: '200px'}} ></th>
+                <th style={{ minWidth: '300px'}} ></th>
               </tr>
             </thead>
             <tbody>
