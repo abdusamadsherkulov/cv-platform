@@ -15,7 +15,7 @@ router.get('/', requireAuth, async (req, res) => {
 });
 
 // admin/recruiter view all projects across all candidates
-router.get('/all', requireAuth, requireRole('recruiter', 'admin'), async (req, res) => {
+router.get('/all', requireAuth, async (req, res) => {
   const projects = await prisma.project.findMany({
     include: { user: true },
     orderBy: { startDate: 'desc' },
@@ -90,6 +90,30 @@ router.delete('/:id', requireAuth, async (req, res) => {
   await prisma.project.deleteMany({
     where: { id: Number(req.params.id), userId: req.user.userId },
   });
+  res.status(204).send();
+});
+
+// admin edits any project
+router.put('/:id', requireAuth, requireRole('admin'), async (req, res) => {
+  const { name, startDate, endDate, description, tags } = req.body;
+
+  const project = await prisma.project.update({
+    where: { id: Number(req.params.id) },
+    data: {
+      name,
+      startDate: new Date(startDate),
+      endDate: endDate ? new Date(endDate) : null,
+      description,
+      tags: tags || [],
+    },
+  });
+
+  res.json(project);
+});
+
+// admin deletes any project
+router.delete('/:id/admin', requireAuth, requireRole('admin'), async (req, res) => {
+  await prisma.project.delete({ where: { id: Number(req.params.id) } });
   res.status(204).send();
 });
 
