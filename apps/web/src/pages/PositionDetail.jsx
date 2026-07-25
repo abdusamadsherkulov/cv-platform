@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { apiFetch, getCurrentRole, displayName } from '../api';
 import { useTranslation } from 'react-i18next';
 
@@ -25,6 +25,7 @@ function PositionDetail() {
 
   const role = getCurrentRole();
   const canManage = role === 'recruiter' || role === 'admin';
+  const navigate = useNavigate();
 
   const { t } = useTranslation();
 
@@ -34,6 +35,16 @@ function PositionDetail() {
       setPosition(data);
       setTitle(data.title);
       setDescription(data.description);
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function handleDeletePosition() {
+    setError('');
+    try {
+      await apiFetch(`/positions/${id}`, { method: 'DELETE' });
+      navigate('/positions');
     } catch (err) {
       setError(err.message);
     }
@@ -185,7 +196,14 @@ function PositionDetail() {
           <h1>{position.title}</h1>
           <p>{position.description}</p>
           {canManage && (
-            <button className="btn btn-sm btn-outline-primary" onClick={() => setEditingInfo(true)}>{t('positionDetail.editButton')}</button>
+            <button className="btn btn-sm btn-outline-primary" onClick={() => setEditingInfo(true)}>
+              {t('positionDetail.editButton')}
+            </button>
+          )}
+          {canManage && (
+            <button className="btn btn-sm btn-danger ms-2" onClick={handleDeletePosition}>
+              {t('positionDetail.delete')}
+            </button>
           )}
         </div>
       )}

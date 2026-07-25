@@ -66,6 +66,7 @@
   "positionDetail": {
     "back": "Back to Positions",
     "editButton": "Edit Title/Description",
+    "delete": "Delete",
     "save": "Save",
     "cancel": "Cancel",
     "attributes": "Attributes",
