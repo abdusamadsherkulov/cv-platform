@@ -40,7 +40,7 @@ function App() {
         <tbody>
           {data.latestPositions.map((pos) => (
             <tr key={pos.id}>
-              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style={{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
+              <td><Link to={`/positions/${pos.id}`} className="pos-user-link">{pos.title}</Link></td>
               <td>{pos.description}</td>
             </tr>
           ))}
@@ -53,7 +53,7 @@ function App() {
         <tbody>
           {data.popularPositions.map((pos) => (
             <tr key={pos.id}>
-              <td><Link to={`/positions/${pos.id}`} className="text-decoration-none" style={{ color: 'var(--text-color)' }}>{pos.title}</Link></td>
+              <td><Link to={`/positions/${pos.id}`} className="pos-user-link">{pos.title}</Link></td>
               <td>{pos._count.cvs}</td>
             </tr>
           ))}

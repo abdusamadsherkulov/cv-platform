@@ -80,7 +80,7 @@ function Positions() {
         <tbody>
           {positions.map((pos) => (
             <tr key={pos.id}>
-              <td><Link to={`/positions/${pos.id}`}>{pos.title}</Link></td>
+              <td><Link className='pos-user-link' to={`/positions/${pos.id}`}>{pos.title}</Link></td>
               <td>{pos.description}</td>
               <td>{pos.attributes.map((a) => a.attribute.name).join(', ')}</td>
             </tr>

@@ -1,6 +1,7 @@
 :root {
   --bg-color: #FEFEFE;
   --text-color: #2c4663;
+  --link-color: #41679b;
   --navbar-bg: #dfdfdf;
   --navbar-text: #2c4663;
   --navbar-btn-bg: #2c4663;
@@ -13,6 +14,7 @@
 [data-theme='dark'] {
   --bg-color: #1f2c3a;
   --text-color: #FEFEFE;
+  --link-color: #accfff;
   --navbar-bg: #2a3a4d;
   --navbar-text: #e9ecef;
   --navbar-btn-bg: #FEFEFE;
@@ -215,4 +217,15 @@ body {
 
 .lang-menu .nav-link.fw-bold {
   background-color: rgba(128, 128, 128, 0.2);
+}
+
+/* Position and User links */
+.pos-user-link {
+  text-decoration: none;
+  color: var(--link-color);
+  font-weight: 500;
+}
+
+.pos-user-link:hover {
+  text-decoration: underline;
 }

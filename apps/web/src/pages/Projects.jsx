@@ -88,7 +88,7 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
 
   return (
     <tr>
-      <td><Link to={`/candidates/${project.user.id}`}>{displayName(project.user)}</Link></td>
+      <td><Link className='pos-user-link' to={`/candidates/${project.user.id}`}>{displayName(project.user)}</Link></td>
       {editing ? (
         <>
           <td><input className="form-control form-control-sm" value={name} onChange={(e) => setName(e.target.value)} /></td>
