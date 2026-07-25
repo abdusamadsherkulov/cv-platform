@@ -146,7 +146,17 @@ function Users() {
                   <option value="admin">{t('users.admin')}</option>
                 </select>
               </td>
-              <td>{u.isBlocked ? t('users.blocked') : t('users.active')}</td>
+              <td>
+                {u.isBlocked ? (
+                  <span className="badge rounded-pill text-bg-danger">
+                    {t('users.blocked')}
+                  </span>
+                ) : (
+                  <span className="badge rounded-pill text-bg-success">
+                    {t('users.active')}
+                  </span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
