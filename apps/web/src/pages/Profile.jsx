@@ -202,7 +202,7 @@ function Profile() {
       </div>
 
       <h2>{t('profile.info')}</h2>
-      <table className="table" style={{ maxWidth: '900px' }}>
+      <table className="table">
         <tbody>
           {values.map((v) => (
             <ValueRow key={v.attributeId} value={v} onRemove={handleRemove} onSaved={loadValues} />
@@ -223,7 +223,7 @@ function Profile() {
       {role === 'candidate' && (
         <>
           <h2>{t('profile.myCvs')}</h2>
-          <table className="table" style={{ maxWidth: '900px' }}>
+          <table className="table">
             <thead>
               <tr>
                 <th>{t('cvs.colPosition')}</th>
@@ -249,7 +249,7 @@ function Profile() {
           </table>
 
           <h2 className="mt-4">{t('profile.myProjects')}</h2>
-          <table className="table" style={{ maxWidth: '900px' }}>
+          <table className="table">
             <thead>
               <tr>
                 <th>{t('projects.colName')}</th>
@@ -267,7 +267,7 @@ function Profile() {
           </table>
 
           <h3 className='mt-4'>{t('projects.addNew')}</h3>
-          <form onSubmit={handleCreateProject} className="row g-2 mb-4" style={{ maxWidth: '900px' }}>
+          <form onSubmit={handleCreateProject} className="row g-2 mb-4">
             <div className="col-md-6">
               <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
             </div>
