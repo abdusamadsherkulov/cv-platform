@@ -249,14 +249,14 @@ function Profile() {
           </table>
 
           <h2 className="mt-5">{t('profile.myProjects')}</h2>
-          <table className="table">
+          <table className="table table-striped table-borderless">
             <thead>
               <tr>
-                <th style={{ minWidth: '150px' }} >{t('projects.colName')}</th>
-                <th style={{ minWidth: '180px' }} className='text-center'>{t('projects.colPeriod')}</th>
-                <th style={{ minWidth: '150px' }} className='text-center'>{t('projects.colTags')}</th>
-                <th style={{ width: '100%' }} className='text-center'>{t('projects.colDescription')}</th>
-                <th style={{ minWidth: '250px'}} ></th>
+                <th>{t('projects.colName')}</th>
+                <th>{t('projects.colPeriod')}</th>
+                <th>{t('projects.colTags')}</th>
+                <th>{t('projects.colDescription')}</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -437,13 +437,13 @@ function ProfileProjectRow({ project, onDelete, onSaved }) {
         </>
       ) : (
         <>
-          <td style={{ minWidth: '150px' }}>{project.name}</td>
-          <td style={{ minWidth: '180px' }} className='text-center'>
+          <td>{project.name}</td>
+          <td>
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
-          <td style={{ minWidth: '150px' }} className='text-center'>{project.tags.join(', ')}</td>
-          <td style={{ width: '100%' }} className='text-center'>{project.description}</td>
+          <td>{project.tags.join(', ')}</td>
+          <td>{project.description}</td>
         </>
       )}
       <td className="d-flex gap-2">
