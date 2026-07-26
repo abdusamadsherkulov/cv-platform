@@ -106,14 +106,46 @@ function Navbar() {
             className="position-absolute d-flex flex-column shadow hamburger-menu"
             style={{ top: '100%', left: 0, backgroundColor: 'var(--navbar-bg)', zIndex: 20 }}
           >
-            <form className="d-md-none mb-2 mt-2 px-2" onSubmit={handleSearch}>
-              <input
-                className="form-control form-control-sm"
-                placeholder={t('nav.searchPlaceholder')}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-              />
-            </form>
+            <div className="d-md-none mb-2 mt-2 px-2 position-relative d-flex">
+              <form onSubmit={handleSearch} className="flex-grow-1">
+                <input
+                  className="form-control form-control-sm"
+                  placeholder={t('nav.searchPlaceholder')}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onFocus={() => { if (results) setShowResults(true); }}
+                />
+              </form>
+
+              {showResults && results && (
+                <div
+                  className="position-absolute bg-white text-dark p-2 shadow"
+                  style={{ top: 0, left: '100%', zIndex: 30, minWidth: '250px', marginLeft: '0.5rem' }}
+                >
+                  {results.positions.length === 0 && results.attributes.length === 0 && <p className="mb-0">{t('nav.noResults')}</p>}
+
+                  {results.positions.length > 0 && (
+                    <>
+                      <strong>{t('nav.positions')}</strong>
+                      <ul className="list-unstyled mb-2">
+                        {results.positions.map((p) => (
+                          <li key={p.id} onClick={() => goToPosition(p.id)} style={{ cursor: 'pointer' }}>{p.title}</li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+
+                  {results.attributes.length > 0 && (
+                    <>
+                      <strong>{t('nav.attributes')}</strong>
+                      <ul className="list-unstyled mb-0">
+                        {results.attributes.map((a) => <li key={a.id}>{a.name}</li>)}
+                      </ul>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
             <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/attributes" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.attributes')}</NavLink>
             <NavLink className={({ isActive }) => `nav-link ${isActive ? 'fw-bold' : ''}`} to="/positions" style={{ color: 'var(--navbar-text)' }} onClick={() => setMenuOpen(false)}>{t('nav.positions')}</NavLink>
             {role !== 'candidate' && (

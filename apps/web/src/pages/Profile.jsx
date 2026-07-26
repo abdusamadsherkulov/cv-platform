@@ -252,10 +252,10 @@ function Profile() {
           <table className="table table-striped table-borderless">
             <thead>
               <tr>
-                <th style={{ minWidth: '150px' }} className='text-center'>{t('projects.colName')}</th>
-                <th style={{ minWidth: '180px' }} className='text-center'>{t('projects.colPeriod')}</th>
-                <th style={{ minWidth: '150px' }} className='text-center'>{t('projects.colTags')}</th>
-                <th style={{width: "100%"}}  className='text-center'>{t('projects.colDescription')}</th>
+                <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
+                <th style={{ minWidth: '190px' }}>{t('projects.colPeriod')}</th>
+                <th style={{ minWidth: '170px' }}>{t('projects.colTags')}</th>
+                <th style={{width: "100%"}}>{t('projects.colDescription')}</th>
                 <th style={{minWidth: '230px'}}></th>
               </tr>
             </thead>
