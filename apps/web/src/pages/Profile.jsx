@@ -197,7 +197,7 @@ function Profile() {
       <h1 className="mb-4">{isOwnProfile ? t('profile.title') : displayName(meFields)}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
-      <h2 className='mt-5'>{t('profile.me')}</h2>
+      {isOwnProfile && <h2 className='mt-5'>{t('profile.me')}</h2>}
       <div className="row g-2 mb-2" style={{ maxWidth: '600px' }}>
         <div className="col-md-4">
           <input
@@ -260,13 +260,13 @@ function Profile() {
 
       {showCandidateSections && (
         <>
-          <h2 className='mt-5'>{t('profile.myCvs')}</h2>
+          <h2 className='mt-5'>{isOwnProfile ? t('profile.myCvs') : t('profile.cvs')}</h2>
           <table className="table table-striped table-borderless">
             <thead>
               <tr>
                 <th style={{ minWidth: '200px' }}>{t('cvs.colPosition')}</th>
                 <th style={{ width: '100%' }} className='text-center'>{t('cvs.colStatus')}</th>
-                {isOwnProfile && <th></th>}
+                {canEdit && <th></th>}
               </tr>
             </thead>
             <tbody>
@@ -278,7 +278,7 @@ function Profile() {
                       {t(`cvDetail.${cv.status}`)}
                     </span>
                   </td>
-                  {isOwnProfile && (
+                  {canEdit && (
                     <td>
                       <button className="btn btn-sm btn-danger" onClick={() => handleDeleteCv(cv.id)}>
                         {t('projects.delete')}
@@ -290,20 +290,20 @@ function Profile() {
             </tbody>
           </table>
 
-          <h2 className="mt-5">{t('profile.myProjects')}</h2>
+          <h2 className="mt-5">{isOwnProfile ? t('profile.myProjects') : t('profile.projects')}</h2>
           <table className="table table-striped table-borderless">
             <thead>
               <tr>
                 <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
-                <th style={{ minWidth: '190px' }} className='text-center'>{t('projects.colPeriod')}</th>
+                <th style={{ minWidth: '250px' }} className='text-center'>{t('projects.colPeriod')}</th>
                 <th style={{ minWidth: '170px' }} className='text-center'>{t('projects.colTags')}</th>
                 <th style={{ width: "100%" }} className='text-center'>{t('projects.colDescription')}</th>
-                {canEdit && <th style={{ minWidth: '230px' }}></th>}
+                {canEdit && <th></th>}
               </tr>
             </thead>
             <tbody>
               {projects.map((proj) => (
-                <ProfileProjectRow key={proj.id} project={proj} canEdit={canEdit} onDelete={handleDeleteProject} onSaved={loadProjects} />
+                <ProfileProjectRow key={proj.id} project={proj} canEdit={canEdit} isOwnProfile={isOwnProfile} onDelete={handleDeleteProject} onSaved={loadProjects} />
               ))}
             </tbody>
           </table>
@@ -418,7 +418,7 @@ function ValueRow({ value, canEdit, onRemove, onSaved, valueUrl }) {
   );
 }
 
-function ProfileProjectRow({ project, canEdit, onDelete, onSaved }) {
+function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(project.name);
@@ -433,7 +433,8 @@ function ProfileProjectRow({ project, canEdit, onDelete, onSaved }) {
     setError('');
     try {
       const tags = tagsInput.split(',').map((t) => t.trim()).filter(Boolean);
-      await apiFetch(`/projects/${project.id}`, {
+      const url = isOwnProfile ? `/projects/${project.id}` : `/projects/${project.id}/admin`;
+      await apiFetch(url, {
         method: 'PUT',
         body: JSON.stringify({ name, startDate, endDate: endDate || null, description, tags }),
       });
@@ -462,7 +463,7 @@ function ProfileProjectRow({ project, canEdit, onDelete, onSaved }) {
       ) : (
         <>
           <td style={{ minWidth: '150px' }}>{project.name}</td>
-          <td style={{ minWidth: '190px' }} className='text-center'>
+          <td style={{ minWidth: '250px' }} className='text-center'>
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
