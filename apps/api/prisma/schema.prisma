@@ -73,7 +73,7 @@ model PositionAttribute {
   positionId  Int
   position    Position  @relation(fields: [positionId], references: [id], onDelete: Cascade)
   attributeId Int
-  attribute   Attribute @relation(fields: [attributeId], references: [id])
+  attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
 }
 
 model PositionAccessRule {
@@ -81,7 +81,7 @@ model PositionAccessRule {
   positionId  Int
   position    Position  @relation(fields: [positionId], references: [id], onDelete: Cascade)
   attributeId Int
-  attribute   Attribute @relation(fields: [attributeId], references: [id])
+  attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
   operator    String
   value       String
 }
@@ -91,7 +91,7 @@ model AttributeValue {
   userId      Int
   user        User      @relation(fields: [userId], references: [id])
   attributeId Int
-  attribute   Attribute @relation(fields: [attributeId], references: [id])
+  attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
   value       String
   version     Int       @default(1)
 

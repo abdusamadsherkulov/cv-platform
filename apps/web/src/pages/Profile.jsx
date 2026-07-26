@@ -253,10 +253,10 @@ function Profile() {
             <thead>
               <tr>
                 <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
-                <th style={{ minWidth: '180px' }}>{t('projects.colPeriod')}</th>
-                <th style={{ minWidth: '150px' }}>{t('projects.colTags')}</th>
-                <th style={{width: "100%"}}>{t('projects.colDescription')}</th>
-                <th style={{minWidth: '200px'}}></th>
+                <th style={{ minWidth: '180px' }} className='text-center'>{t('projects.colPeriod')}</th>
+                <th style={{ minWidth: '150px' }} className='text-center'>{t('projects.colTags')}</th>
+                <th style={{width: "100%"}}  className='text-center'>{t('projects.colDescription')}</th>
+                <th style={{minWidth: '2300px'}}></th>
               </tr>
             </thead>
             <tbody>
