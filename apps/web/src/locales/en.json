@@ -41,7 +41,7 @@
     "addNew": "Add New Attribute",
     "namePlaceholder": "Name",
     "descriptionPlaceholder": "Description",
-    "optionsPlaceholder": "Варианты через запятую (например: Basic, Intermediate, Advanced)",
+    "optionsPlaceholder": "Option, comma separated (examples: Basic, Intermediate, Advanced)",
     "selectCategory": "Select category...",
     "addButton": "Add",
     "type-string": "String",

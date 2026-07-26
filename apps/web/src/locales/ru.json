@@ -41,6 +41,7 @@
     "addNew": "Добавить новый атрибут",
     "namePlaceholder": "Название",
     "descriptionPlaceholder": "Описание",
+    "optionsPlaceholder": "Варианты через запятую (например: Basic, Intermediate, Advanced)",
     "selectCategory": "Выберите категорию...",
     "addButton": "Добавить",
     "type-string": "Строка",
