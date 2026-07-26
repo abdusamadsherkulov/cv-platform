@@ -46,7 +46,7 @@ function Projects() {
             <th>{t('projects.colName')}</th>
             <th>{t('projects.colPeriod')}</th>
             <th>{t('projects.colTags')}</th>
-            <th>{t('projects.colDescription')}</th>
+            <th style={{width: '100%'}}>{t('projects.colDescription')}</th>
             {isAdmin && <th></th>}
           </tr>
         </thead>
@@ -122,7 +122,7 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
             </>
           ) : (
             <>
-              <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('positionDetail.editButton')}</button>
+              <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('positionDetail.edit')}</button>
               <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
             </>
           )}

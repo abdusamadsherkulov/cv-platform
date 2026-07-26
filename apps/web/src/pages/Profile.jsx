@@ -295,7 +295,7 @@ function Profile() {
             <thead>
               <tr>
                 <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
-                <th style={{ minWidth: '250px' }} className='text-center'>{t('projects.colPeriod')}</th>
+                <th style={{ minWidth: '265px' }} className='text-center'>{t('projects.colPeriod')}</th>
                 <th style={{ minWidth: '170px' }} className='text-center'>{t('projects.colTags')}</th>
                 <th style={{ width: "100%" }} className='text-center'>{t('projects.colDescription')}</th>
                 {canEdit && <th></th>}
@@ -463,7 +463,7 @@ function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }
       ) : (
         <>
           <td style={{ minWidth: '150px' }}>{project.name}</td>
-          <td style={{ minWidth: '250px' }} className='text-center'>
+          <td style={{ minWidth: '265px' }} className='text-center'>
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
