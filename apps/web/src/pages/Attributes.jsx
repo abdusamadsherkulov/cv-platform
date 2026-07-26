@@ -126,7 +126,7 @@ function Attributes() {
               <div className="col-md-4">
                 <input
                   className="form-control"
-                  placeholder="Options, comma-separated (e.g. Basic, Intermediate, Advanced)"
+                  placeholder=""
                   value={optionsText}
                   onChange={(e) => setOptionsText(e.target.value)}
                   required

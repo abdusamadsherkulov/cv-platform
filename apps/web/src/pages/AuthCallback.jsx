@@ -11,7 +11,7 @@ function AuthCallback() {
       localStorage.setItem('token', token);
       navigate('/');
     } else {
-      navigate('/login-failed');
+      navigate('/login');
     }
   }, [searchParams, navigate]);
 
