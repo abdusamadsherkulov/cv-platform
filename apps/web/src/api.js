@@ -33,6 +33,17 @@ export function getCurrentRole() {
   }
 }
 
+export function getCurrentUserId() {
+  const token = localStorage.getItem('token');
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.userId;
+  } catch {
+    return null;
+  }
+}
+
 export function displayName(user) {
   if (user.firstName && user.lastName) {
     return `${user.firstName} ${user.lastName}`;

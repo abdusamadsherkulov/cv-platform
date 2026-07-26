@@ -143,4 +143,19 @@ router.delete('/:attributeId', requireAuth, async (req, res) => {
   res.status(204).send();
 });
 
+// remove a specific candidate's attribute value - admin only (or the candidate themself)
+router.delete('/:userId/values/:attributeId', requireAuth, async (req, res) => {
+  const targetUserId = Number(req.params.userId);
+  const attributeId = Number(req.params.attributeId);
+
+  if (req.user.role !== 'admin' && req.user.userId !== targetUserId) {
+    return res.status(403).json({ error: 'Only the candidate or an admin can remove this' });
+  }
+
+  await prisma.attributeValue.deleteMany({
+    where: { userId: targetUserId, attributeId },
+  });
+  res.status(204).send();
+});
+
 export default router;
