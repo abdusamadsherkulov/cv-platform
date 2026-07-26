@@ -206,4 +206,24 @@ router.get('/all/published', requireAuth, requireRole('recruiter', 'admin'), asy
   res.json(result);
 });
 
+// view a specific candidate's CVs - admin sees all, recruiter sees only published, candidate only their own
+router.get('/user/:userId', requireAuth, async (req, res) => {
+  const targetUserId = Number(req.params.userId);
+
+  if (req.user.role === 'candidate' && req.user.userId !== targetUserId) {
+    return res.status(403).json({ error: 'Not authorized' });
+  }
+
+  const where = { userId: targetUserId };
+  if (req.user.role === 'recruiter') {
+    where.status = 'published'; // recruiters only ever see published CVs, per spec
+  }
+
+  const cvs = await prisma.cV.findMany({
+    where,
+    include: { position: true },
+  });
+  res.json(cvs);
+});
+
 export default router;
