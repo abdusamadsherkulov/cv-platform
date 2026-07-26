@@ -46,7 +46,7 @@
     "addButton": "Add",
     "type-string": "String",
     "type-text": "Text",
-    "type-numeric": "Numberic",
+    "type-numeric": "Numeric",
     "type-date": "Date",
     "type-period": "Period",
     "type-boolean": "Boolean",

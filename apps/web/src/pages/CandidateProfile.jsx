@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { apiFetch, getCurrentRole } from '../api';
+import { apiFetch, getCurrentRole, displayName } from '../api';
 import { useTranslation } from 'react-i18next';
 
 
@@ -60,7 +60,7 @@ function CandidateProfile() {
 
   return (
     <div className="container mt-4 mb-4">
-      <h1>{meFields.firstName && meFields.lastName ? `${meFields.firstName} ${meFields.lastName}` : meFields.name}</h1>
+      <h1>{displayName(meFields)}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <div className="row g-2 mb-4" style={{ maxWidth: '600px' }}>
