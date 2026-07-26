@@ -1,18 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { apiFetch, getCurrentRole } from '../api';
+import { Link, useParams } from 'react-router-dom';
+import { apiFetch, getCurrentRole, getCurrentUserId, displayName } from '../api';
 import { useTranslation } from 'react-i18next';
 
 function Profile() {
+  const { userId: paramUserId } = useParams();
+  const myUserId = getCurrentUserId();
+  const viewedUserId = paramUserId ? Number(paramUserId) : myUserId;
+
+  const role = getCurrentRole();
+  const isOwnProfile = viewedUserId === myUserId;
+  const canEdit = isOwnProfile || role === 'admin';
+  const showCandidateSections = isOwnProfile ? role === 'candidate' : true;
+
   const [values, setValues] = useState([]);
   const [attributesList, setAttributesList] = useState([]);
   const [error, setError] = useState('');
   const [attributeToAdd, setAttributeToAdd] = useState('');
   const { t } = useTranslation();
-  const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '' });
+  const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '', name: '' });
   const [meSaveStatus, setMeSaveStatus] = useState('');
   const meLoadedRef = useRef(false);
-  const role = getCurrentRole();
   const [cvs, setCvs] = useState([]);
   const [projects, setProjects] = useState([]);
   const [projectName, setProjectName] = useState('');
@@ -21,9 +29,15 @@ function Profile() {
   const [projectDescription, setProjectDescription] = useState('');
   const [projectTagsInput, setProjectTagsInput] = useState('');
 
+  const meUrl = isOwnProfile ? '/profile/me' : `/profile/${viewedUserId}/me`;
+  const valuesUrl = isOwnProfile ? '/profile' : `/profile/${viewedUserId}/values`;
+  const valueUrl = (attributeId) => isOwnProfile ? `/profile/${attributeId}` : `/profile/${viewedUserId}/values/${attributeId}`;
+  const cvsUrl = isOwnProfile ? '/cvs' : `/cvs/user/${viewedUserId}`;
+  const projectsUrl = isOwnProfile ? '/projects' : `/projects/user/${viewedUserId}`;
+
   async function loadValues() {
     try {
-      const data = await apiFetch('/profile');
+      const data = await apiFetch(valuesUrl);
       setValues(data);
     } catch (err) {
       setError(err.message);
@@ -41,7 +55,7 @@ function Profile() {
 
   async function loadMe() {
     try {
-      const data = await apiFetch('/profile/me');
+      const data = await apiFetch(meUrl);
       setMeFields(data);
       meLoadedRef.current = true;
     } catch (err) {
@@ -50,8 +64,9 @@ function Profile() {
   }
 
   async function loadCvs() {
+    if (!showCandidateSections) return;
     try {
-      const data = await apiFetch('/cvs');
+      const data = await apiFetch(cvsUrl);
       setCvs(data);
     } catch (err) {
       setError(err.message);
@@ -69,8 +84,9 @@ function Profile() {
   }
 
   async function loadProjects() {
+    if (!showCandidateSections) return;
     try {
-      const data = await apiFetch('/projects');
+      const data = await apiFetch(projectsUrl);
       setProjects(data);
     } catch (err) {
       setError(err.message);
@@ -108,20 +124,22 @@ function Profile() {
   }
 
   useEffect(() => {
+    meLoadedRef.current = false; // reset the auto-save guard whenever we switch to viewing a different profile
     loadValues();
     loadAttributesList();
     loadMe();
     loadCvs();
     loadProjects();
-  }, []);
+  }, [viewedUserId]);
 
+  // auto-save for the "Me" fields - only when it's your own profile (matches spec's auto-save requirement)
   useEffect(() => {
-    if (!meLoadedRef.current) return;
+    if (!isOwnProfile || !meLoadedRef.current) return;
 
     const timer = setTimeout(async () => {
       setMeSaveStatus('saving');
       try {
-        await apiFetch('/profile/me', {
+        await apiFetch(meUrl, {
           method: 'PUT',
           body: JSON.stringify(meFields),
         });
@@ -136,11 +154,21 @@ function Profile() {
     return () => clearTimeout(timer);
   }, [meFields]);
 
+  // for viewing someone else's profile (admin editing), save immediately on blur instead of debouncing
+  async function handleMeBlurSave() {
+    if (isOwnProfile) return; // own profile already auto-saves via the effect above
+    try {
+      await apiFetch(meUrl, { method: 'PUT', body: JSON.stringify(meFields) });
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   async function handleAddAttribute() {
     if (!attributeToAdd) return;
     setError('');
     try {
-      await apiFetch(`/profile/${attributeToAdd}`, {
+      await apiFetch(valueUrl(attributeToAdd), {
         method: 'PUT',
         body: JSON.stringify({ value: '' }),
       });
@@ -154,7 +182,7 @@ function Profile() {
   async function handleRemove(attributeId) {
     setError('');
     try {
-      await apiFetch(`/profile/${attributeId}`, { method: 'DELETE' });
+      await apiFetch(valueUrl(attributeId), { method: 'DELETE' });
       loadValues();
     } catch (err) {
       setError(err.message);
@@ -166,7 +194,7 @@ function Profile() {
 
   return (
     <div className="container mt-4">
-      <h1 className="mb-4">{t('profile.title')}</h1>
+      <h1 className="mb-4">{isOwnProfile ? t('profile.title') : displayName(meFields)}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
       <h2 className='mt-5'>{t('profile.me')}</h2>
@@ -176,7 +204,9 @@ function Profile() {
             className="form-control"
             placeholder={t('profile.firstName')}
             value={meFields.firstName}
+            disabled={!canEdit}
             onChange={(e) => setMeFields((f) => ({ ...f, firstName: e.target.value }))}
+            onBlur={handleMeBlurSave}
           />
         </div>
         <div className="col-md-4">
@@ -184,7 +214,9 @@ function Profile() {
             className="form-control"
             placeholder={t('profile.lastName')}
             value={meFields.lastName}
+            disabled={!canEdit}
             onChange={(e) => setMeFields((f) => ({ ...f, lastName: e.target.value }))}
+            onBlur={handleMeBlurSave}
           />
         </div>
         <div className="col-md-4">
@@ -192,35 +224,41 @@ function Profile() {
             className="form-control"
             placeholder={t('profile.location')}
             value={meFields.location}
+            disabled={!canEdit}
             onChange={(e) => setMeFields((f) => ({ ...f, location: e.target.value }))}
+            onBlur={handleMeBlurSave}
           />
         </div>
       </div>
-      <div className="mb-4">
-        {meSaveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
-        {meSaveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
-      </div>
+      {isOwnProfile && (
+        <div className="mb-4">
+          {meSaveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
+          {meSaveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
+        </div>
+      )}
 
       <h2 className='mt-5'>{t('profile.info')}</h2>
       <table className="table table-striped table-borderless">
         <tbody>
           {values.map((v) => (
-            <ValueRow key={v.attributeId} value={v} onRemove={handleRemove} onSaved={loadValues} />
+            <ValueRow key={v.attributeId} value={v} canEdit={canEdit} onRemove={handleRemove} onSaved={loadValues} valueUrl={valueUrl} />
           ))}
         </tbody>
       </table>
 
-      <div className="d-flex gap-2 mb-4">
-        <select className="form-select" value={attributeToAdd} onChange={(e) => setAttributeToAdd(e.target.value)}>
-          <option value="">{t('profile.selectAttribute')}</option>
-          {availableToAdd.map((attr) => (
-            <option key={attr.id} value={attr.id}>{attr.name} ({attr.category.name})</option>
-          ))}
-        </select>
-        <button className="btn btn-primary" onClick={handleAddAttribute}>{t('profile.add')}</button>
-      </div>
+      {canEdit && (
+        <div className="d-flex gap-2 mb-4">
+          <select className="form-select" value={attributeToAdd} onChange={(e) => setAttributeToAdd(e.target.value)}>
+            <option value="">{t('profile.selectAttribute')}</option>
+            {availableToAdd.map((attr) => (
+              <option key={attr.id} value={attr.id}>{attr.name} ({attr.category.name})</option>
+            ))}
+          </select>
+          <button className="btn btn-primary" onClick={handleAddAttribute}>{t('profile.add')}</button>
+        </div>
+      )}
 
-      {role === 'candidate' && (
+      {showCandidateSections && (
         <>
           <h2 className='mt-5'>{t('profile.myCvs')}</h2>
           <table className="table table-striped table-borderless">
@@ -228,21 +266,25 @@ function Profile() {
               <tr>
                 <th style={{ minWidth: '200px' }}>{t('cvs.colPosition')}</th>
                 <th style={{ width: '100%' }} className='text-center'>{t('cvs.colStatus')}</th>
-                <th></th>
+                {isOwnProfile && <th></th>}
               </tr>
             </thead>
             <tbody>
               {cvs.map((cv) => (
                 <tr key={cv.id}>
                   <td style={{ minWidth: '200px' }}><Link className='pos-user-link' to={`/cvs/${cv.id}`}>{cv.position.title}</Link></td>
-                  <td style={{ width: '100%' }} className='text-center'><span className={`badge rounded-pill text-bg-${cv.status === 'published' ? 'success' : 'secondary'}`}>
-                    {t(`cvDetail.${cv.status}`)}
-                  </span></td>
-                  <td>
-                    <button className="btn btn-sm btn-danger" onClick={() => handleDeleteCv(cv.id)}>
-                      {t('projects.delete')}
-                    </button>
+                  <td style={{ width: '100%' }} className='text-center'>
+                    <span className={`badge rounded-pill text-bg-${cv.status === 'published' ? 'success' : 'secondary'}`}>
+                      {t(`cvDetail.${cv.status}`)}
+                    </span>
                   </td>
+                  {isOwnProfile && (
+                    <td>
+                      <button className="btn btn-sm btn-danger" onClick={() => handleDeleteCv(cv.id)}>
+                        {t('projects.delete')}
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
@@ -255,70 +297,75 @@ function Profile() {
                 <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
                 <th style={{ minWidth: '190px' }} className='text-center'>{t('projects.colPeriod')}</th>
                 <th style={{ minWidth: '170px' }} className='text-center'>{t('projects.colTags')}</th>
-                <th style={{width: "100%"}} className='text-center'>{t('projects.colDescription')}</th>
-                <th style={{minWidth: '230px'}}></th>
+                <th style={{ width: "100%" }} className='text-center'>{t('projects.colDescription')}</th>
+                {canEdit && <th style={{ minWidth: '230px' }}></th>}
               </tr>
             </thead>
             <tbody>
               {projects.map((proj) => (
-                <ProfileProjectRow key={proj.id} project={proj} onDelete={handleDeleteProject} onSaved={loadProjects} />
+                <ProfileProjectRow key={proj.id} project={proj} canEdit={canEdit} onDelete={handleDeleteProject} onSaved={loadProjects} />
               ))}
             </tbody>
           </table>
 
-          <h3 className='mt-5'>{t('projects.addNew')}</h3>
-          <form onSubmit={handleCreateProject} className="row g-2 mb-4">
-            <div className="col-md-3">
-              <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
-            </div>
-            <div className="col-md-2">
-              <input className="form-control" type="date" value={projectStartDate} onChange={(e) => setProjectStartDate(e.target.value)} required />
-            </div>
-            <div className="col-md-2">
-              <input className="form-control" type="date" value={projectEndDate} onChange={(e) => setProjectEndDate(e.target.value)} placeholder="End (optional)" />
-            </div>
-            <div className="col-md-3">
-              <input className="form-control" placeholder={t('projects.tagsPlaceholder')} value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
-            </div>
-            <div className="col-md-2">
-              <button type="submit" className="btn btn-primary w-100">{t('projects.addButton')}</button>
-            </div>
-            <div className="col-12">
-              <textarea className="form-control" placeholder={t('projects.descriptionPlaceholder')} value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)} required />
-            </div>
-          </form>
+          {canEdit && (
+            <>
+              <h3 className='mt-5'>{t('projects.addNew')}</h3>
+              <form onSubmit={handleCreateProject} className="row g-2 mb-4">
+                <div className="col-md-3">
+                  <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
+                </div>
+                <div className="col-md-2">
+                  <input className="form-control" type="date" value={projectStartDate} onChange={(e) => setProjectStartDate(e.target.value)} required />
+                </div>
+                <div className="col-md-2">
+                  <input className="form-control" type="date" value={projectEndDate} onChange={(e) => setProjectEndDate(e.target.value)} placeholder="End (optional)" />
+                </div>
+                <div className="col-md-3">
+                  <input className="form-control" placeholder={t('projects.tagsPlaceholder')} value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
+                </div>
+                <div className="col-md-2">
+                  <button type="submit" className="btn btn-primary w-100">{t('projects.addButton')}</button>
+                </div>
+                <div className="col-12">
+                  <textarea className="form-control" placeholder={t('projects.descriptionPlaceholder')} value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)} required />
+                </div>
+              </form>
+            </>
+          )}
         </>
       )}
     </div>
   );
 }
 
-function ValueRow({ value, onRemove, onSaved }) {
+function ValueRow({ value, canEdit, onRemove, onSaved, valueUrl }) {
   const [input, setInput] = useState(value.value);
   const [error, setError] = useState('');
   const [saveStatus, setSaveStatus] = useState('');
   const { t } = useTranslation();
 
+  async function saveNow() {
+    setSaveStatus('saving');
+    setError('');
+    try {
+      await apiFetch(valueUrl(value.attributeId), {
+        method: 'PUT',
+        body: JSON.stringify({ value: input, version: value.version }),
+      });
+      setSaveStatus('saved');
+      onSaved();
+      setTimeout(() => setSaveStatus(''), 3000);
+    } catch (err) {
+      setError(err.message);
+      setSaveStatus('');
+    }
+  }
+
+  // debounce only makes sense for your own live-typing profile; kept simple here for both cases
   useEffect(() => {
     if (input === value.value) return;
-
-    const timer = setTimeout(async () => {
-      setSaveStatus('saving');
-      setError('');
-      try {
-        await apiFetch(`/profile/${value.attributeId}`, {
-          method: 'PUT',
-          body: JSON.stringify({ value: input, version: value.version }),
-        });
-        setSaveStatus('saved');
-        onSaved();
-        setTimeout(() => setSaveStatus(''), 3000);
-      } catch (err) {
-        setError(err.message);
-        setSaveStatus('');
-      }
-    }, 5000);
-
+    const timer = setTimeout(saveNow, 5000);
     return () => clearTimeout(timer);
   }, [input]);
 
@@ -328,50 +375,24 @@ function ValueRow({ value, onRemove, onSaved }) {
       <td style={{ width: '100%' }}>
         <div className="d-flex justify-content-center">
           {value.attribute.type === 'enum' ? (
-            <select
-              className="form-select"
-              style={{ maxWidth: '300px' }}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            >
+            <select className="form-select" style={{ maxWidth: '300px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
               <option value="">{t('profile.selectValue')}</option>
               {value.attribute.options.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
           ) : value.attribute.type === 'boolean' ? (
-            <select
-              className="form-select"
-              style={{ maxWidth: '300px' }}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            >
+            <select className="form-select" style={{ maxWidth: '300px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
               <option value="">{t('profile.selectValue')}</option>
               <option value="true">{t('profile.yes')}</option>
               <option value="false">{t('profile.no')}</option>
             </select>
           ) : value.attribute.type === 'text' ? (
-            <textarea
-              className="form-control"
-              style={{ maxWidth: '300px' }}
-              rows={3}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-            />
+            <textarea className="form-control" style={{ maxWidth: '300px' }} rows={3} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)} />
           ) : value.attribute.type === 'period' ? (
             <div className="d-flex gap-2">
-              <input
-                className="form-control"
-                type="date"
-                value={input.split(',')[0] || ''}
-                onChange={(e) => setInput(`${e.target.value},${input.split(',')[1] || ''}`)}
-              />
-              <input
-                className="form-control"
-                type="date"
-                value={input.split(',')[1] || ''}
-                onChange={(e) => setInput(`${input.split(',')[0] || ''},${e.target.value}`)}
-              />
+              <input className="form-control" type="date" disabled={!canEdit} value={input.split(',')[0] || ''} onChange={(e) => setInput(`${e.target.value},${input.split(',')[1] || ''}`)} />
+              <input className="form-control" type="date" disabled={!canEdit} value={input.split(',')[1] || ''} onChange={(e) => setInput(`${input.split(',')[0] || ''},${e.target.value}`)} />
             </div>
           ) : (
             <input
@@ -379,6 +400,7 @@ function ValueRow({ value, onRemove, onSaved }) {
               type={value.attribute.type === 'numeric' ? 'number' : value.attribute.type === 'date' ? 'date' : 'text'}
               style={{ maxWidth: '300px' }}
               value={input}
+              disabled={!canEdit}
               onChange={(e) => setInput(e.target.value)}
             />
           )}
@@ -387,14 +409,16 @@ function ValueRow({ value, onRemove, onSaved }) {
         {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
         {error && <div className="text-danger small">{error}</div>}
       </td>
-      <td>
-        <button className="btn btn-sm btn-danger" onClick={() => onRemove(value.attributeId)}>{t('profile.remove')}</button>
-      </td>
+      {canEdit && (
+        <td>
+          <button className="btn btn-sm btn-danger" onClick={() => onRemove(value.attributeId)}>{t('profile.remove')}</button>
+        </td>
+      )}
     </tr>
   );
 }
 
-function ProfileProjectRow({ project, onDelete, onSaved }) {
+function ProfileProjectRow({ project, canEdit, onDelete, onSaved }) {
   const { t } = useTranslation();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(project.name);
@@ -437,28 +461,30 @@ function ProfileProjectRow({ project, onDelete, onSaved }) {
         </>
       ) : (
         <>
-          <td style={{minWidth: '150px'}}>{project.name}</td>
-          <td style={{minWidth: '190px'}} className='text-center'>
+          <td style={{ minWidth: '150px' }}>{project.name}</td>
+          <td style={{ minWidth: '190px' }} className='text-center'>
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
-          <td style={{minWidth: '170px'}} className='text-center'>{project.tags.join(', ')}</td>
-          <td style={{width: '100%'}} className='text-center'>{project.description}</td>
+          <td style={{ minWidth: '170px' }} className='text-center'>{project.tags.join(', ')}</td>
+          <td style={{ width: '100%' }} className='text-center'>{project.description}</td>
         </>
       )}
-      <td className="d-flex gap-2">
-        {editing ? (
-          <>
-            <button className="btn btn-sm btn-primary" onClick={handleSave}>{t('cvDetail.save')}</button>
-            <button className="btn btn-sm btn-secondary" onClick={() => setEditing(false)}>{t('cvDetail.cancel')}</button>
-          </>
-        ) : (
-          <>
-            <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('positionDetail.editButton')}</button>
-            <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
-          </>
-        )}
-      </td>
+      {canEdit && (
+        <td className="d-flex gap-2">
+          {editing ? (
+            <>
+              <button className="btn btn-sm btn-primary" onClick={handleSave}>{t('cvDetail.save')}</button>
+              <button className="btn btn-sm btn-secondary" onClick={() => setEditing(false)}>{t('cvDetail.cancel')}</button>
+            </>
+          ) : (
+            <>
+              <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('projects.edit')}</button>
+              <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
+            </>
+          )}
+        </td>
+      )}
     </tr>
   );
 }
