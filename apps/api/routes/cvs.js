@@ -110,7 +110,7 @@ router.get('/:id', requireAuth, async (req, res) => {
   res.json({ ...cv, fields, projects, likeCount, userLiked: !!userLiked });
 });
 
-// delete own cv (only draft, or admin can delete any)
+// delete own cv (any status), or admin can delete any candidate's cv
 router.delete('/:id', requireAuth, async (req, res) => {
   const cv = await prisma.cV.findUnique({ where: { id: Number(req.params.id) } });
   if (!cv) return res.status(404).json({ error: 'CV not found' });

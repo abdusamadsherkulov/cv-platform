@@ -89,7 +89,7 @@ model PositionAccessRule {
 model AttributeValue {
   id          Int       @id @default(autoincrement())
   userId      Int
-  user        User      @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   attributeId Int
   attribute   Attribute @relation(fields: [attributeId], references: [id], onDelete: Cascade)
   value       String
@@ -101,7 +101,7 @@ model AttributeValue {
 model CV {
   id         Int      @id @default(autoincrement())
   userId     Int
-  user       User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   positionId Int
   position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
   status     String   @default("draft")
@@ -114,7 +114,7 @@ model CV {
 model Project {
   id          Int      @id @default(autoincrement())
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   name        String
   startDate   DateTime
   endDate     DateTime?
@@ -128,7 +128,7 @@ model DiscussionPost {
   positionId Int
   position   Position @relation(fields: [positionId], references: [id], onDelete: Cascade)
   authorId   Int
-  author     User     @relation(fields: [authorId], references: [id])
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   content    String
   createdAt  DateTime @default(now())
 }
@@ -138,7 +138,7 @@ model CVLike {
   cvId        Int
   cv          CV       @relation(fields: [cvId], references: [id], onDelete: Cascade)
   recruiterId Int
-  recruiter   User     @relation(fields: [recruiterId], references: [id])
+  recruiter   User     @relation(fields: [recruiterId], references: [id], onDelete: Cascade)
   createdAt   DateTime @default(now())
 
   @@unique([cvId, recruiterId])
