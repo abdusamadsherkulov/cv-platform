@@ -42,10 +42,10 @@ function Projects() {
       <table className="table table-striped table-borderless">
         <thead>
           <tr>
-            <th>{t('projects.colCandidate')}</th>
-            <th>{t('projects.colName')}</th>
-            <th>{t('projects.colPeriod')}</th>
-            <th>{t('projects.colTags')}</th>
+            <th style={{minWidth: '250px'}}>{t('projects.colCandidate')}</th>
+            <th style={{minWidth: '150px'}}>{t('projects.colName')}</th>
+            <th style={{minWidth: '265px'}}>{t('projects.colPeriod')}</th>
+            <th style={{minWidth: '170px'}}>{t('projects.colTags')}</th>
             <th style={{width: '100%'}}>{t('projects.colDescription')}</th>
             {isAdmin && <th></th>}
           </tr>
@@ -122,7 +122,7 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
             </>
           ) : (
             <>
-              <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('positionDetail.edit')}</button>
+              <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('projects.edit')}</button>
               <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
             </>
           )}
