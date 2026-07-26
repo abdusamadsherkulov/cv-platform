@@ -102,7 +102,7 @@ function Attributes() {
       {canManage && (
         <>
           <h2>{t('attributes.addNew')}</h2>
-          <form onSubmit={handleCreate} className="row g-2 mb-5">
+          <form onSubmit={handleCreate} className="row g-2 mb-5" style={{marginBottom: '5rem'}}>
             <div className="col-md-3">
               <input className="form-control" placeholder={t('attributes.namePlaceholder')} value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
