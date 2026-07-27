@@ -42,11 +42,11 @@ function Projects() {
       <table className="table table-striped table-borderless">
         <thead>
           <tr>
-            <th style={{minWidth: '250px'}}>{t('projects.colCandidate')}</th>
-            <th style={{minWidth: '150px'}}>{t('projects.colName')}</th>
-            <th style={{minWidth: '265px'}}>{t('projects.colPeriod')}</th>
-            <th style={{minWidth: '170px'}}>{t('projects.colTags')}</th>
-            <th style={{width: '100%'}}>{t('projects.colDescription')}</th>
+            <th style={{ minWidth: '250px' }}>{t('projects.colCandidate')}</th>
+            <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
+            <th style={{ minWidth: '265px' }}>{t('projects.colPeriod')}</th>
+            <th style={{ minWidth: '170px' }}>{t('projects.colTags')}</th>
+            <th style={{ width: '100%' }}>{t('projects.colDescription')}</th>
             {isAdmin && <th></th>}
           </tr>
         </thead>
@@ -86,6 +86,26 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
     }
   }
 
+  async function handleRemoveTag(tagToRemove) {
+    setError('');
+    try {
+      const newTags = project.tags.filter((t) => t !== tagToRemove);
+      await apiFetch(`/projects/${project.id}/admin`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: project.name,
+          startDate: project.startDate,
+          endDate: project.endDate,
+          description: project.description,
+          tags: newTags,
+        }),
+      });
+      onSaved();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   return (
     <tr>
       <td><Link className='pos-user-link' to={`/profile/${project.user.id}`}>{displayName(project.user)}</Link></td>
@@ -109,7 +129,21 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
-          <td>{project.tags.join(', ')}</td>
+          <td>
+            {project.tags.map((tag) => (
+              <span key={tag} className="badge bg-info text-dark me-1">
+                {tag}
+                {isAdmin && (
+                  <span
+                    onClick={() => handleRemoveTag(tag)}
+                    style={{ cursor: 'pointer', marginLeft: '0.4rem' }}
+                  >
+                    ×
+                  </span>
+                )}
+              </span>
+            ))}
+          </td>
           <td>{project.description}</td>
         </>
       )}
