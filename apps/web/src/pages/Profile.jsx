@@ -563,7 +563,7 @@ function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }
             </>
           ) : (
             <>
-              <button className="btn btn-sm btn-outline-primary me-2" onClick={() => setEditing(true)}>{t('projects.edit')}</button>
+              <button className="btn btn-sm btn-outline-primary mb-2" onClick={() => setEditing(true)}>{t('projects.edit')}</button>
               <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
             </>
           )}
