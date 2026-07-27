@@ -445,6 +445,27 @@ function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }
     }
   }
 
+  async function handleRemoveTag(tagToRemove) {
+    setError('');
+    try {
+      const newTags = project.tags.filter((t) => t !== tagToRemove);
+      const url = isOwnProfile ? `/projects/${project.id}` : `/projects/${project.id}/admin`;
+      await apiFetch(url, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: project.name,
+          startDate: project.startDate,
+          endDate: project.endDate,
+          description: project.description,
+          tags: newTags,
+        }),
+      });
+      onSaved();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   return (
     <tr>
       {editing ? (
@@ -467,7 +488,18 @@ function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
-          <td style={{ minWidth: '170px' }} className='text-center'>{project.tags.join(', ')}</td>
+          <td style={{ minWidth: '170px' }} className='text-center'>
+            {project.tags.map((tag) => (
+              <span key={tag} className="badge text-bg-secondary me-1" style={{ fontSize: '0.85rem' }}>
+                {tag}
+                {canEdit && (
+                  <span onClick={() => handleRemoveTag(tag)} style={{ cursor: 'pointer', marginLeft: '0.4rem' }}>
+                    ×
+                  </span>
+                )}
+              </span>
+            ))}
+          </td>
           <td style={{ width: '100%' }} className='text-center'>{project.description}</td>
         </>
       )}
