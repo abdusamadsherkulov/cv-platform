@@ -194,8 +194,8 @@ function PositionDetail() {
         <form onSubmit={handleSaveInfo} className="mt-3">
           <input className="form-control mb-2" value={title} onChange={(e) => setTitle(e.target.value)} />
           <input className="form-control mb-2" value={description} onChange={(e) => setDescription(e.target.value)} />
-          <input className="form-control mb-2" placeholder="Project tags (comma separated)" value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
-          <input className="form-control mb-2" type="number" placeholder="Max projects" value={maxProjects} onChange={(e) => setMaxProjects(e.target.value)} />
+          <input className="form-control mb-2" placeholder={t('positionDetail.projectTagsLabel')} value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
+          <input className="form-control mb-2" type="number" placeholder={t('positionDetail.maxProjectsLabel')} value={maxProjects} onChange={(e) => setMaxProjects(e.target.value)} />
           <button className="btn btn-primary btn-sm" type="submit">{t('positionDetail.save')}</button>
           <button className="btn btn-secondary btn-sm ms-2" type="button" onClick={() => setEditingInfo(false)}>{t('positionDetail.cancel')}</button>
         </form>
@@ -203,6 +203,11 @@ function PositionDetail() {
         <div className="mt-3">
           <h1>{position.title}</h1>
           <p>{position.description}</p>
+          <p className="text-muted">
+            <strong>{t('positionDetail.projectTagsLabel')}:</strong> {position.projectTags.length > 0 ? position.projectTags.join(', ') : '—'}
+            {' · '}
+            <strong>{t('positionDetail.maxProjectsLabel')}:</strong> {position.maxProjects}
+          </p>
           {canManage && (
             <button className="btn btn-sm btn-outline-primary" onClick={() => setEditingInfo(true)}>
               {t('positionDetail.editButton')}

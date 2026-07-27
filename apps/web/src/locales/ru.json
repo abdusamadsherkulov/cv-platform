@@ -58,6 +58,8 @@
     "colTitle": "Название",
     "colDescription": "Описание",
     "colAttributes": "Атрибуты",
+    "colProjectTags": "Теги проектов",
+    "maxProjectsShort": "макс",
     "createCv": "Создать резюме",
     "createNew": "Создать новую позицию",
     "titlePlaceholder": "Название",
@@ -67,6 +69,8 @@
   },
   "positionDetail": {
     "back": "Назад к позициям",
+    "projectTagsLabel": "Теги проектов",
+    "maxProjectsLabel": "Макс. проектов",
     "editButton": "Редактировать название/описание",
     "delete": "Удалить",
     "save": "Сохранить",

@@ -58,6 +58,8 @@
     "colTitle": "Title",
     "colDescription": "Description",
     "colAttributes": "Attributes",
+    "colProjectTags": "Project Tags",
+    "maxProjectsShort": "max",
     "createCv": "Create CV",
     "createNew": "Create New Position",
     "titlePlaceholder": "Title",
@@ -67,6 +69,8 @@
   },
   "positionDetail": {
     "back": "Back to Positions",
+    "projectTagsLabel": "Project Tags",
+    "maxProjectsLabel": "Max Projects",
     "editButton": "Edit Title/Description",
     "delete": "Delete",
     "save": "Save",
