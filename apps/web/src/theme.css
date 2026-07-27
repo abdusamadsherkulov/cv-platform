@@ -230,6 +230,7 @@ body {
   text-decoration: underline;
 }
 
+/* Login page */
 .login-bg {
   position: relative;
   background: rgba(255, 255, 255, 0.1);
@@ -263,4 +264,14 @@ body {
 .login-bg a:hover {
   background-color: #e0e0e0;
   color: #212529;
+}
+
+/* CV like button */
+.like-icon {
+  transition: transform 0.15s ease;
+  display: inline-flex;
+}
+
+.like-icon:hover {
+  transform: scale(1.15);
 }

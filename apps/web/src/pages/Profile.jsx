@@ -315,7 +315,7 @@ function Profile() {
           <table className="table table-striped table-borderless">
             <thead>
               <tr>
-                <th style={{ minWidth: '200px' }}>{t('cvs.colPosition')}</th>
+                <th style={{ minWidth: '300px' }}>{t('cvs.colPosition')}</th>
                 <th style={{ width: '100%' }} className='text-center'>{t('cvs.colStatus')}</th>
                 {canEdit && <th></th>}
               </tr>
