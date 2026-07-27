@@ -131,7 +131,7 @@ function ProjectRow({ project, isAdmin, onDelete, onSaved }) {
           </td>
           <td>
             {project.tags.map((tag) => (
-              <span key={tag} className="badge bg-info text-dark me-1">
+              <span key={tag} className="badge text-bg-secondary me-1" style={{ fontSize: "0.85rem" }}>
                 {tag}
                 {isAdmin && (
                   <span
