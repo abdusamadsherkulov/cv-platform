@@ -555,7 +555,7 @@ function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }
         </>
       )}
       {canEdit && (
-        <td className="d-flex gap-2">
+        <td className="gap-2">
           {editing ? (
             <>
               <button className="btn btn-sm btn-primary" onClick={handleSave}>{t('cvDetail.save')}</button>
@@ -563,7 +563,7 @@ function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }
             </>
           ) : (
             <>
-              <button className="btn btn-sm btn-outline-primary" onClick={() => setEditing(true)}>{t('projects.edit')}</button>
+              <button className="btn btn-sm btn-outline-primary me-2" onClick={() => setEditing(true)}>{t('projects.edit')}</button>
               <button className="btn btn-sm btn-danger" onClick={() => onDelete(project.id)}>{t('projects.delete')}</button>
             </>
           )}
