@@ -59,6 +59,7 @@
     "colDescription": "Описание",
     "colAttributes": "Атрибуты",
     "colProjectTags": "Теги проектов",
+    "colMaxProjects": "Макс. проектов",
     "maxProjectsShort": "макс",
     "createCv": "Создать резюме",
     "createNew": "Создать новую позицию",

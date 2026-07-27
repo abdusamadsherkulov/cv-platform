@@ -59,6 +59,7 @@
     "colDescription": "Description",
     "colAttributes": "Attributes",
     "colProjectTags": "Project Tags",
+    "colMaxProjects": "Max Projects",
     "maxProjectsShort": "max",
     "createCv": "Create CV",
     "createNew": "Create New Position",

@@ -101,6 +101,7 @@ function Positions() {
             <th>{t('positions.colDescription')}</th>
             <th>{t('positions.colAttributes')}</th>
             <th>{t('positions.colProjectTags')}</th>
+            <th>{t('positions.colMaxProjects')}</th>
             {isCandidate && <th></th>}
           </tr>
         </thead>
@@ -110,7 +111,8 @@ function Positions() {
               <td><Link className='pos-user-link' to={`/positions/${pos.id}`}>{pos.title}</Link></td>
               <td>{pos.description}</td>
               <td>{pos.attributes.map((a) => a.attribute.name).join(', ')}</td>
-              <td>{pos.projectTags.length > 0 ? pos.projectTags.join(', ') : '—'} ({t('positions.maxProjectsShort')}: {pos.maxProjects})</td>
+              <td>{pos.projectTags.length > 0 ? pos.projectTags.join(', ') : '—'}</td>
+              <td>{pos.maxProjects}</td>
               {isCandidate && (
                 <td>
                   <button
