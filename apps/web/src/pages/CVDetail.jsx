@@ -36,7 +36,7 @@ function CVDetail() {
         method: 'PUT',
         body: JSON.stringify({ value: newValue, version }),
       });
-      loadCv(); // refresh so we get the new version number
+      loadCv();
     } catch (err) {
       setError(err.message);
     }
@@ -132,72 +132,63 @@ function CVDetail() {
 }
 
 function FieldRow({ field, onSave, canEdit }) {
-  const { t } = useTranslation(); // was missing before — needed here too
-  const [editing, setEditing] = useState(false);
-  const [value, setValue] = useState(field.value);
+  const { t } = useTranslation();
+  const [input, setInput] = useState(field.value);
+  const [saveStatus, setSaveStatus] = useState('');
 
   const isEmpty = !field.value?.trim();
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    onSave(field.attributeId, value, field.version);
-    setEditing(false);
-  }
+  useEffect(() => {
+    if (input === field.value) return;
+    const timer = setTimeout(async () => {
+      setSaveStatus('saving');
+      await onSave(field.attributeId, input, field.version);
+      setSaveStatus('saved');
+      setTimeout(() => setSaveStatus(''), 3000);
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [input]);
 
   return (
     <tr style={isEmpty ? { color: 'red' } : undefined}>
       <td style={{ width: '200px' }}>{field.name}</td>
       <td>
-        {editing ? (
-          <form onSubmit={handleSubmit} className="d-flex gap-2">
-            {field.type === 'enum' ? (
-              <select
-                className="form-select form-select-sm"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                autoFocus
-              >
-                <option value="">{t('cvDetail.selectValue')}</option>
-                {field.options.map((opt) => (
-                  <option key={opt} value={opt}>{opt}</option>
-                ))}
-              </select>
-            ) : field.type === 'boolean' ? (
-              <select
-                className="form-select form-select-sm"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                autoFocus
-              >
-                <option value="">{t('cvDetail.selectValue')}</option>
-                <option value="true">{t('cvDetail.yes')}</option>
-                <option value="false">{t('cvDetail.no')}</option>
-              </select>
-            ) : (
-              <input
-                className="form-control"
-                type={field.type === 'numeric' ? 'number' : field.type === 'date' ? 'date' : 'text'}
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-                autoFocus
-              />
-            )}
-            <button className="btn btn-sm btn-primary" type="submit">{t('cvDetail.save')}</button>
-            <button className="btn btn-sm btn-secondary" type="button" onClick={() => setEditing(false)}>
-              {t('cvDetail.cancel')}
-            </button>
-          </form>
-        ) : (
-          <span
-            onClick={canEdit ? () => setEditing(true) : undefined}
-            style={{ cursor: canEdit ? 'pointer' : 'default' }}
-          >
-            {isEmpty ? t('cvDetail.empty') : field.value}
-          </span>
-        )}
+        <div className="d-flex justify-content-center">
+          {field.type === 'enum' ? (
+            <select className="form-select" style={{ maxWidth: '300px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
+              <option value="">{t('cvDetail.selectValue')}</option>
+              {field.options.map((opt) => (
+                <option key={opt} value={opt}>{opt}</option>
+              ))}
+            </select>
+          ) : field.type === 'boolean' ? (
+            <select className="form-select" style={{ maxWidth: '300px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
+              <option value="">{t('cvDetail.selectValue')}</option>
+              <option value="true">{t('cvDetail.yes')}</option>
+              <option value="false">{t('cvDetail.no')}</option>
+            </select>
+          ) : field.type === 'text' ? (
+            <textarea className="form-control" style={{ maxWidth: '300px' }} rows={3} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)} />
+          ) : field.type === 'period' ? (
+            <div className="d-flex gap-2">
+              <input className="form-control" type="date" disabled={!canEdit} value={input.split(',')[0] || ''} onChange={(e) => setInput(`${e.target.value},${input.split(',')[1] || ''}`)} />
+              <input className="form-control" type="date" disabled={!canEdit} value={input.split(',')[1] || ''} onChange={(e) => setInput(`${input.split(',')[0] || ''},${e.target.value}`)} />
+            </div>
+          ) : (
+            <input
+              className="form-control"
+              type={field.type === 'numeric' ? 'number' : field.type === 'date' ? 'date' : 'text'}
+              style={{ maxWidth: '300px' }}
+              value={input}
+              disabled={!canEdit}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          )}
+        </div>
+        {saveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
+        {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
       </td>
     </tr>
   );
 }
-
 export default CVDetail;
