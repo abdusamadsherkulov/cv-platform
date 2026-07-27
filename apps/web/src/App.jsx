@@ -25,7 +25,6 @@ function App() {
   return (
     <div className="container mt-4">
       <h2 className="mb-4">{t('home.title')}</h2>
-
       <div className="row mb-4">
         <div className="col-6 col-md-4 col-lg mb-4"><div className="card text-center p-3 p-lg-4"><h3><CountUp end={data.stats.totalPositions} /></h3><p>{t('home.positions')}</p></div></div>
         <div className="col-6 col-md-4 col-lg mb-4"><div className="card text-center p-3 p-lg-4"><h3><CountUp end={data.stats.totalCandidates} /></h3><p>{t('home.candidates')}</p></div></div>

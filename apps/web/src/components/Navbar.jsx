@@ -109,7 +109,7 @@ function Navbar() {
             <div className="d-md-none mb-2 mt-2 px-2 position-relative d-flex">
               <form onSubmit={handleSearch} className="flex-grow-1">
                 <input
-                  className="form-control form-control-sm"
+                  className="form-control-sm"
                   placeholder={t('nav.searchPlaceholder')}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -184,7 +184,7 @@ function Navbar() {
       <div className="ms-auto d-flex align-items-center gap-2 flex-wrap justify-content-end">
         <form className="d-none d-md-flex position-relative" onSubmit={handleSearch} ref={searchRef}>
           <input
-            className="form-control form-control-sm"
+            className="form-control-sm"
             style={{ width: '140px' }}
             placeholder={t('nav.searchPlaceholder')}
             value={query}

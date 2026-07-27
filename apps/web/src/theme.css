@@ -9,6 +9,7 @@
   --navbar-btn-text: #FEFEFE;
   --navbar-btn-hover-bg: #395b81;
   --navbar-btn-hover-text: #FEFEFE;
+  --form-bg: #f1f1f1;
 }
 
 [data-theme='dark'] {
@@ -22,6 +23,7 @@
   --navbar-btn-border: #ffffff;
   --navbar-btn-hover-bg: #E8EDF2;
   --navbar-btn-hover-text: #2c4663;
+  --form-bg: #376086;
 }
 
 .navbar-btn {
@@ -47,11 +49,28 @@ body {
   color: var(--text-color) !important;
 }
 
+.form-control, .form-select {
+  background-color: var(--form-bg);
+  color: var(--text-color);
+  border-color: #444;
+}
+.form-control::placeholder,
+.form-select::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
 [data-theme='dark'] .form-control,
 [data-theme='dark'] .form-select {
-  background-color: #f7f7f7;
-  color: #212529;
+  background-color: var(--form-bg);
+  color: var(--text-color);
   border-color: #444;
+}
+
+[data-theme='dark'] .form-control::placeholder,
+[data-theme='dark'] .form-select::placeholder {
+  color: var(--text-color);
+  opacity: 0.7;
 }
 
 [data-theme='dark'] .list-group-item {
