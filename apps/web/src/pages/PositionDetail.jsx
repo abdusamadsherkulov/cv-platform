@@ -204,7 +204,12 @@ function PositionDetail() {
           <h1>{position.title}</h1>
           <p>{position.description}</p>
           <p>
-            <strong className=''>{t('positionDetail.projectTagsLabel')}:</strong> {position.projectTags.length > 0 ? position.projectTags.join(', ') : '—'}
+            <strong className=''>{t('positionDetail.projectTagsLabel')}:</strong>
+            {pos.projectTags.length > 0 ? (
+              pos.projectTags.map((tag) => (
+                <span key={tag} className="badge text-bg-secondary me-1" style={{ fontSize: "0.85rem" }}>{tag}</span>
+              ))
+            ) : '—'}
           </p>
           <p>
             <strong>{t('positionDetail.maxProjectsLabel')}:</strong> {position.maxProjects}
