@@ -100,8 +100,8 @@ function Positions() {
             <th>{t('positions.colTitle')}</th>
             <th>{t('positions.colDescription')}</th>
             <th>{t('positions.colAttributes')}</th>
-            <th>{t('positions.colProjectTags')}</th>
-            <th>{t('positions.colMaxProjects')}</th>
+            <th style={{ whiteSpace: 'nowrap' }}>{t('positions.colProjectTags')}</th>
+            <th style={{ whiteSpace: 'nowrap' }}>{t('positions.colMaxProjects')}</th>
             {isCandidate && <th></th>}
           </tr>
         </thead>
