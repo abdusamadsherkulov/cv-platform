@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { apiFetch, getCurrentRole } from '../api';
 import { useTranslation } from 'react-i18next';
@@ -105,7 +105,7 @@ function CVDetail() {
       {message && <div className="alert alert-success">{message}</div>}
 
       <h2>{t('cvDetail.attributes')}</h2>
-      <table className="table">
+      <table className="table table-striped table-borderless">
         <tbody>
           {cv.fields.map((field) => (
             <FieldRow key={field.attributeId} field={field} onSave={handleFieldSave} canEdit={canEdit} />
@@ -138,6 +138,14 @@ function FieldRow({ field, onSave, canEdit }) {
 
   const isEmpty = !field.value?.trim();
 
+  const textareaRef = useRef(null);
+
+  function autoResize(el) {
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  }
+
   useEffect(() => {
     if (input === field.value) return;
     const timer = setTimeout(async () => {
@@ -149,26 +157,40 @@ function FieldRow({ field, onSave, canEdit }) {
     return () => clearTimeout(timer);
   }, [input]);
 
+  useEffect(() => {
+    autoResize(textareaRef.current);
+  }, []);
+
   return (
     <tr style={isEmpty ? { color: 'red' } : undefined}>
       <td style={{ width: '200px' }}>{field.name}</td>
       <td>
         <div className="d-flex justify-content-center">
           {field.type === 'enum' ? (
-            <select className="form-select" style={{ maxWidth: '300px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
+            <select className="form-select" style={{ maxWidth: '400px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
               <option value="">{t('cvDetail.selectValue')}</option>
               {field.options.map((opt) => (
                 <option key={opt} value={opt}>{opt}</option>
               ))}
             </select>
           ) : field.type === 'boolean' ? (
-            <select className="form-select" style={{ maxWidth: '300px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
+            <select className="form-select" style={{ maxWidth: '400px' }} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)}>
               <option value="">{t('cvDetail.selectValue')}</option>
               <option value="true">{t('cvDetail.yes')}</option>
               <option value="false">{t('cvDetail.no')}</option>
             </select>
           ) : field.type === 'text' ? (
-            <textarea className="form-control" style={{ maxWidth: '300px' }} rows={3} value={input} disabled={!canEdit} onChange={(e) => setInput(e.target.value)} />
+            <textarea
+              ref={textareaRef}
+              className="form-control"
+              style={{ maxWidth: '400px', overflow: 'hidden', resize: 'none' }}
+              value={input}
+              disabled={!canEdit}
+              onChange={(e) => {
+                setInput(e.target.value);
+                autoResize(e.target);
+              }}
+            />
           ) : field.type === 'period' ? (
             <div className="d-flex gap-2">
               <input className="form-control" type="date" disabled={!canEdit} value={input.split(',')[0] || ''} onChange={(e) => setInput(`${e.target.value},${input.split(',')[1] || ''}`)} />
@@ -178,7 +200,7 @@ function FieldRow({ field, onSave, canEdit }) {
             <input
               className="form-control"
               type={field.type === 'numeric' ? 'number' : field.type === 'date' ? 'date' : 'text'}
-              style={{ maxWidth: '300px' }}
+              style={{ maxWidth: '400px' }}
               value={input}
               disabled={!canEdit}
               onChange={(e) => setInput(e.target.value)}

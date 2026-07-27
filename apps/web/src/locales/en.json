@@ -117,7 +117,9 @@
     "empty": "(empty)",
     "selectValue": "Select level",
     "save": "Save",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "yes": "Yes",
+    "no": "No"
   },
   "projects": {
     "title": "Projects",
