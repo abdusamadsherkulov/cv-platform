@@ -207,7 +207,7 @@ function PositionDetail() {
             <strong className=''>{t('positionDetail.projectTagsLabel')}:</strong>
             {position.projectTags.length > 0 ? (
               position.projectTags.map((tag) => (
-                <span key={tag} className="badge text-bg-secondary me-1" style={{ fontSize: "0.85rem" }}>{tag}</span>
+                <span key={tag} className="badge text-bg-secondary ms-1" style={{ fontSize: "0.85rem" }}>{tag}</span>
               ))
             ) : '—'}
           </p>
