@@ -204,8 +204,9 @@ function PositionDetail() {
           <h1>{position.title}</h1>
           <p>{position.description}</p>
           <p>
-            <strong>{t('positionDetail.projectTagsLabel')}:</strong> {position.projectTags.length > 0 ? position.projectTags.join(', ') : '—'}
-            <br />
+            <strong className=''>{t('positionDetail.projectTagsLabel')}:</strong> {position.projectTags.length > 0 ? position.projectTags.join(', ') : '—'}
+          </p>
+          <p>
             <strong>{t('positionDetail.maxProjectsLabel')}:</strong> {position.maxProjects}
           </p>
           {canManage && (
