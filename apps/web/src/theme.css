@@ -23,7 +23,7 @@
   --navbar-btn-border: #ffffff;
   --navbar-btn-hover-bg: #E8EDF2;
   --navbar-btn-hover-text: #2c4663;
-  --form-bg: #364a63;
+  --form-bg: #3b516b;
 }
 
 .navbar-btn {
@@ -52,7 +52,7 @@ body {
 .form-control, .form-select {
   background-color: var(--form-bg);
   color: var(--text-color);
-  border-color: #444;
+  border-color: #44444400;
 }
 .form-control::placeholder,
 .form-select::placeholder {
@@ -64,7 +64,15 @@ body {
 [data-theme='dark'] .form-select {
   background-color: var(--form-bg);
   color: var(--text-color);
-  border-color: #444;
+  border-color: #44444400;
+}
+
+[data-theme='dark'] .form-select {
+  --bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23FEFEFE' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+
+[data-theme='dark'] input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }
 
 [data-theme='dark'] .form-control::placeholder,
