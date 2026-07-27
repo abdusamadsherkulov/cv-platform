@@ -488,7 +488,7 @@ function ProfileProjectRow({ project, canEdit, isOwnProfile, onDelete, onSaved }
             {new Date(project.startDate).toLocaleDateString()} -{' '}
             {project.endDate ? new Date(project.endDate).toLocaleDateString() : t('projects.ongoing')}
           </td>
-          <td style={{ minWidth: '170px' }} className='text-center'>
+          <td style={{ minWidth: '350px' }} className='text-center'>
             {project.tags.map((tag) => (
               <span key={tag} className="badge text-bg-secondary me-1" style={{ fontSize: '0.85rem' }}>
                 {tag}
