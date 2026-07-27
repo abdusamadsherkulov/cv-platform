@@ -17,6 +17,8 @@ function Profile() {
   const [attributesList, setAttributesList] = useState([]);
   const [error, setError] = useState('');
   const [attributeToAdd, setAttributeToAdd] = useState('');
+  const [valueToAdd, setValueToAdd] = useState('');
+  const selectedAttrToAdd = attributesList.find((a) => a.id === Number(attributeToAdd));
   const { t } = useTranslation();
   const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '', name: '' });
   const [meSaveStatus, setMeSaveStatus] = useState('');
@@ -170,9 +172,10 @@ function Profile() {
     try {
       await apiFetch(valueUrl(attributeToAdd), {
         method: 'PUT',
-        body: JSON.stringify({ value: '' }),
+        body: JSON.stringify({ value: valueToAdd }),
       });
       setAttributeToAdd('');
+      setValueToAdd('');
       loadValues();
     } catch (err) {
       setError(err.message);
@@ -248,12 +251,60 @@ function Profile() {
 
       {canEdit && (
         <div className="d-flex gap-2 mb-4">
-          <select className="form-select" value={attributeToAdd} onChange={(e) => setAttributeToAdd(e.target.value)}>
+          <select
+            className="form-select"
+            value={attributeToAdd}
+            onChange={(e) => { setAttributeToAdd(e.target.value); setValueToAdd(''); }}
+          >
             <option value="">{t('profile.selectAttribute')}</option>
             {availableToAdd.map((attr) => (
               <option key={attr.id} value={attr.id}>{attr.name} ({attr.category.name})</option>
             ))}
           </select>
+
+          {selectedAttrToAdd && (
+            <>
+              {selectedAttrToAdd.type === 'enum' ? (
+                <select className="form-select" value={valueToAdd} onChange={(e) => setValueToAdd(e.target.value)}>
+                  <option value="">{t('profile.selectValue')}</option>
+                  {selectedAttrToAdd.options.map((opt) => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
+              ) : selectedAttrToAdd.type === 'boolean' ? (
+                <select className="form-select" value={valueToAdd} onChange={(e) => setValueToAdd(e.target.value)}>
+                  <option value="">{t('profile.selectValue')}</option>
+                  <option value="true">{t('profile.yes')}</option>
+                  <option value="false">{t('profile.no')}</option>
+                </select>
+              ) : selectedAttrToAdd.type === 'text' ? (
+                <textarea className="form-control" rows={1} value={valueToAdd} onChange={(e) => setValueToAdd(e.target.value)} />
+              ) : selectedAttrToAdd.type === 'period' ? (
+                <div className="d-flex gap-2">
+                  <input
+                    className="form-control"
+                    type="date"
+                    value={valueToAdd.split(',')[0] || ''}
+                    onChange={(e) => setValueToAdd(`${e.target.value},${valueToAdd.split(',')[1] || ''}`)}
+                  />
+                  <input
+                    className="form-control"
+                    type="date"
+                    value={valueToAdd.split(',')[1] || ''}
+                    onChange={(e) => setValueToAdd(`${valueToAdd.split(',')[0] || ''},${e.target.value}`)}
+                  />
+                </div>
+              ) : (
+                <input
+                  className="form-control"
+                  type={selectedAttrToAdd.type === 'numeric' ? 'number' : selectedAttrToAdd.type === 'date' ? 'date' : 'text'}
+                  value={valueToAdd}
+                  onChange={(e) => setValueToAdd(e.target.value)}
+                />
+              )}
+            </>
+          )}
+
           <button className="btn btn-primary" onClick={handleAddAttribute}>{t('profile.add')}</button>
         </div>
       )}
