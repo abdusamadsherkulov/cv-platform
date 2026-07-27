@@ -14,6 +14,9 @@ function PositionDetail() {
   const [description, setDescription] = useState('');
   const [editingInfo, setEditingInfo] = useState(false);
 
+  const [projectTagsInput, setProjectTagsInput] = useState('');
+  const [maxProjects, setMaxProjects] = useState(3);
+
   const [attributeToAdd, setAttributeToAdd] = useState('');
 
   const [ruleAttributeId, setRuleAttributeId] = useState('');
@@ -35,6 +38,8 @@ function PositionDetail() {
       setPosition(data);
       setTitle(data.title);
       setDescription(data.description);
+      setProjectTagsInput(data.projectTags.join(', '));
+      setMaxProjects(data.maxProjects);
     } catch (err) {
       setError(err.message);
     }
@@ -70,13 +75,14 @@ function PositionDetail() {
     setError('');
     setMessage('');
     try {
+      const tags = projectTagsInput.split(',').map((t) => t.trim()).filter(Boolean);
       await apiFetch(`/positions/${id}`, {
         method: 'PUT',
         body: JSON.stringify({
           title,
           description,
-          projectTags: position.projectTags,
-          maxProjects: position.maxProjects,
+          projectTags: tags,
+          maxProjects: Number(maxProjects),
           version: position.version,
         }),
       });
@@ -188,6 +194,8 @@ function PositionDetail() {
         <form onSubmit={handleSaveInfo} className="mt-3">
           <input className="form-control mb-2" value={title} onChange={(e) => setTitle(e.target.value)} />
           <input className="form-control mb-2" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <input className="form-control mb-2" placeholder="Project tags (comma separated)" value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
+          <input className="form-control mb-2" type="number" placeholder="Max projects" value={maxProjects} onChange={(e) => setMaxProjects(e.target.value)} />
           <button className="btn btn-primary btn-sm" type="submit">{t('positionDetail.save')}</button>
           <button className="btn btn-secondary btn-sm ms-2" type="button" onClick={() => setEditingInfo(false)}>{t('positionDetail.cancel')}</button>
         </form>
