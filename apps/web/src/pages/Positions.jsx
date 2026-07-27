@@ -74,7 +74,13 @@ function Positions() {
               <td><Link className='pos-user-link' to={`/positions/${pos.id}`}>{pos.title}</Link></td>
               <td>{pos.description}</td>
               <td>{pos.attributes.map((a) => a.attribute.name).join(', ')}</td>
-              <td>{pos.projectTags.length > 0 ? pos.projectTags.join(', ') : '—'}</td>
+              <td>
+                {pos.projectTags.length > 0 ? (
+                  pos.projectTags.map((tag) => (
+                    <span key={tag} className="badge text-bg-secondary me-1"  style={{fontSize: "0.85rem"}}>{tag}</span>
+                  ))
+                ) : '—'}
+              </td>
               <td>{pos.maxProjects}</td>
               {isCandidate && (
                 <td>
