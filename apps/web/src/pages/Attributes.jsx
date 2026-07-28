@@ -102,14 +102,10 @@ function Attributes() {
       {canManage && (
         <>
           <h2>{t('attributes.addNew')}</h2>
-          <form onSubmit={handleCreate} className="row g-2 mb-5" style={{marginBottom: '5rem'}}>
-            <div className="col-md-3">
+          <form onSubmit={handleCreate} className="mb-5" style={{ marginBottom: '5rem' }}>
+            <div className="d-flex gap-2 mb-2">
               <input className="form-control" placeholder={t('attributes.namePlaceholder')} value={name} onChange={(e) => setName(e.target.value)} required />
-            </div>
-            <div className="col-md-3">
               <input className="form-control" placeholder={t('attributes.descriptionPlaceholder')} value={description} onChange={(e) => setDescription(e.target.value)} required />
-            </div>
-            <div className="col-md-2">
               <select className="form-select" value={type} onChange={(e) => setType(e.target.value)}>
                 <option value="string">{t('attributes.type-string')}</option>
                 <option value="text">{t('attributes.type-text')}</option>
@@ -120,10 +116,8 @@ function Attributes() {
                 <option value="enum">{t('attributes.type-enum')}</option>
                 <option value="image">{t('attributes.type-image')}</option>
               </select>
-            </div>
 
-            {type === 'enum' && (
-              <div className="col-md-4">
+              {type === 'enum' && (
                 <input
                   className="form-control"
                   placeholder={t('attributes.optionsPlaceholder')}
@@ -131,19 +125,19 @@ function Attributes() {
                   onChange={(e) => setOptionsText(e.target.value)}
                   required
                 />
-              </div>
-            )}
+              )}
 
-            <div className="col-md-2">
               <select className="form-select" value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
                 <option value="">{t('attributes.selectCategory')}</option>
                 {categoriesList.map((cat) => (
                   <option key={cat.id} value={cat.id}>{cat.name}</option>
                 ))}
               </select>
-            </div>
-            <div className="col-md-2">
-              <button type="submit" className="btn btn-primary w-100">{t('attributes.addButton')}</button>
+              <button type="submit" className="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" viewBox="0 0 640 640">
+                  <path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z" />
+                </svg>
+              </button>
             </div>
           </form>
         </>

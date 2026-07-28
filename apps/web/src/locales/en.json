@@ -101,7 +101,7 @@
   "allCvs": {
     "title": "All Published CVs",
     "colCandidate": "Candidate",
-    "colPosition": "Position",
+    "colPosition": "CV for Position",
     "colLikes": "Likes"
   },
   "cvDetail": {
@@ -146,8 +146,8 @@
     "add": "Add",
     "remove": "Remove",
     "myProjects": "My Projects",
-    "myCvs": "My CVs",
-    "cvs": "CVs",
+    "myCvs": "My CVs for Positions",
+    "cvs": "CVs for Positions",
     "saving": "Saving...",
     "saved": "Saved",
     "me": "Me",

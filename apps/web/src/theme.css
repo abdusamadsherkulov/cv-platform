@@ -326,11 +326,11 @@ body {
   color: #e94e5e; /* Bootstrap's danger red */
 }
 .icon-btn-delete:hover {
-  color: #ac3844; /* slightly darker on hover */
+  color: #be3643; /* slightly darker on hover */
 }
 
 [data-theme = 'dark'] .icon-btn-delete:hover {
-  color: #df6571;
+  color: #cf4e5b;
 }
 
 [data-theme = 'dark'] .icon-btn-edit:hover {

@@ -114,13 +114,35 @@ function CVDetail() {
       </table>
 
       <h2>{t('cvDetail.projects')}</h2>
-      <ul className="list-group mb-3">
-        {cv.projects.map((proj) => (
-          <li key={proj.id} className="list-group-item">
-            <strong>{proj.name}</strong> — {proj.description}
-          </li>
-        ))}
-      </ul>
+      <table className="table table-striped table-borderless">
+        <thead>
+          <tr>
+            <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
+            <th style={{ minWidth: '250px' }}>{t('projects.colPeriod')}</th>
+            <th style={{ minWidth: '300px' }}>{t('projects.colTags')}</th>
+            <th style={{ width: '100%' }}>{t('projects.colDescription')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cv.projects.map((proj) => (
+            <tr key={proj.id}>
+              <td>{proj.name}</td>
+              <td>
+                {new Date(proj.startDate).toLocaleDateString()} -{' '}
+                {proj.endDate ? new Date(proj.endDate).toLocaleDateString() : t('projects.ongoing')}
+              </td>
+              <td>
+                {proj.tags.map((tag) => (
+                  <span key={tag} className="badge text-bg-secondary me-1" style={{ fontSize: '0.85rem' }}>
+                    {tag}
+                  </span>
+                ))}
+              </td>
+              <td>{proj.description}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
 
       {cv.status === 'draft' && (
         <button className="btn btn-success" onClick={handlePublish}>
