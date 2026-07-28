@@ -230,8 +230,8 @@ function FieldRow({ field, onSave, canEdit }) {
           )}
         </div>
         <div style={{ position: 'relative' }}>
-          {meSaveStatus === 'saving' && <span className="save-toast save-toast-saving">{t('profile.saving')}</span>}
-          {meSaveStatus === 'saved' && <span className="save-toast save-toast-saved">{t('profile.saved')}</span>}
+          {saveStatus === 'saving' && <span className="save-toast save-toast-saving">{t('profile.saving')}</span>}
+          {saveStatus === 'saved' && <span className="save-toast save-toast-saved">{t('profile.saved')}</span>}
         </div>
       </td>
     </tr>
