@@ -25,26 +25,6 @@ function App() {
   return (
     <div className="container mt-4">
       <h2 className="mb-4">{t('home.title')}</h2>
-      <form className="mb-4">
-        <div className="d-flex gap-2 mb-2">
-          <input className="form-control" placeholder="projects.namePlaceholder" required />
-          <input className="form-control" type="date" required />
-          <input className="form-control" type="date" />
-          <input className="form-control" placeholder="projects.tagsPlaceholder" />
-
-          <button type="submit" className="btn btn-primary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" viewBox="0 0 640 640">
-              <path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z" />
-            </svg>
-          </button>
-        </div>
-
-        <textarea
-          className="form-control"
-          placeholder="projects.descriptionPlaceholder"
-          required
-        />
-      </form>
 
       <div className="row mb-4">
         <div className="col-6 col-md-4 col-lg mb-4"><div className="card text-center p-3 p-lg-4"><h3><CountUp end={data.stats.totalPositions} /></h3><p>{t('home.positions')}</p></div></div>
