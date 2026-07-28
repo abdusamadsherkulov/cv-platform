@@ -234,9 +234,9 @@ function Profile() {
         </div>
       </div>
       {isOwnProfile && (
-        <div className="mb-4">
-          {meSaveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
-          {meSaveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
+        <div style={{ position: 'relative' }}>
+          {meSaveStatus === 'saving' && <span className="save-toast save-toast-saving">{t('profile.saving')}</span>}
+          {meSaveStatus === 'saved' && <span className="save-toast save-toast-saved">{t('profile.saved')}</span>}
         </div>
       )}
 
@@ -460,8 +460,10 @@ function ValueRow({ value, canEdit, onRemove, onSaved, valueUrl }) {
             />
           )}
         </div>
-        {saveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
-        {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
+        <div style={{ position: 'relative' }}>
+          {saveStatus === 'saving' && <span className="save-toast save-toast-saving">{t('profile.saving')}</span>}
+          {saveStatus === 'saved' && <span className="save-toast save-toast-saved">{t('profile.saved')}</span>}
+        </div>
         {error && <div className="text-danger small">{error}</div>}
       </td>
       {canEdit && (

@@ -344,3 +344,39 @@ body {
 .icon-btn-edit:hover {
   color: #b49f00;
 }
+
+
+/* Save status toast */
+.save-toast {
+  position: absolute;
+  margin-left: 0.75rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  animation: toast-pop 0.2s ease-out;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+}
+
+.save-toast-saving {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.save-toast-saved {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+@keyframes toast-pop {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

@@ -117,7 +117,7 @@ function CVDetail() {
       <table className="table table-striped table-borderless">
         <thead>
           <tr>
-            <th style={{ minWidth: '150px' }}>{t('projects.colName')}</th>
+            <th style={{ minWidth: '320px' }}>{t('projects.colName')}</th>
             <th style={{ minWidth: '250px' }}>{t('projects.colPeriod')}</th>
             <th style={{ minWidth: '300px' }}>{t('projects.colTags')}</th>
             <th style={{ width: '100%' }}>{t('projects.colDescription')}</th>
@@ -229,8 +229,10 @@ function FieldRow({ field, onSave, canEdit }) {
             />
           )}
         </div>
-        {saveStatus === 'saving' && <small className="text-warning">{t('profile.saving')}</small>}
-        {saveStatus === 'saved' && <small className="text-success">{t('profile.saved')}</small>}
+        <div style={{ position: 'relative' }}>
+          {meSaveStatus === 'saving' && <span className="save-toast save-toast-saving">{t('profile.saving')}</span>}
+          {meSaveStatus === 'saved' && <span className="save-toast save-toast-saved">{t('profile.saved')}</span>}
+        </div>
       </td>
     </tr>
   );
