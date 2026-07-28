@@ -372,29 +372,19 @@ function Profile() {
           {canEdit && (
             <>
               <h3 className='mt-5'>{t('projects.addNew')}</h3>
-              <form onSubmit={handleCreateProject} className="row g-2 mb-4">
-                <div className="col-md-3">
+              <form onSubmit={handleCreateProject} className="mb-4">
+                <div className='d-flex gap-2 mb-2'>
                   <input className="form-control" placeholder={t('projects.namePlaceholder')} value={projectName} onChange={(e) => setProjectName(e.target.value)} required />
-                </div>
-                <div className="col-md-2">
                   <input className="form-control" type="date" value={projectStartDate} onChange={(e) => setProjectStartDate(e.target.value)} required />
-                </div>
-                <div className="col-md-2">
                   <input className="form-control" type="date" value={projectEndDate} onChange={(e) => setProjectEndDate(e.target.value)} placeholder="End (optional)" />
-                </div>
-                <div className="col-md-3">
                   <input className="form-control" placeholder={t('projects.tagsPlaceholder')} value={projectTagsInput} onChange={(e) => setProjectTagsInput(e.target.value)} />
-                </div>
-                <div className="col-md-2">
                   <button type="submit" className="btn btn-primary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" viewBox="0 0 640 640">
                       <path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z" />
                     </svg>
                   </button>
                 </div>
-                <div className="col-12">
-                  <textarea className="form-control" placeholder={t('projects.descriptionPlaceholder')} value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)} required />
-                </div>
+                <textarea className="form-control" placeholder={t('projects.descriptionPlaceholder')} value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)} required />
               </form>
             </>
           )}
