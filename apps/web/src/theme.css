@@ -302,3 +302,37 @@ body {
 .like-icon:hover {
   transform: scale(1.1);
 }
+
+/* Icon action buttons (delete / edit) */
+.icon-btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon-btn-delete .icon-default {
+  display: inline-flex;
+}
+.icon-btn-delete .icon-hover {
+  display: none;
+}
+.icon-btn-delete:hover .icon-default {
+  display: none;
+}
+.icon-btn-delete:hover .icon-hover {
+  display: inline-flex;
+}
+.icon-btn-delete {
+  color: #dc3545; /* Bootstrap's danger red */
+}
+.icon-btn-delete:hover {
+  color: #b02a37; /* slightly darker on hover */
+}
+
+.icon-btn-edit {
+  transition: transform 0.15s ease;
+  color: var(--link-color);
+}
+.icon-btn-edit:hover {
+  transform: scale(1.15);
+}
