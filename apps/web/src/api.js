@@ -1,3 +1,5 @@
+import { useState, useCallback } from 'react';
+
 const API_URL = 'https://cw-platform.onrender.com';
 
 export async function apiFetch(path, options = {}) {
@@ -49,4 +51,30 @@ export function displayName(user) {
     return `${user.firstName} ${user.lastName}`;
   }
   return user.name;
+}
+
+export function useToast() {
+  const [toasts, setToasts] = useState([]);
+
+  const showToast = useCallback((message, type = 'saved') => {
+    const id = Date.now() + Math.random();
+    setToasts((prev) => [...prev, { id, message, type }]);
+    setTimeout(() => {
+      setToasts((prev) => prev.filter((t) => t.id !== id));
+    }, 2500);
+  }, []);
+
+  return { toasts, showToast };
+}
+
+export function ToastContainer({ toasts }) {
+  return (
+    <div className="toast-container">
+      {toasts.map((toast) => (
+        <div key={toast.id} className={`toast-notification toast-${toast.type}`}>
+          {toast.message}
+        </div>
+      ))}
+    </div>
+  );
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { apiFetch, getCurrentRole, getCurrentUserId, displayName } from '../api';
+import { apiFetch, getCurrentRole, getCurrentUserId, displayName, useToast, ToastContainer } from '../api';
 import { useTranslation } from 'react-i18next';
 
 function Profile() {
@@ -21,7 +21,6 @@ function Profile() {
   const selectedAttrToAdd = attributesList.find((a) => a.id === Number(attributeToAdd));
   const { t } = useTranslation();
   const [meFields, setMeFields] = useState({ firstName: '', lastName: '', location: '', name: '' });
-  const [meSaveStatus, setMeSaveStatus] = useState('');
   const meLoadedRef = useRef(false);
   const [cvs, setCvs] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -36,6 +35,7 @@ function Profile() {
   const valueUrl = (attributeId) => isOwnProfile ? `/profile/${attributeId}` : `/profile/${viewedUserId}/values/${attributeId}`;
   const cvsUrl = isOwnProfile ? '/cvs' : `/cvs/user/${viewedUserId}`;
   const projectsUrl = isOwnProfile ? '/projects' : `/projects/user/${viewedUserId}`;
+  const { toasts, showToast } = useToast();
 
   async function loadValues() {
     try {
@@ -139,17 +139,15 @@ function Profile() {
     if (!isOwnProfile || !meLoadedRef.current) return;
 
     const timer = setTimeout(async () => {
-      setMeSaveStatus('saving');
+      showToast(t('profile.saving'), 'saving');
       try {
         await apiFetch(meUrl, {
           method: 'PUT',
           body: JSON.stringify(meFields),
         });
-        setMeSaveStatus('saved');
-        setTimeout(() => setMeSaveStatus(''), 3000);
+        showToast(t('profile.saved'), 'saved');
       } catch (err) {
         setError(err.message);
-        setMeSaveStatus('');
       }
     }, 5000);
 
@@ -197,6 +195,7 @@ function Profile() {
 
   return (
     <div className="container mt-4">
+      <ToastContainer toasts={toasts} />
       <h1 className="mb-4">{isOwnProfile ? t('profile.title') : displayName(meFields)}</h1>
       {error && <div className="alert alert-danger">{error}</div>}
 
@@ -233,18 +232,12 @@ function Profile() {
           />
         </div>
       </div>
-      {isOwnProfile && (
-        <div style={{ position: 'relative' }}>
-          {meSaveStatus === 'saving' && <span className="save-toast save-toast-saving">{t('profile.saving')}</span>}
-          {meSaveStatus === 'saved' && <span className="save-toast save-toast-saved">{t('profile.saved')}</span>}
-        </div>
-      )}
 
       <h2 className='mt-5'>{t('profile.info')}</h2>
       <table className="table table-striped table-borderless">
         <tbody>
           {values.map((v) => (
-            <ValueRow key={v.attributeId} value={v} canEdit={canEdit} onRemove={handleRemove} onSaved={loadValues} valueUrl={valueUrl} />
+            <ValueRow key={v.attributeId} value={v} canEdit={canEdit} onRemove={handleRemove} onSaved={loadValues} valueUrl={valueUrl} showToast={showToast} />
           ))}
         </tbody>
       </table>
@@ -394,26 +387,23 @@ function Profile() {
   );
 }
 
-function ValueRow({ value, canEdit, onRemove, onSaved, valueUrl }) {
+function ValueRow({ value, canEdit, onRemove, onSaved, valueUrl, showToast }) {
   const [input, setInput] = useState(value.value);
   const [error, setError] = useState('');
-  const [saveStatus, setSaveStatus] = useState('');
   const { t } = useTranslation();
 
   async function saveNow() {
-    setSaveStatus('saving');
     setError('');
+    showToast(t('profile.saving'), 'saving');
     try {
       await apiFetch(valueUrl(value.attributeId), {
         method: 'PUT',
         body: JSON.stringify({ value: input, version: value.version }),
       });
-      setSaveStatus('saved');
+      showToast(t('profile.saved'), 'saved');
       onSaved();
-      setTimeout(() => setSaveStatus(''), 3000);
     } catch (err) {
       setError(err.message);
-      setSaveStatus('');
     }
   }
 
@@ -459,10 +449,6 @@ function ValueRow({ value, canEdit, onRemove, onSaved, valueUrl }) {
               onChange={(e) => setInput(e.target.value)}
             />
           )}
-        </div>
-        <div style={{ position: 'relative' }}>
-          {saveStatus === 'saving' && <span className="save-toast save-toast-saving">{t('profile.saving')}</span>}
-          {saveStatus === 'saved' && <span className="save-toast save-toast-saved">{t('profile.saved')}</span>}
         </div>
         {error && <div className="text-danger small">{error}</div>}
       </td>

@@ -347,36 +347,47 @@ body {
 
 
 /* Save status toast */
-.save-toast {
-  position: absolute;
-  margin-left: 0.75rem;
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  white-space: nowrap;
-  animation: toast-pop 0.2s ease-out;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  z-index: 5;
+.toast-container {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
 }
 
-.save-toast-saving {
+.toast-notification {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: toast-slide-down 0.25s ease-out;
+}
+
+.toast-notification.leaving {
+  animation: toast-slide-up 0.2s ease-in forwards;
+}
+
+.toast-saving {
   background-color: #fff3cd;
   color: #856404;
 }
 
-.save-toast-saved {
+.toast-saved {
   background-color: #d1e7dd;
   color: #0f5132;
 }
 
-@keyframes toast-pop {
-  from {
-    opacity: 0;
-    transform: translateY(4px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+@keyframes toast-slide-down {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes toast-slide-up {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-20px); }
 }
