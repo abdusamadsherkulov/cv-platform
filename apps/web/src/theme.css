@@ -323,16 +323,16 @@ body {
   display: inline-flex;
 }
 .icon-btn-delete {
-  color: #dc3545; /* Bootstrap's danger red */
+  color: #e94e5e; /* Bootstrap's danger red */
 }
 .icon-btn-delete:hover {
-  color: #b02a37; /* slightly darker on hover */
+  color: #e94e5e; /* slightly darker on hover */
 }
 
 .icon-btn-edit {
   transition: transform 0.15s ease;
-  color: var(--link-color);
+  color: #cab202;
 }
 .icon-btn-edit:hover {
-  transform: scale(1.15);
+  color: #b49f00;
 }
