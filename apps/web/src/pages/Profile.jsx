@@ -31,6 +31,13 @@ function Profile() {
   const [projectDescription, setProjectDescription] = useState('');
   const [projectTagsInput, setProjectTagsInput] = useState('');
 
+  const [showSalesforceForm, setShowSalesforceForm] = useState(false);
+  const [sfCompanyName, setSfCompanyName] = useState('');
+  const [sfPhone, setSfPhone] = useState('');
+  const [sfNotes, setSfNotes] = useState('');
+  const [sfResult, setSfResult] = useState(null);
+
+
   const meUrl = isOwnProfile ? '/profile/me' : `/profile/${viewedUserId}/me`;
   const valuesUrl = isOwnProfile ? '/profile' : `/profile/${viewedUserId}/values`;
   const valueUrl = (attributeId) => isOwnProfile ? `/profile/${attributeId}` : `/profile/${viewedUserId}/values/${attributeId}`;
@@ -61,6 +68,22 @@ function Profile() {
       const data = await apiFetch(meUrl);
       setMeFields(data);
       meLoadedRef.current = true;
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
+  async function handleSalesforceSync(e) {
+    e.preventDefault();
+    setError('');
+    setSfResult(null);
+    try {
+      const result = await apiFetch('/salesforce/sync', {
+        method: 'POST',
+        body: JSON.stringify({ companyName: sfCompanyName, phone: sfPhone, notes: sfNotes }),
+      });
+      setSfResult(result);
+      setShowSalesforceForm(false);
     } catch (err) {
       setError(err.message);
     }
@@ -233,7 +256,38 @@ function Profile() {
           />
         </div>
       </div>
-      {isOwnProfile && <SalesforceSyncForm showToast={showToast} />}
+
+      {canEdit && (
+        <div className="mt-4 mb-4">
+          <button className="btn btn-outline-primary btn-sm" onClick={() => setShowSalesforceForm((s) => !s)}>
+            Sync to Salesforce
+          </button>
+
+          {sfResult && (
+            <div className="alert alert-success mt-2">
+              Synced! Account ID: {sfResult.accountId}, Contact ID: {sfResult.contactId}
+            </div>
+          )}
+
+          {showSalesforceForm && (
+            <form onSubmit={handleSalesforceSync} className="row g-2 mt-2" style={{ maxWidth: '600px' }}>
+              <div className="col-md-4">
+                <input className="form-control" placeholder="Company Name" value={sfCompanyName} onChange={(e) => setSfCompanyName(e.target.value)} />
+              </div>
+              <div className="col-md-4">
+                <input className="form-control" placeholder="Phone" value={sfPhone} onChange={(e) => setSfPhone(e.target.value)} />
+              </div>
+              <div className="col-md-4">
+                <input className="form-control" placeholder="Notes" value={sfNotes} onChange={(e) => setSfNotes(e.target.value)} />
+              </div>
+              <div className="col-12">
+                <button type="submit" className="btn btn-primary btn-sm">Submit to Salesforce</button>
+              </div>
+            </form>
+          )}
+        </div>
+      )}
+
       <h2 className='mt-5'>{t('profile.info')}</h2>
       <table className="table table-striped table-borderless">
         <tbody>
