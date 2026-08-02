@@ -233,7 +233,7 @@ function Profile() {
           />
         </div>
       </div>
-
+      {isOwnProfile && <SalesforceSyncForm showToast={showToast} />}
       <h2 className='mt-5'>{t('profile.info')}</h2>
       <table className="table table-striped table-borderless">
         <tbody>

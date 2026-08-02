@@ -13,6 +13,7 @@ import profileRouter from './routes/profile.js';
 import searchRouter from './routes/search.js';
 import usersRouter from './routes/users.js';
 import categoriesRouter from './routes/categories.js';
+import salesforceRouter from './routes/salesforce.js';
 
 const app = express();
 app.use(cors());
@@ -29,6 +30,7 @@ app.use('/profile', profileRouter);
 app.use('/search', searchRouter);
 app.use('/users', usersRouter);
 app.use('/categories', categoriesRouter);
+app.use('/salesforce', salesforceRouter);
 
 const port = process.env.PORT || 4000;
 
